@@ -6,13 +6,20 @@
   "scripts": {
     "dev": "vite",
     "build": "vue-tsc && vite build",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "backend:dev": "wrangler pages dev ./ --persist"
   },
   "dependencies": {
-    "vue": "^3.2.47"
+    "@tsndr/cloudflare-worker-jwt": "^2.2.1",
+    "bcryptjs": "^2.4.3",
+    "d1-orm": "^0.7.2",
+    "vue": "^3.2.47",
+    "wrangler": "^2.19.0",
+    "zod": "^3.21.4"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^4.1.0",
+    "better-sqlite3": "^8.3.0",
     "typescript": "^5.0.2",
     "vite": "^4.3.2",
     "vue-tsc": "^1.4.2"
