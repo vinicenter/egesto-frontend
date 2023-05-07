@@ -5,7 +5,7 @@ import jwt from '../core/utils/jwt'
 
 export async function onRequestPost(context) {
   const { env, request } = context;
-  const body = await new Response(request.body).json<RegisterType>();
+  const body = await new Response(request.body).json() as RegisterType;
 
   const registerParse = registerSafeParse(body)
   if (!registerParse.success) return new Response(registerParse.error.message, { status: 400 })
@@ -14,7 +14,7 @@ export async function onRequestPost(context) {
     username: body.username,
     password: body.password,
     name: body.name,
-    email: body.email ? body.email : null,
+    email: body.email,
   })
 
   if (result.error) return new Response(JSON.stringify(result), { status: 500 })

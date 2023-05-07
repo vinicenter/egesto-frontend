@@ -7,7 +7,7 @@ export async function onRequestPost(context) {
   const { env, request } = context;
   const { checkUserPassword, findOneUserByUsername } = User(context)
 
-  const body = await new Response(request.body).json<LoginType>();
+  const body = await new Response(request.body).json() as LoginType;
 
   const loginParse = loginSafeParse(body)
   if (!loginParse.success) return new Response(loginParse.error.message, { status: 400 })

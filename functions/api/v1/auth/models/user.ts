@@ -1,69 +1,37 @@
 import bcrypt from 'bcryptjs'
-import { D1Orm, DataTypes, Model } from "d1-orm";
-import type { Infer } from "d1-orm";
+import { IUser } from './user.types'
+import { mongoInit } from '../../core/utils/mongo-http'
 
 export const User = ({ env }) => {
-  const users = new Model(
-    {
-      D1Orm: new D1Orm(env.DB),
-      tableName: "users",
-      primaryKeys: "id",
-      autoIncrement: "id",
-      uniqueKeys: [["username"]],
-    },
-    {
-      id: {
-        type: DataTypes.INTEGER,
-        
-      },
-      name: {
-        type: DataTypes.STRING,
-        notNull: true,
-      },
-      username: {
-        type: DataTypes.STRING,
-        notNull: true,
-      },
-      password: {
-        type: DataTypes.STRING,
-        notNull: true,
-      },
-      email: {
-        type: DataTypes.STRING,
-      }
-    }
-  )
+  const db = mongoInit(env)
 
-  type IUser = Infer<typeof users>
-
-  const findOneUserByUsername = async (username: string) => {
-    return await users.First({ where: { username } })
-  }
+  const userCollection = db?.collection('users')
 
   const checkUserExists = async (username: string) => {
-    const user = await findOneUserByUsername(username)
-    return !!user
+    const user = await userCollection?.findOne({ filter: { username } })
+    return !!user.document
+  }
+
+  const findOneUserByUsername = async (username: string) => {
+    return await userCollection?.findOne({ filter: { username } })
   }
 
   const checkUserPassword = async (username: string, password: string) => {
-    const user = await findOneUserByUsername(username)
-    if (!user) return false
+    const user = await userCollection?.findOne({ filter: { username } })
+    if (!user.document) return false
 
-    const hashedPassword = user.password
+    const hashedPassword = user.document.password
     const result = await bcrypt.compare(password, hashedPassword)
     return result
   }
 
-  const createUser = async (user: Omit<IUser, "id">) => {
-    const { password } = user
+  const createUser = async (user: IUser) => {
+    const { username, password } = user
+    const userExists = await checkUserExists(username)
+    if (userExists) return { error: 'User already exists' }
 
-    const hashedPassword = await bcrypt.hash(password, 10) as string
-
-    const result = await users.InsertOne({
-      ...user,
-      password: hashedPassword,
-    })
-
+    const hashedPassword = await bcrypt.hash(password, 10)
+    const result = await userCollection?.insertOne({ ...user, password: hashedPassword })
     return result
   }
 
@@ -72,5 +40,6 @@ export const User = ({ env }) => {
     findOneUserByUsername,
     checkUserPassword,
     checkUserExists,
+    userCollection,
   }
 }
