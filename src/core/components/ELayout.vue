@@ -106,21 +106,15 @@ const items: Item[] = [
     ]
   },
   {
-    title: 'Usuários internos',
-    icon: 'mdi-cash',
-    childrens: [
-      {
-        title: 'Meu perfil',
-        onClick: () => router.push({ name: 'costs' }),
-        icon: 'mdi-cash',
-      },
-      {
-        title: 'Outros usuários',
-        onClick: () => router.push({ name: 'selling-prices' }),
-        icon: 'mdi-cash',
-      },
-    ]
+    title: 'Usuários',
+    icon: 'mdi-account-multiple',
+    onClick: () => router.push({ name: 'users' }),
   },
+  {
+    title: 'Meu perfil',
+    icon: 'mdi-account',
+    onClick: () => router.push({ name: 'profile' }),
+  }
 ]
 </script>
 
