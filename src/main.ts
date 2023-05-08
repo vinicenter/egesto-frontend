@@ -1,5 +1,13 @@
 import { createApp } from 'vue'
-import './style.css'
+
+import 'virtual:uno.css'
 import App from './App.vue'
 
-createApp(App).mount('#app')
+import { applyPlugins } from '@/src/core/plugins'
+
+const app = createApp(App)
+const plugins = applyPlugins(app)
+
+Promise.all(plugins).then(() => {
+  app.mount('#app')
+})
