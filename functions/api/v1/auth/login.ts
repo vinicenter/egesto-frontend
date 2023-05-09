@@ -1,23 +1,24 @@
 import type { LoginType } from './auth.schemas'
 import { loginSafeParse } from './auth.schemas'
 import { User } from "./models/user";
-import jwt from '../core/utils/jwt'
+import jwt from '../core/utils/jwt';
+import { successResponse, errorResponse } from '../core/utils/response-messages';
 
 export async function onRequestPost(context) {
   const { env, request } = context;
   const { checkUserPassword, findOneUserByUsername } = User(context)
+  const tenant = request.headers.get('x-tenant')
 
   const body = await new Response(request.body).json() as LoginType;
 
   const loginParse = loginSafeParse(body)
-  if (!loginParse.success) return new Response(loginParse.error.message, { status: 400 })
+  if (!loginParse.success) return errorResponse(loginParse.error.message, 401)
 
   const isUserOrPasswordValid = await checkUserPassword(body.username, body.password)
-  if (!isUserOrPasswordValid) {
-    return new Response(JSON.stringify({ error: 'Invalid password or username' }), { status: 401 })
-  }
+  if (!isUserOrPasswordValid) return errorResponse('Invalid password or username', 401)
 
+  const token = await jwt.sign({ username: body.username, tenant }, env.JWT_SECRET)
   const user = await findOneUserByUsername(body.username)
-  const token = await jwt.sign({ ...user }, env.JWT_SECRET)
-  return new Response(JSON.stringify({ token, ...user }), { status: 200 })
+
+  return successResponse({ token, ...user }, 200)
 }

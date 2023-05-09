@@ -15,7 +15,13 @@ const verify = async (token: string, secret: string | JsonWebKey, options?: JwtV
   return payload
 }
 
+const decode = async (token: string) => {
+  const payload = await jwt.decode(token)
+  return payload
+}
+
 export default {
   sign,
-  verify
+  verify,
+  decode
 }

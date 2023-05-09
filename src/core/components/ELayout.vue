@@ -7,8 +7,14 @@ interface Item {
   icon?: string
 }
 
-import { useRouter } from 'vue-router'
+import { computed } from 'vue'
+import { useRouter, useRoute } from 'vue-router'
+import { removeToken } from '~utils/auth'
+import { removeTenant } from '~utils/tenant'
 const router = useRouter()
+const route = useRoute()
+
+const enableNavbar = computed(() => !route.meta['disable-navbar'])
 
 const items: Item[] = [
   {
@@ -111,23 +117,28 @@ const items: Item[] = [
     onClick: () => router.push({ name: 'users' }),
   },
   {
-    title: 'Meu perfil',
-    icon: 'mdi-account',
-    onClick: () => router.push({ name: 'profile' }),
-  }
+    title: 'Sair',
+    icon: 'mdi-logout',
+    onClick: () => {
+      removeToken()
+      removeTenant()
+      router.push({ name: 'auth-user' })
+    },
+  },
 ]
 </script>
 
 <template>
   <VCard>
     <VLayout>
-      <VNavigationDrawer width="300" rail expand-on-hover>
+      <VNavigationDrawer width="300" rail expand-on-hover v-if="enableNavbar">
         <VList>
           <VListItem
             prepend-avatar="https://randomuser.me/api/portraits/women/85.jpg"
             title="Sandra Adams"
             subtitle="sandra_a88@gmailcom"
-          ></VListItem>
+            @click="router.push({ name: 'profile' })"
+          />
         </VList>
 
         <VDivider></VDivider>
@@ -164,7 +175,7 @@ const items: Item[] = [
         </VList>
       </VNavigationDrawer>
 
-      <VMain style="height: 100vh">
+      <VMain class="m-sm" style="height: 100vh">
         <slot />
       </VMain>
     </VLayout>

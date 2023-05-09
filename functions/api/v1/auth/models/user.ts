@@ -2,8 +2,8 @@ import bcrypt from 'bcryptjs'
 import { IUser } from './user.types'
 import { mongoInit } from '../../core/utils/mongo-http'
 
-export const User = ({ env }) => {
-  const db = mongoInit(env)
+export const User = (context) => {
+  const db = mongoInit(context)
 
   const userCollection = db?.collection('users')
 
@@ -35,11 +35,17 @@ export const User = ({ env }) => {
     return result
   }
 
+  const deleteUser = async (username: string) => {
+    const result = await userCollection?.deleteOne({ filter: { username } })
+    return result
+  }
+
   return {
     createUser,
     findOneUserByUsername,
     checkUserPassword,
     checkUserExists,
+    deleteUser,
     userCollection,
   }
 }

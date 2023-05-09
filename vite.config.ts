@@ -12,6 +12,7 @@ export default defineConfig({
   resolve: {
     alias: {
       '@': resolve(__dirname),
+      '~utils': resolve(__dirname, 'src/core/utils'),
     },
   },
   plugins: [
