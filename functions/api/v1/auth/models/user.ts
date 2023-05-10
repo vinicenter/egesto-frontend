@@ -25,6 +25,19 @@ export const User = (context) => {
     return result
   }
 
+  const updateUser = async (username: string, user: IUser) => {
+    const result = await userCollection?.updateOne({
+      filter: { username },
+      update: {
+        $set: {
+          ...user
+        }
+      }
+    })
+
+    return result
+  }
+
   const createUser = async (user: IUser) => {
     const { username, password } = user
     const userExists = await checkUserExists(username)
@@ -40,12 +53,28 @@ export const User = (context) => {
     return result
   }
 
+  const getUsers = async(
+    perPage: number,
+    page: number,
+    search?: string
+  ) => {
+    const result = await userCollection?.find({
+      limit: perPage,
+      skip: perPage * (page - 1),
+      sort: { username: 1 },
+    })
+
+    return result
+  }
+
   return {
     createUser,
     findOneUserByUsername,
     checkUserPassword,
     checkUserExists,
     deleteUser,
+    updateUser,
+    getUsers,
     userCollection,
   }
 }
