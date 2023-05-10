@@ -10,7 +10,7 @@ async function tenantVerify(context) {
 }
 
 async function authentication(context) {
-  const publicRoutes = ['/api/v1/auth/login', '/api/v1/auth/users'];
+  const publicRoutes = ['/api/v1/auth/login'];
 
   const { request, env, next } = context;
   const url = new URL(request.url);
