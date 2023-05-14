@@ -62,6 +62,8 @@ export const User = (context) => {
       limit: perPage,
       skip: perPage * (page - 1),
       sort: { username: 1 },
+      filter: search ? { username: { $regex: search, $options: 'i' } } : {},
+      projection: { password: 0 }
     })
 
     return result
