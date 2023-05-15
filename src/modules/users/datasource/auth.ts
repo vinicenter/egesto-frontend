@@ -11,3 +11,11 @@ export const createUser = async (username: string, password: string, name: strin
 
   return data
 }
+
+interface tableParams { page: number, perPage: number, search?: string }
+
+export const getUsers = async ({ page, perPage, search }: tableParams) => {
+  const { data } = await axios.get('/auth/users', { params: { page, perPage, search } })
+
+  return data
+}

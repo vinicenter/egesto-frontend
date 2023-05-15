@@ -63,10 +63,26 @@ export const User = (context) => {
       skip: perPage * (page - 1),
       sort: { username: 1 },
       filter: search ? { username: { $regex: search, $options: 'i' } } : {},
-      projection: { password: 0 }
+      projection: { password: 0 },
     })
 
-    return result
+    const total = await userCollection?.aggregate({
+      pipeline: [
+        { $match: search ? { username: { $regex: search, $options: 'i' } } : {} },
+        { $count: 'total' },
+      ]
+    })
+
+    return {
+      ...result,
+      meta: {
+        totalPages: Math.ceil((total?.documents[0]?.total || 0) / perPage),
+        totalItems: (total?.documents[0]?.total) || 0,
+        hasMorePages: page < Math.ceil((total?.documents[0]?.total || 0) / perPage),
+        page,
+        perPage,
+      }
+    }
   }
 
   return {
