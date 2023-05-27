@@ -114,7 +114,7 @@ const items: Item[] = [
   {
     title: 'Usuários',
     icon: 'mdi-account-multiple',
-    onClick: () => router.push({ name: 'users' }),
+    onClick: () => router.push({ name: 'list-users' }),
   },
   {
     title: 'Sair',
@@ -122,7 +122,7 @@ const items: Item[] = [
     onClick: () => {
       removeToken()
       removeTenant()
-      router.push({ name: 'auth-user' })
+      router.push({ name: 'login-user' })
     },
   },
 ]
@@ -162,12 +162,12 @@ const items: Item[] = [
               </template>
 
               <VListItem
-                nav
                 v-for="(children, index) in item.childrens"
                 :key="`item-children-${index}`"
                 :title="children.title"
                 :prepend-icon="children.icon"
                 @click="children.onClick"
+                nav
               />
             </VListGroup>
 
@@ -175,7 +175,7 @@ const items: Item[] = [
         </VList>
       </VNavigationDrawer>
 
-      <VMain class="m-sm" style="height: 100vh">
+      <VMain class="m-sm" style="height: calc(100vh - 30px)">
         <slot />
       </VMain>
     </VLayout>

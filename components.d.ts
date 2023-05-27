@@ -9,8 +9,10 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    EError: typeof import('./src/core/components/EError.vue')['default']
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']
     ETable: typeof import('./src/core/components/ETable.vue')['default']
+    ETableActionButtons: typeof import('./src/core/components/ETableActionButtons.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
   }

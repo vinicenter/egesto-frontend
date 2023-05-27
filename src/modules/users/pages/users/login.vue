@@ -1,9 +1,9 @@
 <script setup lang="ts">
 import type { AxiosError } from 'axios';
-import AuthForm from '../components/AuthForm.vue'
+import LoginForm from '../../components/LoginForm.vue'
 import { saveTenant } from '~utils/tenant'
 import { saveToken } from '~utils/auth'
-import { createLogin } from '../datasource/auth';
+import { createLogin } from '../../datasource/auth';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -50,12 +50,13 @@ const submit = async () => {
 <template>
   <div class="flex justify-center items-center h-full">
     <div class="w-300px h-300px">
-      <AuthForm
+      <LoginForm
         :model="model"
         :loading="loading"
         @submit="submit"
       />
     </div>
+
     <VSnackbar v-model="snackbar.show">
       {{ snackbar.text }}
     </VSnackbar>
@@ -63,8 +64,8 @@ const submit = async () => {
 </template>
 
 <route lang="yaml">
-name: auth-user
-path: /usuarios/entrar
+name: login-user
+path: entrar
 meta:
   disable-navbar: true
 </route>

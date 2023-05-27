@@ -1,16 +1,21 @@
 <script lang="ts" setup>
+type AvoidValidation<T> = T
+
 defineProps<{
   columns: { label: string, style: string }[];
-  data: { [key: string]: any; }[];
-  nextPage: Function;
-  hasNextPage: boolean;
+  data: AvoidValidation<{ [key: string]: any; }[] | undefined>;
+  hasNextPage: AvoidValidation<boolean | undefined>;
   loading: boolean;
+  nextPage: Function;
 }>();
 </script>
 
 <template>
   <div>
-    <VTable v-if="loading || data.length">
+    <VTable
+      hover
+      v-if="loading || data?.length"
+    >
       <thead>
         <tr>
           <th :style="column.style" v-for="(column, index) in columns" :key="`e-table-col-${index}`">

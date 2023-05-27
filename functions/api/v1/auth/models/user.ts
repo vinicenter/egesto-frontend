@@ -1,6 +1,7 @@
 import bcrypt from 'bcryptjs'
 import { IUser } from './user.types'
 import { mongoInit } from '../../core/utils/mongo-http'
+import { getPaginateMeta } from '../../core/utils/meta-paginate'
 
 export const User = (context) => {
   const db = mongoInit(context)
@@ -16,6 +17,13 @@ export const User = (context) => {
     return await userCollection?.findOne({ filter: { username } })
   }
 
+  const findOneUserById = async (id: string) => {
+    return await userCollection?.findOne({
+      filter: { _id: { $oid: id } },
+      projection: { password: 0 }
+    })
+  }
+
   const checkUserPassword = async (username: string, password: string) => {
     const user = await userCollection?.findOne({ filter: { username } })
     if (!user.document) return false
@@ -25,9 +33,9 @@ export const User = (context) => {
     return result
   }
 
-  const updateUser = async (username: string, user: IUser) => {
+  const updateUser = async (id: string, user: IUser) => {
     const result = await userCollection?.updateOne({
-      filter: { username },
+      filter: { $where: { _id: { $oid: id }  } },
       update: {
         $set: {
           ...user
@@ -48,8 +56,8 @@ export const User = (context) => {
     return result
   }
 
-  const deleteUser = async (username: string) => {
-    const result = await userCollection?.deleteOne({ filter: { username } })
+  const deleteUser = async (id: string) => {
+    const result = await userCollection?.deleteOne({ filter: { _id: { $oid: id }  } })
     return result
   }
 
@@ -75,18 +83,13 @@ export const User = (context) => {
 
     return {
       ...result,
-      meta: {
-        totalPages: Math.ceil((total?.documents[0]?.total || 0) / perPage),
-        totalItems: (total?.documents[0]?.total) || 0,
-        hasMorePages: page < Math.ceil((total?.documents[0]?.total || 0) / perPage),
-        page,
-        perPage,
-      }
+      meta: getPaginateMeta(total, perPage, page)
     }
   }
 
   return {
     createUser,
+    findOneUserById,
     findOneUserByUsername,
     checkUserPassword,
     checkUserExists,

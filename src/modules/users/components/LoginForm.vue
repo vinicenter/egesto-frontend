@@ -1,8 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
-import { computed } from 'vue';
 
-const props = defineProps<{
+defineProps<{
   model: {
     tenant: string;
     username: string;
@@ -11,12 +10,7 @@ const props = defineProps<{
   loading: boolean;
 }>();
 
-const emit = defineEmits(['submit', 'update:model-value', 'update:form']);
-
-const model = computed({
-  get: () => props.model,
-  set: (value) => emit('update:model-value', value),
-});
+const emit = defineEmits(['submit']);
 
 const isFormCompleted = ref(false);
 
@@ -25,8 +19,8 @@ const required = (v: string) => !!v || 'Campo obrigatório';
 
 <template>
   <VForm
-    v-model="isFormCompleted"
     fast-fail
+    v-model="isFormCompleted"
     @submit.prevent="emit('submit', $event)"
   >
     <VTextField

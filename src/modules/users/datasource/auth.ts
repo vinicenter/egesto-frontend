@@ -1,3 +1,4 @@
+import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
 
 export const createLogin = async (username: string, password: string) => {
@@ -12,7 +13,11 @@ export const createUser = async (username: string, password: string, name: strin
   return data
 }
 
-interface tableParams { page: number, perPage: number, search?: string }
+export const getUser = async (id: string) => {
+  const { data } = await axios.get(`/auth/users/${id}`)
+
+  return data
+}
 
 export const getUsers = async ({ page, perPage, search }: tableParams) => {
   const { data } = await axios.get('/auth/users', { params: { page, perPage, search } })
