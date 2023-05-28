@@ -7,7 +7,7 @@ const config = {
 
 const sign = async (payload: JwtPayload, secret: string | JsonWebKey) => {
   console.log('start sign', payload, secret)
-  const token = await jwt.sign({ ...payload, ...config }, secret)
+  const token = await jwt.sign({ ...payload }, secret)
   console.log('sign', token)
   return token
 }
