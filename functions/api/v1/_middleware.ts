@@ -10,7 +10,7 @@ async function tenantVerify(context) {
 }
 
 async function authentication(context) {
-  const publicRoutes = ['/api/v1/auth/login', '/api/v1/auth/users'];
+  const publicRoutes = ['/api/v1/auth/login'];
 
   const { request, env, next } = context;
   const url = new URL(request.url);
@@ -23,18 +23,18 @@ async function authentication(context) {
 
   const tokenPrefix = authorization.split(' ')[0];
 
-  if (tokenPrefix !== 'Bearer') return errorResponse('Invalid token, no Bearer', 401)
+  if (tokenPrefix !== 'Bearer') return errorResponse('Your authorization must starts with Bearer.', 401)
 
   const token = authorization.split(' ')[1];
   const isTokenValid = await jwt.verify(token, env.JWT_SECRET);
-  if (!isTokenValid) return errorResponse(`Invalid token, token is not valid, ${env.JWT_SECRET}`, 401)
+  if (!isTokenValid) return errorResponse(`Invalid token`, 401)
 
   const tokenData = await jwt.decode(token);
 
   if (tokenData.payload.tenant === tenant) {
     return await next()
   } else {
-    return errorResponse('Invalid token, tenant is wrong', 401)
+    return errorResponse('Invalid token', 401)
   }
 }
 
