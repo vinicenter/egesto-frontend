@@ -23,18 +23,18 @@ async function authentication(context) {
 
   const tokenPrefix = authorization.split(' ')[0];
 
-  if (tokenPrefix !== 'Bearer') return errorResponse('Invalid token', 401)
+  if (tokenPrefix !== 'Bearer') return errorResponse('Invalid token, no Bearer', 401)
 
   const token = authorization.split(' ')[1];
   const isTokenValid = await jwt.verify(token, env.JWT_SECRET);
-  if (!isTokenValid) return errorResponse('Invalid token', 401)
+  if (!isTokenValid) return errorResponse('Invalid token, token is not valid', 401)
 
   const tokenData = await jwt.decode(token);
 
   if (tokenData.payload.tenant === tenant) {
     return await next()
   } else {
-    return errorResponse('Invalid token', 401)
+    return errorResponse('Invalid token, tenant is wrong', 401)
   }
 }
 
