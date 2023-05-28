@@ -1,12 +1,14 @@
 <script lang="ts" setup>
-import { useRoute } from 'vue-router';
-import { getUser } from '../../datasource/auth';
+import { useRoute, useRouter } from 'vue-router';
+import { createUser, getUser, deleteUser, updateUser } from '../../datasource/auth';
 import { reactive } from 'vue';
 import { ref } from 'vue';
 
 const { params } = useRoute()
+const router = useRouter()
 
-const loading = ref(false)
+const loadingGet = ref(false)
+const loadingSave = ref(false)
 const error = ref(false)
 
 const model = reactive({
@@ -18,7 +20,7 @@ const model = reactive({
 
 const fetchModel = async () => {
   try {
-    loading.value = true
+    loadingGet.value = true
     const data = await getUser(params.id as string);
 
     model.email = data.result.document.email;
@@ -30,13 +32,28 @@ const fetchModel = async () => {
   } catch(e) {
     error.value = true
   } finally {
-    loading.value = false
+    loadingGet.value = false
   }
 }
 
-// const saveModel = async () => {
-//   console.log(model)
-// }
+const saveModel = async (mode: 'edit' | 'create' | 'delete') => {
+  const modes: Record<string, Function> = {
+    edit: async () => await updateUser(params.id as string, { ...model }),
+    create: async () => await createUser({ ...model }),
+    delete: async () => await deleteUser(params.id as string),
+  }
+
+  try {
+    loadingSave.value = true
+    await modes[mode]()
+
+    router.push({ name: 'list-users' })
+  } catch(e) {
+    error.value = true
+  } finally {
+    loadingSave.value = false
+  }
+}
 
 const refetch = () => {
   error.value = false
@@ -48,7 +65,7 @@ fetchModel()
 
 <template>
   <div
-    v-if="loading"
+    v-if="loadingGet"
     class="flex justify-center items-center"
   >
     <VProgressCircular
@@ -59,7 +76,12 @@ fetchModel()
 
   <EError v-else-if="error" @refetch="refetch" />
 
-  <RouterView v-else :model="model" />
+  <RouterView
+    v-else
+    :model="model"
+    :loading="loadingSave"
+    @submit="saveModel"
+  />
 </template>
 
 <route lang="yaml">

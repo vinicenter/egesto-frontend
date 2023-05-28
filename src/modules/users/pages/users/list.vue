@@ -57,7 +57,6 @@ const {
           <ETableActionButtons
             :id="item._id"
             delete
-            clone
             edit
           />
         </td>

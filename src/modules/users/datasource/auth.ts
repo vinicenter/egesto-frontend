@@ -1,4 +1,5 @@
 import { tableParams } from '@/src/core/types/pagination-types'
+import type { IUser } from '../types/auth'
 import axios from '~utils/axios'
 
 export const createLogin = async (username: string, password: string) => {
@@ -7,8 +8,20 @@ export const createLogin = async (username: string, password: string) => {
   return data
 }
 
-export const createUser = async (username: string, password: string, name: string, email: string) => {
-  const { data } = await axios.post('/auth/register', { username, password, name, email })
+export const updateUser = async (id: string, params: IUser) => {
+  const { data } = await axios.patch(`/auth/users/${id}`, { ...params })
+
+  return data
+}
+
+export const deleteUser = async (id: string) => {
+  const { data } = await axios.delete(`/auth/users/${id}`)
+
+  return data
+}
+
+export const createUser = async (params: IUser) => {
+  const { data } = await axios.post('/auth/users', { ...params })
 
   return data
 }

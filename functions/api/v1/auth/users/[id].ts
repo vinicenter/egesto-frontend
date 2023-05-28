@@ -1,5 +1,5 @@
 import type { RegisterType } from '../auth.schemas'
-import { registerSafeParse } from '../auth.schemas'
+import { updateSafeParse } from '../auth.schemas'
 import { User } from '../models/user'
 import { successResponse, errorResponse } from '../../core/utils/response-messages';
 
@@ -8,7 +8,7 @@ export async function onRequestPatch(context) {
 
   const body = await new Response(request.body).json() as RegisterType;
 
-  const registerParse = registerSafeParse(body)
+  const registerParse = updateSafeParse(body)
   if (!registerParse.success) return errorResponse(registerParse.error.message, 400)
 
   const result = await User(context).updateUser(params.id, {
@@ -26,6 +26,15 @@ export async function onRequestGet(context) {
   const { params } = context;
 
   const result = await User(context).findOneUserById(params.id)
+
+  if (result.error) return errorResponse(result, 500)
+  return successResponse({ result }, 200)
+}
+
+export async function onRequestDelete(context) {
+  const { params } = context;
+
+  const result = await User(context).deleteUser(params.id)
 
   if (result.error) return errorResponse(result, 500)
   return successResponse({ result }, 200)

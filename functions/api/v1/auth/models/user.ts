@@ -34,12 +34,17 @@ export const User = (context) => {
   }
 
   const updateUser = async (id: string, user: IUser) => {
+    const updatedModel = {
+      ...user,
+      password: user.password ? await bcrypt.hash(user.password, 10) : undefined
+    }
+
+    if(!updatedModel.password) delete updatedModel.password
+
     const result = await userCollection?.updateOne({
-      filter: { $where: { _id: { $oid: id }  } },
+      filter: { _id: { $oid: id } },
       update: {
-        $set: {
-          ...user
-        }
+        $set: updatedModel
       }
     })
 
