@@ -27,7 +27,7 @@ async function authentication(context) {
 
   const token = authorization.split(' ')[1];
   const isTokenValid = await jwt.verify(token, env.JWT_SECRET);
-  if (!isTokenValid) return errorResponse('Invalid token, token is not valid', 401)
+  if (!isTokenValid) return errorResponse(`Invalid token, token is not valid, ${env.JWT_SECRET}`, 401)
 
   const tokenData = await jwt.decode(token);
 
