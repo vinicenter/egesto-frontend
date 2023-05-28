@@ -2,7 +2,7 @@
 import type { IUser } from '../../../types/auth';
 import UserForm from '../../../components/UserForm.vue';
 
-\const emit = defineEmits(['submit']);
+const emit = defineEmits(['submit']);
 
 defineProps<{
   model: IUser
