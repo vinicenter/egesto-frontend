@@ -23,7 +23,6 @@ const onSubmit = async (event: object) => {
     validate-on="input"
     v-model="isFormCompleted"
     @submit.prevent="onSubmit"
-    class="m-sm"
   >
     <slot />
   </VForm>

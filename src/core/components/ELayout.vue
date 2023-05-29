@@ -119,38 +119,34 @@ const drawer = ref(false)
 </script>
 
 <template>
-  <VCard>
-    <VLayout>
-      <VAppBar v-if="enableNavbar">
-        <VAppBarTitle>eGesto</VAppBarTitle>
-        <VAppBarNavIcon @click="drawer = !drawer" />
-      </VAppBar>
-      
-      <VNavigationDrawer v-model="drawer" location="right" width="250" v-if="enableNavbar">
-        <VList density="compact" nav>
-          <template v-for="(buttons) in items">
-            <template v-for="button in buttons">
-              <VListItem
-                :title="button.title"
-                @click="button.onClick"
-                :prepend-icon="button.icon"
-              />
-            </template>
-
-            <VDivider />
+  <VLayout>
+    <VAppBar v-if="enableNavbar">
+      <VAppBarTitle>eGesto</VAppBarTitle>
+      <VAppBarNavIcon @click="drawer = !drawer" />
+    </VAppBar>
+    
+    <VNavigationDrawer v-model="drawer" location="right" width="250" v-if="enableNavbar">
+      <VList density="compact" nav>
+        <template v-for="(buttons) in items">
+          <template v-for="button in buttons">
+            <VListItem
+              :title="button.title"
+              @click="button.onClick"
+              :prepend-icon="button.icon"
+            />
           </template>
-        </VList>
-      </VNavigationDrawer>
 
-      <VMain>
-        <VContainer>
-          <h1>{{ route.meta.title }}</h1>
+          <VDivider />
+        </template>
+      </VList>
+    </VNavigationDrawer>
 
-          <div>
-            <slot />
-          </div>
-        </VContainer>
-      </VMain>
-    </VLayout>
-  </VCard>
+    <VMain>
+      <VContainer>
+        <h1>{{ route.meta.title }}</h1>
+
+        <slot />
+      </VContainer>
+    </VMain>
+  </VLayout>
 </template>
