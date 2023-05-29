@@ -88,7 +88,7 @@ export const User = (context) => {
 
     return {
       ...result,
-      meta: getPaginateMeta(total, perPage, page)
+      meta: getPaginateMeta(total.documents[0].total, perPage, page)
     }
   }
 

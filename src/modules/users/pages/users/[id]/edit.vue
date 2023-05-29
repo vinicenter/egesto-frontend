@@ -11,19 +11,19 @@ defineProps<{
 </script>
 
 <template>
-  <VCard title="Editar usuário">
-    <UserForm
-      :disabled="false"
-      button-label="Salvar"
-      :model="model"
-      :loading="loading"
-      :password-required="false"
-      @submit="emit('submit', 'edit')"
-    />
-  </VCard>
+  <UserForm
+    :disabled="false"
+    button-label="Salvar"
+    :model="model"
+    :loading="loading"
+    :password-required="false"
+    @submit="emit('submit', 'edit')"
+  />
 </template>
 
 <route lang="yaml">
 name: edit-user
 path: editar
+meta:
+  title: Editar usuário
 </route>

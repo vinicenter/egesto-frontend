@@ -1,15 +1,19 @@
 <script lang="ts" setup>
-import { useRoute, useRouter } from 'vue-router';
+import type { AxiosError } from 'axios'
+const props = defineProps<{ id: string }>()
+
+import { useRouter } from 'vue-router';
 import { createUser, getUser, deleteUser, updateUser } from '../../datasource/auth';
 import { reactive } from 'vue';
 import { ref } from 'vue';
 
-const { params } = useRoute()
 const router = useRouter()
 
 const loadingGet = ref(false)
 const loadingSave = ref(false)
-const error = ref(false)
+const errorGet = ref(false)
+const errorSave = ref(false)
+const errorMessage = ref('')
 
 const model = reactive({
   name: '',
@@ -21,7 +25,7 @@ const model = reactive({
 const fetchModel = async () => {
   try {
     loadingGet.value = true
-    const data = await getUser(params.id as string);
+    const data = await getUser(props.id as string);
 
     model.email = data.result.document.email;
     model.username = data.result.document.username;
@@ -30,7 +34,7 @@ const fetchModel = async () => {
 
     return data;
   } catch(e) {
-    error.value = true
+    errorGet.value = true
   } finally {
     loadingGet.value = false
   }
@@ -38,9 +42,19 @@ const fetchModel = async () => {
 
 const saveModel = async (mode: 'edit' | 'create' | 'delete') => {
   const modes: Record<string, Function> = {
-    edit: async () => await updateUser(params.id as string, { ...model }),
-    create: async () => await createUser({ ...model }),
-    delete: async () => await deleteUser(params.id as string),
+    edit: async () => await updateUser(props.id as string, { 
+      ...model,
+      email: model.email || undefined,
+      password: model.password ? model.password : undefined,
+    }),
+
+    create: async () => await createUser({
+      ...model,
+      email: model.email || undefined,
+      password: model.password ? model.password : undefined,
+    }),
+
+    delete: async () => await deleteUser(props.id as string),
   }
 
   try {
@@ -49,18 +63,21 @@ const saveModel = async (mode: 'edit' | 'create' | 'delete') => {
 
     router.push({ name: 'list-users' })
   } catch(e) {
-    error.value = true
+    const error = e as AxiosError
+
+    errorSave.value = true
+    errorMessage.value = JSON.stringify(error.response?.data) || 'Erro ao salvar usuário'
   } finally {
     loadingSave.value = false
   }
 }
 
 const refetch = () => {
-  error.value = false
+  errorGet.value = false
   fetchModel()
 }
 
-fetchModel()
+if(props.id !== 'novo') fetchModel()
 </script>
 
 <template>
@@ -74,7 +91,7 @@ fetchModel()
     />
   </div>
 
-  <EError v-else-if="error" @refetch="refetch" />
+  <EError v-else-if="errorGet" @refetch="refetch" />
 
   <RouterView
     v-else
@@ -82,6 +99,14 @@ fetchModel()
     :loading="loadingSave"
     @submit="saveModel"
   />
+
+  <VSnackbar
+    v-model="errorSave"
+    color="error"
+    top
+  >
+    {{ errorMessage }}
+  </VSnackbar>
 </template>
 
 <route lang="yaml">

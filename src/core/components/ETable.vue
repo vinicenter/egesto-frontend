@@ -11,46 +11,44 @@ defineProps<{
 </script>
 
 <template>
-  <div>
-    <VTable
-      hover
-      v-if="loading || data?.length"
-    >
-      <thead>
+  <VTable
+    v-if="loading || data?.length"
+    hover
+  >
+    <thead>
+      <tr>
+        <th :style="column.style" v-for="(column, index) in columns" :key="`e-table-col-${index}`">
+          {{ column.label }}
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      <template v-for="(item) in data" :key="item">
         <tr>
-          <th :style="column.style" v-for="(column, index) in columns" :key="`e-table-col-${index}`">
-            {{ column.label }}
-          </th>
+          <slot :item="item" />
         </tr>
-      </thead>
-      <tbody>
-        <template v-for="(item) in data" :key="item">
-          <tr>
-            <slot :item="item" />
-          </tr>
-        </template>
-      </tbody>
-    </VTable>
+      </template>
+    </tbody>
+  </VTable>
 
-    <div class="flex flex-col items-center" v-else>
-      Nenhum dado encontrado, tente modificar a pesquisa ou adicionar um novo registro.
-    </div>
+  <div class="flex flex-col items-center" v-else>
+    Nenhum dado encontrado, tente modificar a pesquisa ou adicionar um novo registro.
+  </div>
 
-    <div class="flex flex-col items-center">
-      <VProgressLinear
-        v-if="loading"
-        class="w-full"
-        indeterminate
-      />
-  
-      <VBtn
-        v-if="hasNextPage"
-        :loading="loading"
-        @click="nextPage"
-        class="mt-4"
-      >
-        Carregar mais
-      </VBtn>
-    </div>
+  <div class="flex flex-col items-center">
+    <VProgressLinear
+      v-if="loading"
+      class="w-full"
+      indeterminate
+    />
+
+    <VBtn
+      v-if="hasNextPage"
+      :loading="loading"
+      @click="nextPage"
+      class="mt-4"
+    >
+      Carregar mais
+    </VBtn>
   </div>
 </template>

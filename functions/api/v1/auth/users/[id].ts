@@ -15,7 +15,7 @@ export async function onRequestPatch(context) {
     username: body.username,
     password: body.password,
     name: body.name,
-    email: body.email,
+    email: body.email || null,
   })
 
   if (result.error) return errorResponse(result, 500)

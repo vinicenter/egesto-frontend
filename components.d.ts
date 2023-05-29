@@ -10,6 +10,7 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     EError: typeof import('./src/core/components/EError.vue')['default']
+    EForm: typeof import('./src/core/components/EForm.vue')['default']
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']
     ETable: typeof import('./src/core/components/ETable.vue')['default']
     ETableActionButtons: typeof import('./src/core/components/ETableActionButtons.vue')['default']

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { ref } from 'vue';
+import { required } from '@/src/core/utils/form-validator';
 
 defineProps<{
   model: {
@@ -11,18 +11,10 @@ defineProps<{
 }>();
 
 const emit = defineEmits(['submit']);
-
-const isFormCompleted = ref(false);
-
-const required = (v: string) => !!v || 'Campo obrigatório';
 </script>
 
 <template>
-  <VForm
-    fast-fail
-    v-model="isFormCompleted"
-    @submit.prevent="emit('submit', $event)"
-  >
+  <EForm @submit="emit('submit', $event)">
     <VTextField
       v-model="model.tenant"
       label="Empresa"
@@ -44,12 +36,11 @@ const required = (v: string) => !!v || 'Campo obrigatório';
 
     <VBtn
       :loading="loading"
-      :disabled="!isFormCompleted"
       type="submit"
       class="mt-2"
       block
     >
       Entrar
     </VBtn>
-  </VForm>
+  </EForm>
 </template>

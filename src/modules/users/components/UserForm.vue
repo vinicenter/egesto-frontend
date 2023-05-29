@@ -1,7 +1,8 @@
 <script lang="ts" setup>
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import type { IUser } from '../types/auth';
-import { ref, computed } from 'vue';
+import { emailValidation, required } from '@/src/core/utils/form-validator';
 
 const router = useRouter();
 
@@ -15,26 +16,11 @@ const props = defineProps<{
 
 const emit = defineEmits(['submit']);
 
-const isFormCompleted = ref(false);
 const disabled = computed(() => props.loading || props.disabled);
-
-const required = (v: string) => !!v || 'Campo obrigatório';
-const emailValidation = (value: string) => {
-  if(!value) return true 
-
-  if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
-
-  return 'Deve ser um email válido'
-}
 </script>
 
 <template>
-  <VForm
-    fast-fail
-    v-model="isFormCompleted"
-    @submit.prevent="emit('submit')"
-    class="p-sm"
-  >
+  <EForm @submit="emit('submit', $event)">
     <div class="grid grid-cols-2 gap-x-sm">
       <VTextField
         v-model="model.name"
@@ -78,7 +64,7 @@ const emailValidation = (value: string) => {
       </VBtn>
 
       <VBtn
-        @click="router.back()"
+        @click="router.push({ name: 'list-users' })"
         :disabled="loading"
         color="secondary"
         class="w-20"
@@ -87,5 +73,5 @@ const emailValidation = (value: string) => {
         Voltar
       </VBtn>
     </div>
-  </VForm>
+  </EForm>
 </template>
