@@ -19,8 +19,8 @@ export default defineConfig({
     vue(),
     vuetify({ autoImport: true }),
     UnoCSS(),
-    Pages({ dirs: [ 'src/modules/**/pages' ] }),
-    Components({ dts: true, dirs: ['src/core/components/**', 'src/modules/components/**'], }),
+    Pages({ dirs: [ 'src/modules/**/**/pages' ] }),
+    Components({ dts: true, dirs: ['src/core/components/**', 'src/modules/**/**/components/**'], }),
   ],
   server: {
     host: true,

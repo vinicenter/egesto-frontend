@@ -14,7 +14,9 @@ declare module '@vue/runtime-core' {
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']
     ETable: typeof import('./src/core/components/ETable.vue')['default']
     ETableActionButtons: typeof import('./src/core/components/ETableActionButtons.vue')['default']
+    LoginForm: typeof import('./src/modules/auth/users/components/LoginForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    UserForm: typeof import('./src/modules/auth/users/components/UserForm.vue')['default']
   }
 }
