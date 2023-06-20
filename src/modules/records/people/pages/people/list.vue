@@ -1,10 +1,10 @@
 <script lang="ts" setup>
-import { getUsers } from '../../datasource/auth';
+import { getPeople } from '../../datasource/people';
 
 const columns = [
-  { label: 'Username', style: 'width: 100px' },
-  { label: 'Nome', style: 'width: 200px' },
-  { label: 'Email', style: 'width: 50px' },
+  { label: 'Razão Social', style: 'width: 100px' },
+  { label: 'Cidade', style: 'width: 200px' },
+  { label: 'Documento', style: 'width: 50px' },
   { label: 'Ações', style: 'width: 30px' }
 ]
 </script>
@@ -12,12 +12,12 @@ const columns = [
 <template>
   <ETableGenericList
     :columns="columns"
-    :list-data-source="getUsers"
+    :list-data-source="getPeople"
   >
     <template #default="{ item }">
-      <td>{{ item.username }}</td>
-      <td>{{ item.name }}</td>
-      <td>{{ item.email || '-' }}</td>
+      <td>{{ item.corporateName }}</td>
+      <td>{{ item.city || '-' }}</td>
+      <td>{{ item.document }}</td>
       <td>
         <ETableActionButtons
           :id="item._id"
@@ -31,8 +31,8 @@ const columns = [
 </template>
 
 <route lang="yaml">
-name: list-users
+name: list-people
 path: listar
 meta:
-  title: Usuários
+  title: Pessoas
 </route>

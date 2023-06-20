@@ -1,6 +1,5 @@
 import { PersonType } from '../models/people.schemas'
-import { mongoInit } from '../../core/utils/mongo-http'
-import { getPaginateMeta } from '../../core/utils/meta-paginate'
+import { mongoInit, getPaginateMeta } from '../../core/utils/mongo-http'
 
 export const People = (context) => {
   const db = mongoInit(context)

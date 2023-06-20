@@ -28,7 +28,7 @@ const items: Item[][] = [
   [
     {
       title: 'Pessoas',
-      onClick: () => router.push({ name: 'people' }),
+      onClick: () => router.push({ name: 'list-people' }),
       divider: true,
       icon: 'mdi-account-multiple',
     },

@@ -16,3 +16,18 @@ export const mongoInit = ({ env, request }) => {
     console.error(error);
   }
 };
+
+export const getPaginateMeta = (total: number, perPage: number, page: number) => {
+  const totalPages = Math.ceil(total / perPage);
+  const nextPage = page + 1 > totalPages ? null : page + 1;
+  const prevPage = page - 1 < 1 ? null : page - 1;
+
+  return {
+    total,
+    perPage,
+    page,
+    totalPages,
+    nextPage,
+    prevPage,
+  };
+}

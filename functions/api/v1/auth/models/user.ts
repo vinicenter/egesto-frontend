@@ -1,7 +1,6 @@
 import bcrypt from 'bcryptjs'
 import { IUser } from './user.types'
-import { mongoInit } from '../../core/utils/mongo-http'
-import { getPaginateMeta } from '../../core/utils/meta-paginate'
+import { mongoInit, getPaginateMeta } from '../../core/utils/mongo-http'
 
 export const User = (context) => {
   const db = mongoInit(context)
