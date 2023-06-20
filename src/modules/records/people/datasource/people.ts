@@ -1,5 +1,4 @@
 import { tableParams } from '@/src/core/types/pagination-types'
-import type { PersonType } from '@/functions/api/v1/records/model/people.schemas.ts'
 import axios from '~utils/axios'
 
 export const getPeople = async ({ page, perPage, search }: tableParams) => {
