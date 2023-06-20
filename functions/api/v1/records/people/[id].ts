@@ -1,22 +1,17 @@
-import type { RegisterType } from '../user.schemas'
-import { updateSafeParse } from '../user.schemas'
-import { User } from '../models/user'
+import type { PersonType } from '../models/people.schemas'
+import { personSafeParse } from '../models/people.schemas'
+import { People } from '../models/person'
 import { successResponse, errorResponse } from '../../core/utils/response-messages';
 
 export async function onRequestPatch(context) {
   const { request, params } = context;
 
-  const body = await new Response(request.body).json() as RegisterType;
+  const body = await new Response(request.body).json() as PersonType;
 
-  const registerParse = updateSafeParse(body)
+  const registerParse = personSafeParse(body)
   if (!registerParse.success) return errorResponse(registerParse.error.message, 400)
 
-  const result = await User(context).updateUser(params.id, {
-    username: body.username,
-    password: body.password,
-    name: body.name,
-    email: body.email || null,
-  })
+  const result = await People(context).updatePerson(params.id, registerParse.data)
 
   if (result.error) return errorResponse(result, 500)
   return successResponse({ result }, 200)
@@ -25,7 +20,7 @@ export async function onRequestPatch(context) {
 export async function onRequestGet(context) {
   const { params } = context;
 
-  const result = await User(context).findOneUserById(params.id)
+  const result = await People(context).getPeopleById(params.id)
 
   if (result.error) return errorResponse(result, 500)
   return successResponse({ result }, 200)
@@ -34,7 +29,7 @@ export async function onRequestGet(context) {
 export async function onRequestDelete(context) {
   const { params } = context;
 
-  const result = await User(context).deleteUser(params.id)
+  const result = await People(context).deletePerson(params.id)
 
   if (result.error) return errorResponse(result, 500)
   return successResponse({ result }, 200)

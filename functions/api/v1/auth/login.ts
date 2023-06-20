@@ -1,5 +1,5 @@
-import type { LoginType } from './auth.schemas'
-import { loginSafeParse } from './auth.schemas'
+import type { LoginType } from './user.schemas'
+import { loginSafeParse } from './user.schemas'
 import { User } from "./models/user";
 import jwt from '../core/utils/jwt';
 import { successResponse, errorResponse } from '../core/utils/response-messages';
