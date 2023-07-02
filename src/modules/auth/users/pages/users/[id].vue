@@ -27,10 +27,10 @@ const fetchModel = async () => {
     loadingGet.value = true
     const data = await getUser(props.id as string);
 
-    model.email = data.result.document.email;
-    model.username = data.result.document.username;
-    model.name = data.result.document.name;
-    model.password = data.result.document.password;
+    model.email = data.email;
+    model.username = data.username;
+    model.name = data.name;
+    model.password = data.password;
 
     return data;
   } catch(e) {

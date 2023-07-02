@@ -28,7 +28,7 @@ const disabled = computed(() => props.loading || props.disabled);
         label="Nome"
         :rules="[required]"
       />
-  
+
       <VTextField
         v-model="model.username"
         :disabled="disabled"

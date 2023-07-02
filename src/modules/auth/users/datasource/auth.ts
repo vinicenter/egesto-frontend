@@ -9,31 +9,31 @@ export const createLogin = async (username: string, password: string) => {
 }
 
 export const updateUser = async (id: string, params: IUser) => {
-  const { data } = await axios.patch(`/auth/users/${id}`, { ...params })
+  const { data } = await axios.patch(`/users/${id}`, { ...params })
 
   return data
 }
 
 export const deleteUser = async (id: string) => {
-  const { data } = await axios.delete(`/auth/users/${id}`)
+  const { data } = await axios.delete(`/users/${id}`)
 
   return data
 }
 
 export const createUser = async (params: IUser) => {
-  const { data } = await axios.post('/auth/users', { ...params })
+  const { data } = await axios.post('/users', { ...params })
 
   return data
 }
 
 export const getUser = async (id: string) => {
-  const { data } = await axios.get(`/auth/users/${id}`)
+  const { data } = await axios.get(`/users/${id}`)
 
   return data
 }
 
 export const getUsers = async ({ page, perPage, search }: tableParams) => {
-  const { data } = await axios.get('/auth/users', { params: { page, perPage, search } })
+  const { data } = await axios.get('/users', { params: { page, perPage, search } })
 
   return data
 }

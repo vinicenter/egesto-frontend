@@ -22,10 +22,10 @@ const {
 } = useInfiniteQuery({
   queryKey: [ 'users', search ],
   queryFn: ({ pageParam, queryKey }) => props.listDataSource({ page: pageParam, search: unref(queryKey[1]) }),
-  getNextPageParam: (lastPage) => lastPage?.result?.meta?.hasMorePages ? lastPage?.result?.meta?.page + 1 : undefined,
+  getNextPageParam: (lastPage) => lastPage?.nextPage,
   select: (data) => {
     const dataSelect = data?.pages?.reduce((acc, page) => {
-      return [ ...acc, ...page.result?.documents ]
+      return [ ...acc, ...page.docs ]
     }, [])
 
     return dataSelect
