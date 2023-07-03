@@ -22,6 +22,7 @@ const model = reactive({
   fantasyName: '',
   phone: '',
   email: '',
+  observation: '',
   address: {}
 })
 
@@ -36,6 +37,7 @@ const fetchModel = async () => {
       number: data.address?.number,
       complement: data.address?.complement,
       neighborhood: data.address?.neighborhood,
+      federativeUnit: data.address?.federativeUnit,
       city: data.address?.city,
       state: data.address?.state,
     }
@@ -46,6 +48,7 @@ const fetchModel = async () => {
     model.corporateName = data.corporateName
     model.fantasyName = data.fantasyName
     model.stateRegistration = data.stateRegistration
+    model.observation = data.observation
 
     return data;
   } catch(e) {

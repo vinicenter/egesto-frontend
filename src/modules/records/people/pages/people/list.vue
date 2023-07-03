@@ -25,6 +25,7 @@ const columns = [
         delete
         edit
         :clone="false"
+        page="people"
       />
     </template>
   </ETableGenericList>

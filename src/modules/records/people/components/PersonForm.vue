@@ -52,11 +52,7 @@ const emit = defineEmits(['submit']);
           v-model="model.email"
           label="E-mail"
         />
-      </div>
-    </section>
 
-    <section>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-sm">
         <VTextField
           v-model="model.address.zipCode"
           label="CEP"
@@ -107,7 +103,7 @@ const emit = defineEmits(['submit']);
       </VBtn>
 
       <VBtn
-        @click="router.push({ name: 'list-users' })"
+        @click="router.push({ name: 'list-people' })"
         :disabled="loading"
         color="secondary"
         class="w-20"

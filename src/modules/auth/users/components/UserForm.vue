@@ -21,7 +21,7 @@ const disabled = computed(() => props.loading || props.disabled);
 
 <template>
   <EForm @submit="emit('submit', $event)">
-    <div class="grid grid-cols-2 gap-x-sm">
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
       <VTextField
         v-model="model.name"
         :disabled="disabled"

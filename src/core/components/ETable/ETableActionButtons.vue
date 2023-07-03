@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 
 const props = defineProps<{
   id: string,
+  page: string,
   edit: boolean,
   clone: boolean,
   delete: boolean
@@ -12,9 +13,9 @@ const router = useRouter()
 
 const goTo = (type: string) => {
   const paths: Record<string, string> = {
-    edit: 'edit-user',
-    clone: 'clone-user',
-    delete: 'delete-user',
+    edit: `edit-${props.page}`,
+    clone: `clone-${props.page}`,
+    delete: `delete-${props.page}`,
   }
 
   router.push({name: paths[type], params: { id: props.id } })
