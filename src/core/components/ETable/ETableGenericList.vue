@@ -1,4 +1,6 @@
 <script lang="ts" setup>
+import dayjs from 'dayjs';
+
 const props = defineProps<{
   columns: { label: string, style: string }[];
   listDataSource: Function;
@@ -31,6 +33,26 @@ const {
     return dataSelect
   },
 })
+
+const columns = [
+  ...props.columns,
+  {
+    label: 'Última atualização',
+    style: 'width: 30px'
+  },
+  {
+    label: 'Criação',
+    style: 'width: 10px'
+  },
+  {
+    label: 'Ações',
+    style: 'width: 10px'
+  }
+]
+
+const formatDate = (date: string) => {
+  return date ? dayjs(date).format('DD/MM/YYYY HH:mm:ss') : '-'
+}
 </script>
 
 <template>
@@ -65,6 +87,13 @@ const {
     >
       <template #default="{ item }">
         <slot :item="item" />
+
+        <td>{{ formatDate(item.updatedAt) }}</td>
+        <td>{{ formatDate(item.createdAt) }}</td>
+
+        <td v-if="$slots.actions">
+          <slot :item="item" name="actions" />
+        </td>
       </template>
     </ETable>
   </div>

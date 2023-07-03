@@ -4,8 +4,7 @@ import { getPeople } from '../../datasource/people';
 const columns = [
   { label: 'Razão Social', style: 'width: 100px' },
   { label: 'Cidade', style: 'width: 200px' },
-  { label: 'Documento', style: 'width: 50px' },
-  { label: 'Ações', style: 'width: 30px' }
+  { label: 'Documento', style: 'width: 50px' }
 ]
 </script>
 
@@ -18,14 +17,15 @@ const columns = [
       <td>{{ item.corporateName }}</td>
       <td>{{ item.city || '-' }}</td>
       <td>{{ item.document }}</td>
-      <td>
-        <ETableActionButtons
-          :id="item._id"
-          delete
-          edit
-          :clone="false"
-        />
-      </td>
+    </template>
+
+    <template #actions="{ item }">
+      <ETableActionButtons
+        :id="item._id"
+        delete
+        edit
+        :clone="false"
+      />
     </template>
   </ETableGenericList>
 </template>

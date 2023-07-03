@@ -17,7 +17,7 @@ export const personSchema = z.object({
     city: z.string().optional(),
     federativeUnit: z.string().min(0).max(2).optional(),
     zipCode: z.string().optional(),
-  }).optional()
+  })
 });
 
 export type PersonType = z.infer<typeof personSchema>;

@@ -3,6 +3,7 @@ import type { AxiosError } from 'axios'
 import { useRouter } from 'vue-router';
 import { createPerson, deletePerson, getPerson, updatePerson } from '../../datasource/people';
 import { ref } from 'vue';
+import { reactive } from 'vue';
 
 const props = defineProps<{ id: string }>()
 const router = useRouter()
@@ -13,19 +14,43 @@ const errorGet = ref(false)
 const errorSave = ref(false)
 const errorMessage = ref('')
 
-const model = ref({})
+const model = reactive({
+  name: '',
+  document: '',
+  stateRegistration: '',
+  corporateName: '',
+  fantasyName: '',
+  phone: '',
+  email: '',
+  address: {}
+})
 
 const fetchModel = async () => {
   try {
     loadingGet.value = true
     const data = await getPerson(props.id as string);
 
-    model.value = {
-      ...data.result.document
+    model.address = {
+      zipCode: data.address?.zipCode,
+      street: data.address?.street,
+      number: data.address?.number,
+      complement: data.address?.complement,
+      neighborhood: data.address?.neighborhood,
+      city: data.address?.city,
+      state: data.address?.state,
     }
+    model.document = data.document
+    model.email = data.email
+    model.name = data.name
+    model.phone = data.phone
+    model.corporateName = data.corporateName
+    model.fantasyName = data.fantasyName
+    model.stateRegistration = data.stateRegistration
 
     return data;
   } catch(e) {
+    console.log(e)
+
     errorGet.value = true
   } finally {
     loadingGet.value = false
@@ -34,8 +59,8 @@ const fetchModel = async () => {
 
 const saveModel = async (mode: 'edit' | 'create' | 'delete') => {
   const modes: Record<string, Function> = {
-    edit: async () => await updatePerson(props.id as string, model.value),
-    create: async () => await createPerson(model.value),
+    edit: async () => await updatePerson(props.id as string, model),
+    create: async () => await createPerson(model),
     delete: async () => await deletePerson(props.id as string),
   }
 

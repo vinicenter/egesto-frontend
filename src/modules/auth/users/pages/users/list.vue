@@ -4,8 +4,7 @@ import { getUsers } from '../../datasource/auth';
 const columns = [
   { label: 'Username', style: 'width: 100px' },
   { label: 'Nome', style: 'width: 200px' },
-  { label: 'Email', style: 'width: 50px' },
-  { label: 'Ações', style: 'width: 30px' }
+  { label: 'Email', style: 'width: 50px' }
 ]
 </script>
 
@@ -18,14 +17,15 @@ const columns = [
       <td>{{ item.username }}</td>
       <td>{{ item.name }}</td>
       <td>{{ item.email || '-' }}</td>
-      <td>
-        <ETableActionButtons
-          :id="item._id"
-          delete
-          edit
-          :clone="false"
-        />
-      </td>
+    </template>
+
+    <template #actions="{ item }">
+      <ETableActionButtons
+        :id="item._id"
+        delete
+        edit
+        :clone="false"
+      />
     </template>
   </ETableGenericList>
 </template>
