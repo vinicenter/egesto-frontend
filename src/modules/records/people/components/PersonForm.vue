@@ -1,12 +1,14 @@
 <script lang="ts" setup>
 import type { PersonType } from '@/functions/api/v1/records/models/people.schemas.ts'
 import { required } from '@/src/core/utils/form-validator';
+import { brazilianStates } from '@/src/core/constants/states';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 defineProps<{
   model: PersonType;
+  disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;
 }>();
@@ -20,73 +22,88 @@ const emit = defineEmits(['submit']);
     <section>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-sm">
         <VTextField
-          v-model="model.document"
-          label="CNPJ / CPF"
-          :rules="[required]"
-        />
-
-        <VTextField
-          v-model="model.stateRegistration"
-          label="Inscrição Estadual"
-        />
-
-        <VTextField
+          :disabled="disabled"
           v-model="model.corporateName"
           label="Razão Social"
           :rules="[required]"
         />
 
         <VTextField
+          :disabled="disabled"
           v-model="model.fantasyName"
           label="Nome Fantasia"
           :rules="[required]"
         />
 
         <VTextField
+          :disabled="disabled"
+          v-model="model.document"
+          label="CNPJ / CPF"
+          :rules="[required]"
+        />
+
+        <VTextField
+          :disabled="disabled"
+          v-model="model.stateRegistration"
+          label="Inscrição Estadual"
+        />
+
+        <VTextField
+          :disabled="disabled"
           type="number"
           v-model="model.phone"
           label="Celular"
         />
 
         <VTextField
+          :disabled="disabled"
           v-model="model.email"
           label="E-mail"
         />
 
         <VTextField
+          :disabled="disabled"
           v-model="model.address.zipCode"
           label="CEP"
         />
 
-        <VTextField
-          v-model="model.address.street"
-          label="Rua"
+        <VSelect
+          :disabled="disabled"
+          :items="brazilianStates"
+          item-title="label"
+          item-value="value"
+          v-model="model.address.federativeUnit"
+          label="UF"
         />
 
         <VTextField
-          v-model="model.address.number"
-          label="Número"
-        />
-
-        <VTextField
-          v-model="model.address.neighborhood"
-          label="Bairro"
-        />
-
-        <VTextField
+          :disabled="disabled"
           v-model="model.address.city"
           label="Cidade"
         />
 
         <VTextField
-          v-model="model.address.federativeUnit"
-          label="UF"
-          maxlenght="2"
+          :disabled="disabled"
+          v-model="model.address.neighborhood"
+          label="Bairro"
+        />
+
+        <VTextField
+          :disabled="disabled"
+          v-model="model.address.street"
+          label="Rua"
+        />
+
+        <VTextField
+          :disabled="disabled"
+          v-model="model.address.number"
+          label="Número"
         />
       </div>
     </section>
 
     <VTextarea
+      :disabled="disabled"
       v-model="model.observation"
       label="Observação"
     />

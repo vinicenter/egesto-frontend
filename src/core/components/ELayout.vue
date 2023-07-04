@@ -45,7 +45,7 @@ const items: Item[][] = [
     },
     {
       title: 'Marcas',
-      onClick: () => router.push({ name: 'brands' }),
+      onClick: () => router.push({ name: 'list-brands' }),
       icon: 'mdi-tag-text-outline',
     },
     {

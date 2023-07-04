@@ -8,9 +8,8 @@ const props = defineProps<{
 
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { ref, unref } from 'vue';
-import { useRouter } from 'vue-router';
 
-const router = useRouter()
+const emit = defineEmits([ 'new' ])
 
 const search = ref<string | undefined>(undefined)
 
@@ -60,7 +59,7 @@ const formatDate = (date: string) => {
     <div class="flex mb-sm">
       <div class="flex items-center w-50">
         <VBtn
-          @click="router.push({ name: 'create-user', params: { id: 'novo' } })"
+          @click="emit('new')"
           class="p-sm"
           color="primary"
         >

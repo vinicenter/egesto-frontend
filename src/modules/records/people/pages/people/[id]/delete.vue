@@ -12,17 +12,17 @@ defineProps<{
 
 <template>
   <PersonForm
-    :disabled="false"
-    button-label="Salvar"
+    :disabled="true"
+    button-label="Excluir"
     :model="model"
     :loading="loading"
-    @submit="emit('submit', 'edit')"
+    @submit="emit('submit', 'delete')"
   />
 </template>
 
 <route lang="yaml">
-name: edit-people
-path: editar
+name: delete-people
+path: deletar
 meta:
-  title: Editar pessoa
+  title: Deletar marca
 </route>

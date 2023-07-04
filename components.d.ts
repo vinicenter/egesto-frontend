@@ -9,6 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BrandForm: typeof import('./src/modules/records/brands/components/BrandForm.vue')['default']
     EError: typeof import('./src/core/components/EError.vue')['default']
     EForm: typeof import('./src/core/components/EForm.vue')['default']
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']

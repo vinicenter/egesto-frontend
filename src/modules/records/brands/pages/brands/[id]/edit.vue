@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import type { PersonType } from '@/functions/api/v1/records/models/people.schemas.ts'
-import PersonForm from '../../../components/PersonForm.vue';
+import type { IBrand } from '../../../types/brand';
+import BrandForm from '../../../components/BrandForm.vue';
 
 const emit = defineEmits(['submit']);
 
 defineProps<{
-  model: PersonType
+  model: IBrand
   loading: boolean
 }>()
 </script>
 
 <template>
-  <PersonForm
+  <BrandForm
     :disabled="false"
     button-label="Salvar"
     :model="model"
@@ -21,8 +21,8 @@ defineProps<{
 </template>
 
 <route lang="yaml">
-name: edit-people
+name: edit-brands
 path: editar
 meta:
-  title: Editar pessoa
+  title: Editar marca
 </route>

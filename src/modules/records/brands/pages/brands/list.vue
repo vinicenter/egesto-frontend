@@ -1,26 +1,25 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { getUsers } from '../../datasource/auth';
 
 const router = useRouter();
 
+import { getBrands } from '../../datasource/brands';
+
 const columns = [
-  { label: 'Username', style: 'width: 100px' },
-  { label: 'Nome', style: 'width: 200px' },
-  { label: 'Email', style: 'width: 50px' }
+  { label: 'Nome', style: 'width: 100px' },
+  { label: 'Descrição', style: 'width: 200px' },
 ]
 </script>
 
 <template>
   <ETableGenericList
     :columns="columns"
-    :list-data-source="getUsers"
-    @new="router.push({ name: 'create-user', params: { id: 'novo' } })"
+    :list-data-source="getBrands"
+    @new="router.push({ name: 'create-brands', params: { id: 'novo' } })"
   >
     <template #default="{ item }">
-      <td>{{ item.username }}</td>
       <td>{{ item.name }}</td>
-      <td>{{ item.email || '-' }}</td>
+      <td>{{ item.description }}</td>
     </template>
 
     <template #actions="{ item }">
@@ -29,15 +28,15 @@ const columns = [
         delete
         edit
         :clone="false"
-        page="user"
+        page="brands"
       />
     </template>
   </ETableGenericList>
 </template>
 
 <route lang="yaml">
-name: list-users
+name: list-brands
 path: listar
 meta:
-  title: Usuários
+  title: Marcas
 </route>
