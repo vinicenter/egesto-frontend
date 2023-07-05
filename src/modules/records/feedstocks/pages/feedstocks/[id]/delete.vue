@@ -1,17 +1,17 @@
 <script lang="ts" setup>
-import type { IPeople } from '../../../types/people';
-import PersonForm from '../../../components/PersonForm.vue';
+import type { IFeedstock } from '../../../types/feedstocks';
+import FeedStockForm from '../../../components/feedStockForm.vue';
 
 const emit = defineEmits(['submit']);
 
 defineProps<{
-  model: IPeople
+  model: IFeedstock
   loading: boolean
 }>()
 </script>
 
 <template>
-  <PersonForm
+  <FeedStockForm
     :disabled="true"
     button-label="Excluir"
     :model="model"
@@ -21,8 +21,8 @@ defineProps<{
 </template>
 
 <route lang="yaml">
-name: delete-people
+name: delete-feedstocks
 path: deletar
 meta:
-  title: Deletar marca
+  title: Deletar matéria prima
 </route>

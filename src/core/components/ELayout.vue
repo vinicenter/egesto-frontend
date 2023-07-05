@@ -33,8 +33,8 @@ const items: Item[][] = [
       icon: 'mdi-account-multiple',
     },
     {
-      title: 'Produtos',
-      onClick: () => router.push({ name: 'products' }),
+      title: 'Matérias Primas',
+      onClick: () => router.push({ name: 'list-feedstocks' }),
       icon: 'mdi-package-down',
     },
     {

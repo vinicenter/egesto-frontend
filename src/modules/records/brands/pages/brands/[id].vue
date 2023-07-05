@@ -1,104 +1,45 @@
 <script lang="ts" setup>
-import type { AxiosError } from 'axios'
-const props = defineProps<{ id: string }>()
-
 import { useRouter } from 'vue-router';
+import EGenericIdView from '../../../../../core/components/EGeneric/EGenericIdView.vue'
 import { createBrand, getBrand, deleteBrand, updateBrand } from '../../datasource/brands';
+import { IBrand } from '../../types/brand'
 import { reactive } from 'vue';
-import { ref } from 'vue';
 
-const router = useRouter()
+defineProps<{ id: string }>()
 
-const loadingGet = ref(false)
-const loadingSave = ref(false)
-const errorGet = ref(false)
-const errorSave = ref(false)
-const errorMessage = ref('')
+const router = useRouter();
 
 const model = reactive({
   name: '',
   description: '',
 })
 
-const fetchModel = async () => {
-  try {
-    loadingGet.value = true
-    const data = await getBrand(props.id as string);
-
-    model.name = data.name;
-    model.description = data.description;
-
-    return data;
-  } catch(e) {
-    errorGet.value = true
-  } finally {
-    loadingGet.value = false
-  }
+const loadModel = (data: IBrand) => {
+  model.name = data.name;
+  model.description = data.description;
 }
-
-const saveModel = async (mode: 'edit' | 'create' | 'delete') => {
-  const modes: Record<string, Function> = {
-    edit: async () => await updateBrand(props.id as string, { 
-      ...model,
-    }),
-
-    create: async () => await createBrand({
-      ...model,
-    }),
-
-    delete: async () => await deleteBrand(props.id as string),
-  }
-
-  try {
-    loadingSave.value = true
-    await modes[mode]()
-
-    router.push({ name: 'list-brands' })
-  } catch(e) {
-    const error = e as AxiosError
-
-    errorSave.value = true
-    errorMessage.value = JSON.stringify(error.response?.data) || 'Erro ao salvar marca'
-  } finally {
-    loadingSave.value = false
-  }
-}
-
-const refetch = () => {
-  errorGet.value = false
-  fetchModel()
-}
-
-if(props.id !== 'novo') fetchModel()
 </script>
 
 <template>
-  <div
-    v-if="loadingGet"
-    class="flex justify-center items-center"
-  >
-    <VProgressCircular
-      indeterminate
-      :size="62"
-    />
-  </div>
-
-  <EError v-else-if="errorGet" @refetch="refetch" />
-
-  <RouterView
-    v-else
+  <EGenericIdView
+    :id="id"
+    :format-submit-fn="(data: IBrand) => ({ ...data })"
+    :create-fn="createBrand"
+    :delete-fn="deleteBrand"
+    :get-fn="getBrand"
+    :update-fn="updateBrand"
     :model="model"
-    :loading="loadingSave"
-    @submit="saveModel"
-  />
-
-  <VSnackbar
-    v-model="errorSave"
-    color="error"
-    top
+    @load="loadModel"
+    @finish="router.push({  name: 'list-brands' })"
   >
-    {{ errorMessage }}
-  </VSnackbar>
+    <template #default="{ loading, submit }">
+      <RouterView
+        :loading="loading"
+        :model="model"
+        @submit="submit"
+      />
+    </template>
+  </EGenericIdView>
 </template>
 
 <route lang="yaml">

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { PersonType } from '@/functions/api/v1/records/models/people.schemas.ts'
+import type { IPeople } from '../types/people';
 import { required } from '@/src/core/utils/form-validator';
 import { brazilianStates } from '@/src/core/constants/states';
 import { useRouter } from 'vue-router';
@@ -7,7 +7,7 @@ import { useRouter } from 'vue-router';
 const router = useRouter();
 
 defineProps<{
-  model: PersonType;
+  model: IPeople;
   disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;

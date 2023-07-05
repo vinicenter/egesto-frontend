@@ -1,19 +1,19 @@
 <script lang="ts" setup>
-import type { IPeople } from '../../../types/people';
-import PersonForm from '../../../components/PersonForm.vue';
+import type { IFeedstock } from '../../../types/feedstocks';
+import FeedStockForm from '../../../components/feedStockForm.vue';
 
 const emit = defineEmits(['submit']);
 
 defineProps<{
-  model: IPeople
+  model: IFeedstock
   loading: boolean
 }>()
 </script>
 
 <template>
-  <PersonForm
+  <FeedStockForm
     :disabled="false"
-    button-label="Salvar"
+    button-label="Editar"
     :model="model"
     :loading="loading"
     @submit="emit('submit', 'edit')"
@@ -21,8 +21,8 @@ defineProps<{
 </template>
 
 <route lang="yaml">
-name: edit-people
+name: edit-feedstocks
 path: editar
 meta:
-  title: Editar pessoa
+  title: Editar matéria prima
 </route>
