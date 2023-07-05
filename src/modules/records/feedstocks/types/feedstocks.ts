@@ -3,6 +3,6 @@ export interface IFeedstock {
   price: number,
   icms: number,
   priceWithoutIcms: number,
-  brand: { _id: string },
+  brand?: { _id: string },
   ncm: string,
 }

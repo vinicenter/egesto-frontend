@@ -9,12 +9,12 @@ defineProps<{ id: string }>()
 
 const router = useRouter();
 
-const model = reactive({
+const model = reactive<IFeedstock>({
   name: '',
   price: 0,
   icms: 0,
   priceWithoutIcms: 0,
-  brand: {},
+  brand: undefined,
   ncm: '',
 })
 
@@ -30,7 +30,7 @@ const loadModel = (data: IFeedstock) => {
 const formatSubmitFeedStock = async (data: IFeedstock) => {
   return {
     ...data,
-    brand: data.brand._id,
+    brand: data.brand?._id,
   }
 }
 </script>

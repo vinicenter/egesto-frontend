@@ -21,7 +21,7 @@ const {
   isFetchingNextPage,
   isFetching,
 } = useInfiniteQuery({
-  queryKey: [ 'users', search ],
+  queryKey: [ 'tableGeneric', search ],
   queryFn: ({ pageParam, queryKey }) => props.listDataSource({ page: pageParam, search: unref(queryKey[1]) }),
   getNextPageParam: (lastPage) => lastPage?.nextPage,
   select: (data) => {

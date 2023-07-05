@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { IPeople } from '../types/people';
 import { required } from '@/src/core/utils/form-validator';
-import { brazilianStates } from '@/src/core/constants/states';
+import ESelectStates from '@/src/core/components/ESelect/ESelectStates.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -67,11 +67,8 @@ const emit = defineEmits(['submit']);
           label="CEP"
         />
 
-        <VSelect
+        <ESelectStates
           :disabled="disabled"
-          :items="brazilianStates"
-          item-title="label"
-          item-value="value"
           v-model="model.address.federativeUnit"
           label="UF"
         />

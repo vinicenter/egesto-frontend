@@ -3,6 +3,7 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import type { IFeedstock } from '../types/feedstocks';
 import { required } from '@/src/core/utils/form-validator';
+import ESelectBrands from '@/src/core/components/ESelect/ESelectBrands.vue';
 
 const router = useRouter();
 
@@ -30,6 +31,7 @@ const disabled = computed(() => props.loading || props.disabled);
 
       <VTextField
         v-model="model.price"
+        type="number"
         :disabled="disabled"
         label="Preço"
         :rules="[required]"
@@ -54,6 +56,13 @@ const disabled = computed(() => props.loading || props.disabled);
         :disabled="disabled"
         label="NCM"
         :rules="[required]"
+      />
+
+      <ESelectBrands
+        v-model="model.brand"
+        :disabled="disabled"
+        :rules="[required]"
+        return-object
       />
     </div>
 
