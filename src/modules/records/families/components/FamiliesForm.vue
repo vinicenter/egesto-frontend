@@ -34,12 +34,6 @@ const removeCost = (index: number) => {
 };
 
 const loadingLoadCosts = ref(false);
-const familyToLoadCosts = computed<null>({
-  set: (value: string | null) => {
-    loadCostsFromFamily(value as string);
-  },
-  get: () => null
-})
 
 const loadCostsFromFamily = async (id: string) => {
   try {
@@ -67,8 +61,8 @@ const loadCostsFromFamily = async (id: string) => {
 
       <ESelectFamilies
         :loading="loadingLoadCosts"
-        v-model="familyToLoadCosts"
         label="Selecione uma família para copiar custos"
+        @update:model-value="loadCostsFromFamily($event);"
       />
 
       <VDivider class="m-y-sm" />
