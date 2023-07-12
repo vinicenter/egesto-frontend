@@ -6,7 +6,7 @@ import { required } from '@/src/core/utils/form-validator';
 import ESelectBrands from '@/src/core/components/ESelect/ESelectBrands.vue';
 import { watch } from 'vue';
 import minimumFractionDigits from '~constants/minimumFractionDigits'
-import { toRef } from 'vue';
+import { ref } from 'vue';
 
 const router = useRouter();
 
@@ -17,7 +17,7 @@ const props = defineProps<{
   loading: boolean;
 }>();
 
-const priceWithoutIcms = toRef(props.model, 'priceWithoutIcms');
+const priceWithoutIcms = ref(props.model.priceWithoutIcms);
 
 watch([() => props.model.icms, () => props.model.price], () => {
   const newPriceWithoutIcms = (props.model.price * (1 - (props.model.icms / 100)))
@@ -72,7 +72,7 @@ const disabled = computed(() => props.loading || props.disabled);
       />
 
       <VTextField
-        v-model="model.priceWithoutIcms"
+        v-model="priceWithoutIcms"
         :disabled="disabled"
         prefix="R$"
         label="Preço sem ICMS"

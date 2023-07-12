@@ -9,6 +9,7 @@ import ESelectQuery from './ESelectQuery.vue';
     item-title="name"
     item-value="_id"
     label="Familia"
+    queryKey="select-families"
     :query-fn="getFamilies"
   />
 </template>

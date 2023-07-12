@@ -32,7 +32,6 @@ const formatSubmitFeedStock = async (data: IFeedstock) => {
     name: data.name,
     price: Number(data.price),
     icms: Number(data.icms),
-    priceWithoutIcms: Number(data.priceWithoutIcms),
     ncm: data.ncm,
     brand: data.brand?._id,
   }
