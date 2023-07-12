@@ -34,9 +34,11 @@ const {
   <VCombobox
     :items="data?.pages"
     :loading="isLoading"
+    :return-object="false"
     item-title="name"
     item-value="_id"
     label="Marca"
+    clearable
     @update:search="search = $event"
   >
     <template v-slot:no-data />

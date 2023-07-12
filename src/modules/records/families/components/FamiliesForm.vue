@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import type { IFamily } from '../types/family';
 import { required } from '@/src/core/utils/form-validator';
-import { getFamily } from '../datasource/families'
 import { toRef } from 'vue';
 import ESelectFamilies from '@/src/core/components/ESelect/ESelectFamilies.vue';
 import { ref } from 'vue';
@@ -35,17 +34,8 @@ const removeCost = (index: number) => {
 
 const loadingLoadCosts = ref(false);
 
-const loadCostsFromFamily = async (id: string) => {
-  try {
-    loadingLoadCosts.value = true;
-
-    const family = await getFamily(id);
-
-    costs.value = family.costs;
-  }
-  finally {
-    loadingLoadCosts.value = false;
-  }
+const loadCostsFromFamily = async (family: IFamily) => {
+  costs.value = family.costs
 }
 </script>
 
@@ -63,6 +53,7 @@ const loadCostsFromFamily = async (id: string) => {
         :loading="loadingLoadCosts"
         label="Selecione uma família para copiar custos"
         @update:model-value="loadCostsFromFamily($event);"
+        return-object
       />
 
       <VDivider class="m-y-sm" />

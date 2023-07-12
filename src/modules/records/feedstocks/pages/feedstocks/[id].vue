@@ -33,7 +33,7 @@ const formatSubmitFeedStock = async (data: IFeedstock) => {
     price: Number(data.price),
     icms: Number(data.icms),
     ncm: data.ncm,
-    brand: data.brand?._id,
+    brand: data.brand?._id ? data.brand._id : null,
   }
 }
 </script>
