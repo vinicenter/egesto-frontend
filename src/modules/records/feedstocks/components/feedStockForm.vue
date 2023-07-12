@@ -4,6 +4,9 @@ import { useRouter } from 'vue-router';
 import type { IFeedstock } from '../types/feedstocks';
 import { required } from '@/src/core/utils/form-validator';
 import ESelectBrands from '@/src/core/components/ESelect/ESelectBrands.vue';
+import { watch } from 'vue';
+import minimumFractionDigits from '~constants/minimumFractionDigits'
+import { toRef } from 'vue';
 
 const router = useRouter();
 
@@ -14,6 +17,14 @@ const props = defineProps<{
   loading: boolean;
 }>();
 
+const priceWithoutIcms = toRef(props.model, 'priceWithoutIcms');
+
+watch([() => props.model.icms, () => props.model.price], () => {
+  const newPriceWithoutIcms = (props.model.price * (1 - (props.model.icms / 100)))
+
+  priceWithoutIcms.value = Number(newPriceWithoutIcms.toFixed(minimumFractionDigits));
+});
+
 const emit = defineEmits(['submit']);
 
 const disabled = computed(() => props.loading || props.disabled);
@@ -21,7 +32,7 @@ const disabled = computed(() => props.loading || props.disabled);
 
 <template>
   <EForm @submit="emit('submit', $event)">
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
+    <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-sm">
       <VTextField
         v-model="model.name"
         :disabled="disabled"
@@ -29,40 +40,44 @@ const disabled = computed(() => props.loading || props.disabled);
         :rules="[required]"
       />
 
-      <VTextField
-        v-model="model.price"
-        type="number"
+      <ESelectBrands
+        v-model="model.brand"
         :disabled="disabled"
-        label="Preço"
-        :rules="[required]"
-      />
-
-      <VTextField
-        v-model="model.icms"
-        :disabled="disabled"
-        label="ICMS (%)"
-        :rules="[required]"
-      />
-
-      <VTextField
-        v-model="model.priceWithoutIcms"
-        :disabled="disabled"
-        label="ICMS (%)"
-        :rules="[required]"
+        return-object
       />
 
       <VTextField
         v-model="model.ncm"
         :disabled="disabled"
         label="NCM"
+        v-maska:mask="'####.##.##'"
+      />
+
+      <VTextField
+        v-model="model.price"
+        type="number"
+        :disabled="disabled"
+        label="Preço"
+        prefix="R$"
         :rules="[required]"
       />
 
-      <ESelectBrands
-        v-model="model.brand"
+      <VTextField
+        v-model="model.icms"
         :disabled="disabled"
+        type="number"
+        label="ICMS (%)"
+        suffix="%"
         :rules="[required]"
-        return-object
+      />
+
+      <VTextField
+        v-model="model.priceWithoutIcms"
+        :disabled="disabled"
+        prefix="R$"
+        label="Preço sem ICMS"
+        readonly
+        :rules="[required]"
       />
     </div>
 

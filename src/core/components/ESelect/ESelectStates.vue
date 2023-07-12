@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { brazilianStates } from '@/src/core/constants/states';
+import { brazilianStates } from '~constants/states';
 </script>
 
 <template>

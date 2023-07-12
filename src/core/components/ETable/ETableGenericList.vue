@@ -3,11 +3,13 @@ import dayjs from 'dayjs';
 
 const props = defineProps<{
   columns: { label: string, style: string }[];
+  queryKey: string;
   listDataSource: Function;
 }>();
 
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { ref, unref } from 'vue';
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 
 const emit = defineEmits([ 'new' ])
 
@@ -21,7 +23,7 @@ const {
   isFetchingNextPage,
   isFetching,
 } = useInfiniteQuery({
-  queryKey: [ 'tableGeneric', search ],
+  queryKey: [ props.queryKey, search ],
   queryFn: ({ pageParam, queryKey }) => props.listDataSource({ page: pageParam, search: unref(queryKey[1]) }),
   getNextPageParam: (lastPage) => lastPage?.nextPage,
   select: (data) => {
@@ -76,13 +78,23 @@ const formatDate = (date: string) => {
       />
     </div>
 
+    <div v-if="isLoading">
+      <VSkeletonLoader type="table-row-divider" />
+      <VSkeletonLoader type="table-row" />
+      <VSkeletonLoader type="table-row" />
+      <VSkeletonLoader type="table-row" />
+      <VSkeletonLoader type="table-row" />
+      <VSkeletonLoader type="table-row" />
+    </div>
+
     <ETable
+      v-else
       class="p-sm"
       :columns="columns"
       :data="data"
       :next-page="fetchNextPage"
       :has-next-page="hasNextPage"
-      :loading="isLoading || isFetchingNextPage || isFetching"
+      :loading="isFetchingNextPage || isFetching"
     >
       <template #default="{ item }">
         <slot :item="item" />

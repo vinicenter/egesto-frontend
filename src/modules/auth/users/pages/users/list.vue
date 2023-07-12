@@ -15,11 +15,12 @@ const columns = [
   <ETableGenericList
     :columns="columns"
     :list-data-source="getUsers"
+    query-key="users"
     @new="router.push({ name: 'create-user', params: { id: 'novo' } })"
   >
     <template #default="{ item }">
-      <td>{{ item.username }}</td>
-      <td>{{ item.name }}</td>
+      <td>{{ item.username || '-' }}</td>
+      <td>{{ item.name || '-' }}</td>
       <td>{{ item.email || '-' }}</td>
     </template>
 

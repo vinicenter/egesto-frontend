@@ -1,26 +1,25 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
+import { useRouter } from 'vue-router'
+import { getFamilies } from '../../datasource/families';
 
 const router = useRouter();
 
-import { getBrands } from '../../datasource/brands';
-
 const columns = [
   { label: 'Nome', style: 'width: 100px' },
-  { label: 'Descrição', style: 'width: 200px' },
+  { label: 'Custo total', style: 'width: 100px' },
 ]
 </script>
 
 <template>
   <ETableGenericList
     :columns="columns"
-    :list-data-source="getBrands"
-    query-key="brands"
-    @new="router.push({ name: 'create-brands', params: { id: 'novo' } })"
+    :list-data-source="getFamilies"
+    query-key="families"
+    @new="router.push({ name: 'create-families', params: { id: 'novo' } })"
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
-      <td>{{ item.description || '-' }}</td>
+      <td>{{ item.totalCosts ? `${item.totalCosts}%` : '-' }}</td>
     </template>
 
     <template #actions="{ item }">
@@ -29,15 +28,15 @@ const columns = [
         delete
         edit
         :clone="false"
-        page="brands"
+        page="families"
       />
     </template>
   </ETableGenericList>
 </template>
 
 <route lang="yaml">
-name: list-brands
+name: list-families
 path: listar
 meta:
-  title: Marcas
+  title: Famílias
 </route>

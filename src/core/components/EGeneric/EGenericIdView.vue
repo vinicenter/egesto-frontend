@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { ref } from 'vue';
 import type { AxiosError } from 'axios'
+import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 const props = defineProps<{
   id: string,
   getFn: Function,
@@ -71,14 +72,12 @@ if(props.id !== 'novo') fetchModel()
 </script>
 
 <template>
-  <div
-    v-if="loadingGet"
-    class="flex justify-center items-center"
-  >
-    <VProgressCircular
-      indeterminate
-      :size="62"
-    />
+  <div v-if="loadingGet">
+    <VSkeletonLoader type="text" />
+    <VSkeletonLoader type="text" />
+    <VSkeletonLoader type="text" />
+    <VSkeletonLoader type="text" />
+    <VSkeletonLoader type="button" />
   </div>
 
   <EError v-else-if="errorGet" @refetch="refetch" />

@@ -13,6 +13,7 @@ export default defineConfig({
     alias: {
       '@': resolve(__dirname),
       '~utils': resolve(__dirname, 'src/core/utils'),
+      '~constants': resolve(__dirname, 'src/core/constants'),
     },
   },
   plugins: [
