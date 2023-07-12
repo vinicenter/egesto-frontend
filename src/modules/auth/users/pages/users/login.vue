@@ -6,22 +6,17 @@ import { saveToken } from '~utils/auth'
 import { createLogin } from '../../datasource/auth';
 import { reactive, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import useNotify from '@/src/core/composables/useNotify';
 
 const router = useRouter();
 const loading = ref(false);
+
+const { displayMessage } = useNotify()
 
 const model = reactive({
   tenant: '',
   username: '',
   password: '',
-})
-
-const snackbar = reactive<{
-  show: boolean,
-  text?: string
-}>({
-  show: false,
-  text: undefined,
 })
 
 const submit = async () => {
@@ -32,14 +27,21 @@ const submit = async () => {
     const data = await createLogin(model.username, model.password)
 
     saveToken(data.token)
-
+    
     router.push({ name: 'home' })
+
+    displayMessage({
+      message: 'Login efetuado com sucesso',
+      type: 'success'
+    })
   }
   catch (err) {
     const error = err as AxiosError<{ error: string }>
 
-    snackbar.show = true
-    snackbar.text = error.response?.data?.error
+    displayMessage({
+      message: error.response?.data.error as string || 'Erro ao efetuar login. Verifique suas credências e tente novamente',
+      type: 'error'
+    })
   }
   finally {
     loading.value = false
@@ -56,10 +58,6 @@ const submit = async () => {
         @submit="submit"
       />
     </div>
-
-    <VSnackbar v-model="snackbar.show">
-      {{ snackbar.text }}
-    </VSnackbar>
   </div>
 </template>
 

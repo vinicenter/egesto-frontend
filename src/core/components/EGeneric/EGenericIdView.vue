@@ -2,6 +2,7 @@
 import { ref } from 'vue';
 import type { AxiosError } from 'axios'
 import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
+import useNotify from '@/src/core/composables/useNotify'
 const props = defineProps<{
   id: string,
   getFn: Function,
@@ -12,13 +13,12 @@ const props = defineProps<{
   model: Record<string, any>,
 }>()
 
+const { displayMessage } = useNotify()
 const emit = defineEmits(['finish', 'load'])
 
 const loadingGet = ref(false)
 const loadingSave = ref(false)
 const errorGet = ref(false)
-const errorSave = ref(false)
-const errorMessage = ref('')
 
 const fetchModel = async () => {
   try {
@@ -53,11 +53,18 @@ const saveModel = async (mode: 'edit' | 'create' | 'delete') => {
     await modes[mode]()
 
     emit('finish')
+
+    displayMessage({
+      message: 'Salvo com sucesso',
+      type: 'success'
+    })
   } catch(e) {
     const error = e as AxiosError
 
-    errorSave.value = true
-    errorMessage.value = JSON.stringify(error.response?.data) || 'Erro ao salvar'
+    displayMessage({
+      message: JSON.stringify(error.response?.data) || 'Erro ao salvar',
+      type: 'error'
+    })
   } finally {
     loadingSave.value = false
   }
@@ -87,12 +94,4 @@ if(props.id !== 'novo') fetchModel()
     :loading="loadingSave"
     :submit="saveModel"
   />
-
-  <VSnackbar
-    v-model="errorSave"
-    color="error"
-    top
-  >
-    {{ errorMessage }}
-  </VSnackbar>
 </template>

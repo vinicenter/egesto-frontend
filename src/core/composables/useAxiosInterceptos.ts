@@ -2,14 +2,20 @@ import { useRouter } from 'vue-router'
 import axios from '@/src/core/utils/axios'
 import { getTenant, removeTenant } from '../utils/tenant';
 import { getToken, removeToken } from '../utils/auth';
+import useNotify from '@/src/core/composables/useNotify'
 
 export default () => {
   const router = useRouter()
 
+  const { displayMessage } = useNotify()
+
   const logout = () => {
     removeToken()
     removeTenant()
+
     router.push({ name: 'login-user' })
+
+    displayMessage({ message: 'Sua sessão expirou, faça login novamente', type: 'error' })
   }
 
   axios.interceptors.response.use(undefined, function (error) {
