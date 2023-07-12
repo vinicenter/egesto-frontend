@@ -1,7 +1,6 @@
 <script lang="ts" setup>
 import type { IPeople } from '../types/people';
 import { required } from '@/src/core/utils/form-validator';
-import ESelectStates from '@/src/core/components/ESelect/ESelectStates.vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();

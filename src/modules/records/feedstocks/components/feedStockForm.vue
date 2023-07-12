@@ -3,7 +3,6 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import type { IFeedstock } from '../types/feedstocks';
 import { required } from '@/src/core/utils/form-validator';
-import ESelectBrands from '@/src/core/components/ESelect/ESelectBrands.vue';
 import { watch } from 'vue';
 import minimumFractionDigits from '~constants/minimumFractionDigits'
 import { ref } from 'vue';
@@ -52,21 +51,16 @@ const disabled = computed(() => props.loading || props.disabled);
         label="NCM"
       />
 
-      <VTextField
+      <EInputPrice
         v-model="model.price"
-        type="number"
         :disabled="disabled"
-        label="Preço"
-        prefix="R$"
         :rules="[required]"
       />
 
-      <VTextField
+      <EInputPct
         v-model="model.icms"
         :disabled="disabled"
-        type="number"
         label="ICMS (%)"
-        suffix="%"
         :rules="[required]"
       />
 

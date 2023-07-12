@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { getBrands } from '@/src/modules/records/brands/datasource/brands'
-import ESelectQuery from './ESelectQuery.vue';
-
 </script>
 
 <template>

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import EGenericIdView from '../../../../../core/components/EGeneric/EGenericIdView.vue'
 import { createUser, getUser, deleteUser, updateUser } from '../../datasource/auth';
 import { IUser } from '../../types/auth'
 import { reactive } from 'vue';

@@ -1,7 +1,5 @@
 <script lang="ts" setup>
 import { getFamilies } from '@/src/modules/records/families/datasource/families'
-import ESelectQuery from './ESelectQuery.vue';
-
 </script>
 
 <template>

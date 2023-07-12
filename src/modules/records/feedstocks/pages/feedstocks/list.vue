@@ -1,9 +1,11 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { getFeedStocks } from '../../datasource/feedstocks';
+import { getFeedStocks, updateFeedStock } from '../../datasource/feedstocks';
 import { priceFormat } from '~utils/format';
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter();
+const queryClient = useQueryClient();
 
 const { format } = priceFormat();
 
@@ -14,6 +16,18 @@ const columns = [
   { label: 'Preço Sem ICMS', style: 'width: 100px' },
   { label: 'Marca', style: 'width: 100px' },
 ]
+
+const updatePrice = async (id: string, price: Number) => {
+  await updateFeedStock(id, { price: Number(price) });
+
+  queryClient.invalidateQueries([ 'feedstocks' ]);
+}
+
+const updateIcms = async (id: string, icms: Number) => {
+  await updateFeedStock(id, { icms: Number(icms) });
+
+  queryClient.invalidateQueries([ 'feedstocks' ]);
+}
 </script>
 
 <template>
@@ -25,8 +39,32 @@ const columns = [
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
-      <td>{{ format(item.price) || '-' }}</td>
-      <td>{{ item.icms ? `${item.icms}%` : '-' }}</td>
+      <td>
+        <ETableCellUpdate
+          :label="format(item.price) || '-'"
+        >
+          <template #content>
+            <EInputPrice
+              :model-value="item.price"
+              hide-details
+              class="w-60"
+              @keyup.enter="updatePrice(item._id, $event.target.value)"
+            />
+          </template>
+        </ETableCellUpdate>
+      </td>
+      <td>
+        <ETableCellUpdate :label="item.icms ? `${item.icms}%` : '-'">
+          <template #content>
+            <EInputPct
+              :model-value="item.icms"
+              hide-details
+              class="w-40"
+              @keyup.enter="updateIcms(item._id, $event.target.value)"
+            />
+          </template>
+        </ETableCellUpdate>
+      </td>
       <td>{{ format(item.priceWithoutIcms) || '-' }}</td>
       <td>{{ item.brand?.name || '-' }}</td>
     </template>

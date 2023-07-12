@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import EGenericIdView from '../../../../../core/components/EGeneric/EGenericIdView.vue'
 import { createFeedStock, deleteFeedStock, getFeedStock, updateFeedStock } from '../../datasource/feedstocks'
 import { reactive } from 'vue';
 import { IFeedstock } from '../../types/feedstocks'

@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import EGenericIdView from '../../../../../core/components/EGeneric/EGenericIdView.vue'
 import { createBrand, getBrand, deleteBrand, updateBrand } from '../../datasource/brands';
 import { IBrand } from '../../types/brand'
 import { reactive } from 'vue';

@@ -4,7 +4,6 @@ import { useRouter } from 'vue-router';
 import type { IFamily } from '../types/family';
 import { required } from '@/src/core/utils/form-validator';
 import { toRef } from 'vue';
-import ESelectFamilies from '@/src/core/components/ESelect/ESelectFamilies.vue';
 import { ref } from 'vue';
 
 const router = useRouter();
@@ -76,13 +75,11 @@ const loadCostsFromFamily = async (family: IFamily) => {
           />
 
           <div class="flex gap-x-sm">
-            <VTextField
+            <EInputPct
               v-model="cost.value"
-              type="number"
+              :rules="[required]"
               :disabled="disabled"
               label="Custo (%)"
-              suffix="%"
-              :rules="[required]"
             />
 
             <VBtn 

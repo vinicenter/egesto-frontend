@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import EGenericIdView from '../../../../../core/components/EGeneric/EGenericIdView.vue'
 import { createFamily, deleteFamily, getFamily, updateFamily } from '../../datasource/families'
 import { reactive } from 'vue';
 import { IFamily } from '../../types/family'
