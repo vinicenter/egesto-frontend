@@ -1,15 +1,7 @@
 <script setup lang="ts">
-// import { isTokenSaved } from '~utils/auth'
-// import { useRouter } from 'vue-router'
-// const router = useRouter()
+import useAxiosInterceptors from '@/src/core/composables/useAxiosInterceptos'
 
-// const checkAuth = () => {
-//   if(!isTokenSaved()) {
-//     router.push({ name: 'users' })
-//   }
-// }
-
-// checkAuth()
+useAxiosInterceptors()
 </script>
 
 <template>
