@@ -35,7 +35,9 @@ const removeCost = (index: number) => {
 const loadingLoadCosts = ref(false);
 
 const loadCostsFromFamily = async (family: IFamily) => {
-  costs.value = family.costs
+  if(family?.costs) {
+    costs.value = family.costs
+  }
 }
 </script>
 

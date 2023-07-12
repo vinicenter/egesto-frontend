@@ -32,7 +32,7 @@ const disabled = computed(() => props.loading || props.disabled);
 
 <template>
   <EForm @submit="emit('submit', $event)">
-    <div class="grid grid-cols-2 sm:grid-cols-3 gap-x-sm">
+    <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
       <VTextField
         v-model="model.name"
         :disabled="disabled"
@@ -50,7 +50,6 @@ const disabled = computed(() => props.loading || props.disabled);
         v-model="model.ncm"
         :disabled="disabled"
         label="NCM"
-        v-maska:mask="'####.##.##'"
       />
 
       <VTextField

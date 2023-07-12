@@ -51,7 +51,6 @@ const emit = defineEmits(['submit']);
         <VTextField
           :disabled="disabled"
           v-model="model.phone"
-          v-mask="'###.###.###-##'"
           label="Celular"
         />
 
