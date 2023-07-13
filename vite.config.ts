@@ -23,10 +23,4 @@ export default defineConfig({
     Pages({ dirs: [ 'src/modules/**/**/pages' ] }),
     Components({ dts: true, dirs: ['src/core/components/**', 'src/modules/**/**/components/**'], }),
   ],
-  server: {
-    host: true,
-    proxy: {
-      "/api/": "http://127.0.0.1:3000",
-    },
-  },
 })
