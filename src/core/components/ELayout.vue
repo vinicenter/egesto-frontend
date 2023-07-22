@@ -78,22 +78,16 @@ const items: Item[][] = [
       divider: true,
       icon: 'mdi-file-document',
     },
-    {
-      title: 'SEO',
-      onClick: () => router.push({ name: 'seo' }),
-      divider: true,
-      icon: 'mdi-file-document',
-    },
   ],
   [
     {
-      title: 'Custos',
-      onClick: () => router.push({ name: 'costs' }),
+      title: 'Tabelas de Custos',
+      onClick: () => router.push({ name: 'list-costs-table' }),
       icon: 'mdi-cash',
     },
     {
-      title: 'Preços de vendas',
-      onClick: () => router.push({ name: 'selling-prices' }),
+      title: 'Tabelas de Preços',
+      onClick: () => router.push({ name: 'list-price-table' }),
       icon: 'mdi-cash',
     },
   ],
