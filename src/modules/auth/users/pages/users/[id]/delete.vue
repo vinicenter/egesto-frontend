@@ -25,5 +25,5 @@ defineProps<{
 name: delete-user
 path: deletar
 meta:
-  title: Deletar usuário
+  title: Excluir usuário
 </route>

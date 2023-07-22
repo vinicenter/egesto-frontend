@@ -13,7 +13,7 @@ defineProps<{
 <template>
   <BrandForm
     :disabled="true"
-    button-label="Deletar"
+    button-label="Excluir"
     :model="model"
     :loading="loading"
     :password-required="true"
@@ -25,5 +25,5 @@ defineProps<{
 name: delete-brands
 path: deletar
 meta:
-  title: Deletar marca
+  title: Excluir marca
 </route>

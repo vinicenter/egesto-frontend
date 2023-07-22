@@ -24,5 +24,5 @@ defineProps<{
 name: delete-families
 path: deletar
 meta:
-  title: Deletar família
+  title: Excluir família
 </route>

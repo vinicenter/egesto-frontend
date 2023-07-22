@@ -29,6 +29,7 @@ declare module '@vue/runtime-core' {
     FeedStockForm: typeof import('./src/modules/records/feedstocks/components/feedStockForm.vue')['default']
     LoginForm: typeof import('./src/modules/auth/users/components/LoginForm.vue')['default']
     PersonForm: typeof import('./src/modules/records/people/components/PersonForm.vue')['default']
+    ProductDetailsModel: typeof import('./src/modules/records/products/components/ProductDetailsModel.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     UserForm: typeof import('./src/modules/auth/users/components/UserForm.vue')['default']

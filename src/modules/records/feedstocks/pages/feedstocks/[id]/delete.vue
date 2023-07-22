@@ -24,5 +24,5 @@ defineProps<{
 name: delete-feedstocks
 path: deletar
 meta:
-  title: Deletar matéria prima
+  title: Excluir matéria prima
 </route>

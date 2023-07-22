@@ -38,8 +38,8 @@ const items: Item[][] = [
       icon: 'mdi-package-down',
     },
     {
-      title: 'Produtos acabados',
-      onClick: () => router.push({ name: 'final-products' }),
+      title: 'Produtos',
+      onClick: () => router.push({ name: 'list-products' }),
       divider: true,
       icon: 'mdi-package-variant-closed',
     },

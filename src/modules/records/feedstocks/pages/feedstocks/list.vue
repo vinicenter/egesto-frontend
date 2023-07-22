@@ -7,7 +7,7 @@ import { useQueryClient } from '@tanstack/vue-query';
 const router = useRouter();
 const queryClient = useQueryClient();
 
-const { format } = priceFormat();
+const { formatPrice } = priceFormat();
 
 const columns = [
   { label: 'Nome', style: 'width: 200px' },
@@ -41,7 +41,7 @@ const updateIcms = async (id: string, icms: Number) => {
       <td>{{ item.name || '-' }}</td>
       <td>
         <ETableCellUpdate
-          :label="format(item.price) || '-'"
+          :label="formatPrice(item.price) || '-'"
         >
           <template #content>
             <EInputPrice
@@ -65,7 +65,7 @@ const updateIcms = async (id: string, icms: Number) => {
           </template>
         </ETableCellUpdate>
       </td>
-      <td>{{ format(item.priceWithoutIcms) || '-' }}</td>
+      <td>{{ formatPrice(item.priceWithoutIcms) || '-' }}</td>
       <td>{{ item.brand?.name || '-' }}</td>
     </template>
 

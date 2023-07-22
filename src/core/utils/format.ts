@@ -1,23 +1,32 @@
 import minimumFractionDigits from '~constants/minimumFractionDigits'
 
-export const priceFormat = (
+export const numberFormat = (
   locale = 'pt-BR',
   options?: Intl.NumberFormatOptions
 ) => {
-  const NumberFormat = new Intl.NumberFormat(locale, {
-    style: 'currency',
-    currency: 'BRL',
+  const {
+    format,
+    formatToParts,
+  } = new Intl.NumberFormat(locale, {
+    style: 'decimal',
     minimumFractionDigits,
     ...options
   });
 
-  const {
-    format,
+  return {
+    format: (number?: number) => number ? format(number) : '-',
     formatToParts,
-  } = NumberFormat
+  }
+}
+
+export const priceFormat = () => {
+  const { format, formatToParts } = numberFormat('pt-BR', {
+    style: 'currency',
+    currency: 'BRL',
+  })
 
   return {
-    format,
-    formatToParts,
+    formatPrice: format,
+    formatPriceToParts: formatToParts,
   }
 }

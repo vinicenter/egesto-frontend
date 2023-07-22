@@ -6,49 +6,51 @@ const props = defineProps<{
   page: string,
   edit: boolean,
   clone: boolean,
-  delete: boolean
+  delete: boolean,
+  view: boolean,
+}>()
+
+const emit = defineEmits<{
+  (e: 'view', id: string): void
 }>()
 
 const router = useRouter()
 
+const items = [
+  { title: 'Visualizar', action: 'view', visible: props.view },
+  { title: 'Editar', action: 'edit', visible: props.edit },
+  { title: 'Clonar', action: 'clone', visible: props.clone },
+  { title: 'Excluir', action: 'delete', visible: props.delete },
+]
+
+const itemsFiltered = items.filter(item => item.visible)
+
 const goTo = (type: string) => {
-  const paths: Record<string, string> = {
-    edit: `edit-${props.page}`,
-    clone: `clone-${props.page}`,
-    delete: `delete-${props.page}`,
+  const paths: Record<string, Function> = {
+    edit: () => router.push({ name: `edit-${props.page}`, params: { id: props.id } }),
+    clone: () => router.push({ name: `clone-${props.page}`, params: { id: props.id } }),
+    delete: () => router.push({ name: `delete-${props.page}`, params: { id: props.id } }),
+    view: () => emit('view', props.id),
   }
 
-  router.push({name: paths[type], params: { id: props.id } })
+  paths[type]()
 }
 </script>
 
 <template>
-  <div class="space-x-sm">
-    <VBtn
-      v-if="edit"
-      color="primary"
-      size="small"
-      title="Editar"
-      @click="goTo('edit')"
-      icon="mdi-pencil"
-    />
+  <VMenu>
+    <template v-slot:activator="{ props }">
+      <VBtn color="primary" size="small" icon="mdi-dots-vertical" v-bind="props"></VBtn>
+    </template>
 
-    <VBtn
-      v-if="clone"
-      color="primary"
-      size="small"
-      title="Clonar"
-      @click="goTo('clone')"
-      icon="mdi-content-copy"
-    />
-
-    <VBtn
-      v-if="delete"
-      color="red"
-      size="small"
-      title="Excluir"
-      @click="goTo('delete')"
-      icon="mdi-trash-can"
-    />
-  </div>
+    <VList>
+      <VListItem
+        v-for="(item, i) in itemsFiltered"
+        :key="i"
+        @click="goTo(item.action)"
+      >
+        <VListItemTitle>{{ item.title }}</VListItemTitle>
+      </VListItem>
+    </VList>
+  </VMenu>
 </template>
