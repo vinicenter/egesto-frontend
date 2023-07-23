@@ -1,17 +1,16 @@
 <script lang="ts" setup>
-import type { IPeople } from '../../../types/people';
-import PersonForm from '../../../components/PersonForm.vue';
+import type { IProduct } from '../../../types/product';
 
 const emit = defineEmits(['submit']);
 
 defineProps<{
-  model: IPeople
+  model: IProduct.Root
   loading: boolean
 }>()
 </script>
 
 <template>
-  <PersonForm
+  <ProductForm
     :disabled="true"
     button-label="Excluir"
     :model="model"
@@ -21,8 +20,8 @@ defineProps<{
 </template>
 
 <route lang="yaml">
-name: delete-people
+name: delete-products
 path: deletar
 meta:
-  title: Excluir marca
+  title: Excluir produto
 </route>

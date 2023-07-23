@@ -1,17 +1,16 @@
 <script lang="ts" setup>
-import type { IPeople } from '../../../types/people';
-import PersonForm from '../../../components/PersonForm.vue';
+import type { IProduct } from '../../../types/product';
 
 const emit = defineEmits(['submit']);
 
 defineProps<{
-  model: IPeople
+  model: IProduct.Root
   loading: boolean
 }>()
 </script>
 
 <template>
-  <PersonForm
+  <ProductForm
     :disabled="false"
     button-label="Criar"
     :model="model"
@@ -21,8 +20,8 @@ defineProps<{
 </template>
 
 <route lang="yaml">
-name: create-people
-path: Criar
+name: create-products
+path: criar
 meta:
-  title: Criar pessoa
+  title: Criar produto
 </route>

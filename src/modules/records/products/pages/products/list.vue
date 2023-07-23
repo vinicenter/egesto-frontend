@@ -48,7 +48,7 @@ export default {
         edit
         clone
         view
-        page="people"
+        page="products"
         @view="viewId = $event"
       />
     </template>

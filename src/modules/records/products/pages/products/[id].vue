@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
-import { createPerson, deletePerson, getPerson, updatePerson } from '../../datasource/people';
-import { IPeople } from '../../types/people'
+import { createProduct, deleteProduct, getProduct, updateProduct } from '../../datasource/products';
+import { IProduct } from '../../types/product'
 import { reactive } from 'vue';
 
 defineProps<{ id: string }>()
@@ -9,48 +9,27 @@ defineProps<{ id: string }>()
 const router = useRouter();
 
 const model = reactive({
-  name: '',
-  document: '',
-  stateRegistration: '',
-  corporateName: '',
-  fantasyName: '',
-  phone: '',
-  email: '',
-  observation: '',
-  address: {}
 })
 
-const loadModel = (data: IPeople) => {
-  model.address = {
-    zipCode: data.address?.zipCode,
-    street: data.address?.street,
-    number: data.address?.number,
-    complement: data.address?.complement,
-    neighborhood: data.address?.neighborhood,
-    federativeUnit: data.address?.federativeUnit,
-    city: data.address?.city,
+const loadModel = (data: IProduct.Root) => {
+  return {
+    brand: data.brand?._id,
+    family: data.family?._id,
   }
-  model.document = data.document
-  model.email = data.email || ''
-  model.phone = data.phone || ''
-  model.corporateName = data.corporateName
-  model.fantasyName = data.fantasyName
-  model.stateRegistration = data.stateRegistration || ''
-  model.observation = data.observation || ''
 }
 </script>
 
 <template>
   <EGenericIdView
     :id="id"
-    :format-submit-fn="(data: IPeople) => ({ ...data })"
-    :create-fn="createPerson"
-    :delete-fn="deletePerson"
-    :get-fn="getPerson"
-    :update-fn="updatePerson"
+    :format-submit-fn="(data: IProduct.Root) => ({ ...data })"
+    :create-fn="createProduct"
+    :delete-fn="deleteProduct"
+    :get-fn="getProduct"
+    :update-fn="updateProduct"
     :model="model"
     @load="loadModel"
-    @finish="router.push({  name: 'list-people' })"
+    @finish="router.push({  name: 'list-products' })"
   >
     <template #default="{ loading, submit }">
       <RouterView
@@ -63,5 +42,5 @@ const loadModel = (data: IPeople) => {
 </template>
 
 <route lang="yaml">
-path: /pessoas/:id
+path: /produtos/:id
 </route>
