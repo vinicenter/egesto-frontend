@@ -13,6 +13,12 @@ const columns = [
 ]
 
 const viewId = ref(null)
+
+const closeView = (open = false) => {
+  if(!open) {
+    viewId.value = null
+  }
+}
 </script>
 
 <script lang="ts">
@@ -51,7 +57,7 @@ export default {
   <ProductDetailsModel
     :model-value="!!viewId"
     :id="viewId"
-    @update:model-value="(open) => { if(!open) { viewId = null } }"
+    @update:model-value="closeView"
   />
 </template>
 
