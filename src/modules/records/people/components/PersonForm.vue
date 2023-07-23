@@ -19,7 +19,7 @@ const emit = defineEmits(['submit']);
   <EForm @submit="emit('submit', $event)">
 
     <section>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
         <VTextField
           :disabled="disabled"
           v-model="model.corporateName"

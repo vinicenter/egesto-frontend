@@ -4,18 +4,18 @@ import { IFamily } from "../../families/types/family"
 
 export namespace IProduct {
   export interface Root {
-    _id: string
+    _id?: string
     name: string
     code: string
     UnitOfMeasurement: string
     pack: Pack
     unit: Unit
-    family: IFamily
+    family?: IFamily
     marketing: Marketing
-    brand: IBrand
-    taxes?: Taxes
-    createdAt: string
-    updatedAt: string
+    brand?: IBrand
+    taxes: Taxes
+    createdAt?: string
+    updatedAt?: string
     production: Production
   }
 
@@ -32,20 +32,20 @@ export namespace IProduct {
   }
 
   export interface Pack {
-    numberOfUnitsInPack: number
-    barcodeDun14: string
+    numberOfUnitsInPack?: number
+    barcodeDun14?: string
     numberOfPacksInPallet?: number
-    weight: number
+    weight?: number
   }
 
   export interface Unit {
-    weight: number
-    barcodeEan13: string
+    weight?: number
+    barcodeEan13?: string
   }
 
   export interface Production {
     formulation: Formulation[]
-    cost: ProductionCost
+    cost?: ProductionCost
     lost?: number
   }
 

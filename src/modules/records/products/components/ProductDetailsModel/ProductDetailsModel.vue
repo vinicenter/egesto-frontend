@@ -3,7 +3,9 @@ import { getProduct } from '../../datasource/products'
 import useNotify from '@/src/core/composables/useNotify'
 import { computed, ref, watch } from 'vue';
 import { IProduct } from '../../types/product'
+import { useRouter } from 'vue-router';
 
+const router = useRouter()
 const { displayMessage } = useNotify()
 
 const props = defineProps<{
@@ -88,6 +90,14 @@ watch(() => props.modelValue, async () => {
             @click="isActive.value = false"
           >
             Fechar
+          </VBtn>
+
+          <VBtn
+            variant="flat"
+            color="primary"
+            @click="router.push({ name: 'edit-products', params: { id: productData?._id } })"
+          >
+            Editar
           </VBtn>
         </VCardActions>
       </VCard>
