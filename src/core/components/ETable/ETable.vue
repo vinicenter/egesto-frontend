@@ -1,13 +1,16 @@
 <script lang="ts" setup>
 type AvoidValidation<T> = T
 
-defineProps<{
+withDefaults(defineProps<{
   columns: { label: string, style: string }[];
   data: AvoidValidation<{ [key: string]: any; }[] | undefined>;
   hasNextPage: AvoidValidation<boolean | undefined>;
   loading: boolean;
+  noDataText?: string;
   nextPage: Function;
-}>();
+}>(), {
+  noDataText: 'Nenhum dado encontrado, tente modificar a pesquisa ou adicionar um novo registro.',
+});
 </script>
 
 <template>
@@ -33,7 +36,7 @@ defineProps<{
     </VTable>
 
     <div class="flex flex-col items-center" v-else>
-      Nenhum dado encontrado, tente modificar a pesquisa ou adicionar um novo registro.
+      {{ noDataText }}
     </div>
 
     <div class="flex flex-col items-center">
