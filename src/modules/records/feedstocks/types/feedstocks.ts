@@ -1,4 +1,5 @@
 export interface IFeedstock {
+  _id?: string,
   name: string,
   price: number,
   icms: number,

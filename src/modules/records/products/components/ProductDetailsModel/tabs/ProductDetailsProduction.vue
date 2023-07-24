@@ -56,9 +56,14 @@ const productionFormulationColumns = [
       >
         <template #default="{ item }">
           <td>
-            <RouterLink :to="{ name: 'edit-feedstocks', params: { id: item?.feedstock?._id } }">
+            <RouterLink
+              v-if="item?.feedstock?.name"
+              :to="{ name: 'edit-feedstocks', params: { id: item?.feedstock?._id } }"
+            >
               {{ item?.feedstock?.name }}
             </RouterLink>
+
+            <a v-else>-</a>
           </td>
           <td>{{ formatPrice(item?.feedstock?.priceWithoutIcms) }}</td>
           <td :class="item?.considerInWeightCalculation

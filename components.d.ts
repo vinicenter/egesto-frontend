@@ -18,6 +18,7 @@ declare module '@vue/runtime-core' {
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']
     ESelectBrands: typeof import('./src/core/components/ESelect/ESelectBrands.vue')['default']
     ESelectFamilies: typeof import('./src/core/components/ESelect/ESelectFamilies.vue')['default']
+    ESelectFeedstocks: typeof import('./src/core/components/ESelect/ESelectFeedstocks.vue')['default']
     ESelectProducts: typeof import('./src/core/components/ESelect/ESelectProducts.vue')['default']
     ESelectQuery: typeof import('./src/core/components/ESelect/ESelectQuery.vue')['default']
     ESelectStates: typeof import('./src/core/components/ESelect/ESelectStates.vue')['default']

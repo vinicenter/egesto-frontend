@@ -50,8 +50,8 @@ export namespace IProduct {
   }
 
   export interface Formulation {
-    feedstock: IFeedstock
-    value: number
+    feedstock?: IFeedstock
+    value?: number
     considerInWeightCalculation: boolean
   }
 

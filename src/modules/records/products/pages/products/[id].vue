@@ -45,6 +45,7 @@ const loadModel = (data: IProduct.Root) => {
   model.family = data.family
   model.brand = data.brand
   model.marketing = data.marketing
+  model.production = data.production
   model.taxes = {
     ncm: data.taxes?.ncm,
     cest: data.taxes?.cest,
@@ -67,7 +68,15 @@ const formatSubmit = (data: IProduct.Root) => {
     name: data.name,
     marketing: data.marketing,
     taxes: data.taxes,
-    production: data.production,
+    production: {
+      formulation: data.production.formulation.map((item) => {
+        return {
+          value: Number(item.value),
+          feedstock: item.feedstock?._id,
+          considerInWeightCalculation: item.considerInWeightCalculation,
+        }
+      }),
+    },
     pack: {
       barcodeDun14: data.pack.barcodeDun14,
       numberOfUnitsInPack: Number(data.pack.numberOfUnitsInPack),
