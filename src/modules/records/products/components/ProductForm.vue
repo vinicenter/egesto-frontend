@@ -36,7 +36,7 @@ const emit = defineEmits(['submit']);
   <EForm @submit="emit('submit', $event)">
 
     <section>
-      <section class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
         <VTextField
           :disabled="disabled"
           v-model="model.code"
@@ -62,10 +62,10 @@ const emit = defineEmits(['submit']);
           v-model="model.brand"
           return-object
         />
-      </section>
+      </div>
 
 
-      <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-sm">
         <VTextField
           :disabled="disabled"
           type="number"
@@ -92,9 +92,9 @@ const emit = defineEmits(['submit']);
           v-model="model.UnitOfMeasurement"
           label="Unidade de medida"
         />
-      </section>
+      </div>
       
-      <section class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
         <VTextField
           :disabled="disabled"
           v-model="model.unit.barcodeEan13"
@@ -118,13 +118,45 @@ const emit = defineEmits(['submit']);
           v-model="model.taxes.ncm"
           label="NCM"
         />
-      </section>
+      </div>
+    </section>
 
-      <VDivider class="m-y-sm" />
+    <VDivider class="m-y-sm" />
 
+    <section>
+      <div class="font-bold">Marketing</div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
+        <VSelect
+          v-model="model.marketing.isPublic"
+          :disabled="disabled"
+          :items="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
+          :return-object="false"
+          hint="Se o produto for público, ele será exibido no site."
+          persistent-hint
+          item-title="label"
+          label="Produto público"
+        />
+
+        <VColorPicker
+          v-model="model.marketing.color"
+          :disabled="disabled"
+          :modes="['hex']"
+        />
+      </div>
+
+      <VTextarea
+        v-model="model.marketing.description"
+        type="textarea"
+      />
+    </section>
+
+    <VDivider class="m-y-sm" />
+
+    <section>
       <div class="font-bold">Formulação</div>
 
-      <section
+      <div
         v-for="(formulation, index) in model.production.formulation" :key="`formulation-${index}`"
         class="grid grid-cols-1 md:grid-cols-3 gap-x-sm"
       >
@@ -160,7 +192,7 @@ const emit = defineEmits(['submit']);
             icon="mdi-trash-can"
           />
         </div>
-      </section>
+      </div>
 
       <VBtn 
         :disabled="disabled"
@@ -172,7 +204,7 @@ const emit = defineEmits(['submit']);
 
     <VDivider class="m-y-sm" />
 
-    <div class="grid grid-cols-4 gap-x-sm">
+    <section class="grid grid-cols-4 gap-x-sm">
       <VBtn
         :loading="loading"
         color="primary"
@@ -192,6 +224,6 @@ const emit = defineEmits(['submit']);
       >
         Voltar
       </VBtn>
-    </div>
+    </section>
   </EForm>
 </template>

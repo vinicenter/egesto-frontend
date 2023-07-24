@@ -85,13 +85,13 @@ defineProps<{ productData: IProduct.Root | undefined }>()
       title="Publicidade"
     >
       <div v-if="productData?.marketing?.isPublic">
-        <VIcon icon="mdi-lock-open" />
         Produto Público - Aparece no site
+        <VIcon icon="mdi-lock-open" />
       </div>
 
       <div v-else>
-        <VIcon icon="mdi-lock" />
         Produto Privado - Não aparece no site
+        <VIcon icon="mdi-lock" />
       </div>
 
       <div v-if="productData?.marketing?.color">
