@@ -154,6 +154,20 @@ const emit = defineEmits(['submit']);
     <VDivider class="m-y-sm" />
 
     <section>
+      <div class="font-bold">Produção</div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
+        <EInputPct
+          v-model="model.production.lost"
+          :disabled="disabled"
+          label="Perda de produção"
+        />
+      </div>
+    </section>
+
+    <VDivider class="m-y-sm" />
+
+    <section>
       <div class="font-bold">Formulação</div>
 
       <div
@@ -191,6 +205,12 @@ const emit = defineEmits(['submit']);
             @click="removeFormulation(index)"
             icon="mdi-trash-can"
           />
+        </div>
+
+        <div class="flex justify-center grid-col-span-3">
+          <div class="w-98%">
+            <VDivider class="m-b-sm grid-col-span-3" />
+          </div>
         </div>
       </div>
 
