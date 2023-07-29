@@ -1,4 +1,34 @@
+import dayjs from '~utils/dayjs'
 import minimumFractionDigits from '~constants/minimumFractionDigits'
+
+export const capitalizeFirstLetter = (string: string) => {
+  return string.charAt(0).toUpperCase() + string.slice(1)
+}
+
+function applyPastOrFutureInfo(humanizedString: string, ms: number) {
+  const isPast = ms < 0
+  const past = 'há %s'
+  const future = 'em %s'
+
+  return isPast
+    ? past.replace('%s', humanizedString)
+    : future.replace('%s', humanizedString)
+}
+
+export const humanizeDateRange = (
+  start: string | Date,
+  end: string | Date,
+  withPastOrFutureInfo = true,
+) => {
+  const dateStart = dayjs(start)
+  const dateEnd = dayjs(end)
+
+  const duration = dayjs.duration(dateEnd!.diff(dateStart))
+
+  return withPastOrFutureInfo
+    ? applyPastOrFutureInfo(duration.humanize(), duration.asMilliseconds())
+    : duration.humanize()
+}
 
 export const numberFormat = (
   locale = 'pt-BR',
