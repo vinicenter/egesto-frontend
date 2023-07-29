@@ -10,11 +10,12 @@ const queryClient = useQueryClient();
 const { formatPrice } = priceFormat();
 
 const columns = [
-  { label: 'Nome', style: 'width: 200px' },
-  { label: 'Preço', style: 'width: 100px' },
-  { label: 'ICMS', style: 'width: 100px' },
-  { label: 'Preço Sem ICMS', style: 'width: 100px' },
+  { label: 'Nome', style: 'width: 250px' },
+  { label: 'Preço', style: 'width: 100px', tooltip: 'Você pode editar este campo clicando sobre ele na tabela.' },
+  { label: 'ICMS', style: 'width: 100px', tooltip: 'Você pode editar este campo clicando sobre ele na tabela.' },
+  { label: 'Preço Sem ICMS', style: 'width: 100px', tooltip: 'Este campo é processado automáticamente.' },
   { label: 'Marca', style: 'width: 100px' },
+  { label: 'NCM', style: 'width: 90px' },
 ]
 
 const updatePrice = async (id: string, price: Number) => {
@@ -67,6 +68,7 @@ const updateIcms = async (id: string, icms: Number) => {
       </td>
       <td>{{ formatPrice(item.priceWithoutIcms) || '-' }}</td>
       <td>{{ item.brand?.name || '-' }}</td>
+      <td>{{ item.ncm || '-' }}</td>
     </template>
 
     <template #actions="{ item }">
