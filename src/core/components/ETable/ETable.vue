@@ -2,7 +2,7 @@
 type AvoidValidation<T> = T
 
 withDefaults(defineProps<{
-  columns: { label: string, style: string }[];
+  columns: { label: string, style: string, tooltip?: string }[];
   data: AvoidValidation<{ [key: string]: any; }[] | undefined>;
   hasNextPage: AvoidValidation<boolean | undefined>;
   loading: boolean;
@@ -23,6 +23,11 @@ withDefaults(defineProps<{
         <tr>
           <th :style="column.style" v-for="(column, index) in columns" :key="`e-table-col-${index}`">
             {{ column.label }}
+            <VTooltip location="top" v-if="column.tooltip" :text="column.tooltip">
+              <template v-slot:activator="{ props }">
+                <VIcon size="12" v-bind="props" icon="mdi-information-outline" />
+              </template>
+            </VTooltip>
           </th>
         </tr>
       </thead>
