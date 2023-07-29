@@ -69,6 +69,7 @@ const formatSubmit = (data: IProduct.Root) => {
     marketing: data.marketing,
     taxes: data.taxes,
     production: {
+      lost: Number(data.production.lost),
       formulation: data.production.formulation.map((item) => {
         return {
           value: Number(item.value),
