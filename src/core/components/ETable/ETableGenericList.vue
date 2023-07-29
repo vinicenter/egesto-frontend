@@ -1,5 +1,6 @@
 <script lang="ts" setup>
-import dayjs from 'dayjs';
+import { humanizeDateRange, capitalizeFirstLetter } from '~utils/format'
+import dayjs from '~utils/dayjs'
 
 const props = defineProps<{
   columns: { label: string, style: string }[];
@@ -39,20 +40,26 @@ const columns = [
   ...props.columns,
   {
     label: 'Última atualização',
-    style: 'width: 30px'
+    style: 'width: 20px'
   },
   {
     label: 'Criação',
-    style: 'width: 10px'
+    style: 'width: 20px'
   },
   {
-    label: 'Ações',
+    label: '',
     style: 'width: 10px'
   }
 ]
 
 const formatDate = (date: string) => {
   return date ? dayjs(date).format('DD/MM/YYYY HH:mm:ss') : '-'
+}
+
+const humanizeDate = (date: string) => {
+  return date
+    ? capitalizeFirstLetter(humanizeDateRange(new Date, date))
+    : '-'
 }
 </script>
 
@@ -99,8 +106,24 @@ const formatDate = (date: string) => {
       <template #default="{ item }">
         <slot :item="item" />
 
-        <td>{{ formatDate(item.updatedAt) }}</td>
-        <td>{{ formatDate(item.createdAt) }}</td>
+        <td>
+          <VTooltip location="top" :text="formatDate(item.updatedAt)">
+            <template v-slot:activator="{ props }">
+              <div v-bind="props">
+                {{ humanizeDate(item.updatedAt) }}
+              </div>
+            </template>
+          </VTooltip>
+        </td>
+        <td>
+          <VTooltip location="top" :text="formatDate(item.createdAt)">
+            <template v-slot:activator="{ props }">
+              <div v-bind="props">
+                {{ humanizeDate(item.createdAt) }}
+              </div>
+            </template>
+          </VTooltip>
+        </td>
 
         <td v-if="$slots.actions">
           <slot :item="item" name="actions" />
