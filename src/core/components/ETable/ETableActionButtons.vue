@@ -1,14 +1,19 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
 
-const props = defineProps<{
+const props = withDefaults(defineProps<{
   id: string,
   page: string,
-  edit: boolean,
-  clone: boolean,
-  delete: boolean,
-  view: boolean,
-}>()
+  edit?: boolean,
+  clone?: boolean,
+  delete?: boolean,
+  view?: boolean,
+}>(), {
+  edit: false,
+  clone: false,
+  delete: false,
+  view: false,
+})
 
 const emit = defineEmits<{
   (e: 'view', id: string): void

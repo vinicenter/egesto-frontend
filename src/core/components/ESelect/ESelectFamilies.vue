@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getFamilies } from '@/src/modules/records/families/datasource/families'
+import { getFamilies } from '@/src/modules/families/datasource/families'
 </script>
 
 <template>

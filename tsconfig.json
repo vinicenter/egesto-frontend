@@ -26,7 +26,7 @@
       "~utils/*": ["./src/core/utils/*"],
       "~constants/*": ["./src/core/constants/*"],
     },
-    "types": ["vuetify"]
+    "types": ["vuetify", "node"]
   },
   "include": ["src/**/*.ts", "src/**/*.d.ts", "src/**/*.tsx", "src/**/*.vue", "src/core/plugins/router.js", "src/core/plugins/mask.js"],
   "references": [{ "path": "./tsconfig.node.json" }]

@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getFeedStocks } from '@/src/modules/records/feedstocks/datasource/feedstocks'
+import { getFeedStocks } from '@/src/modules/feedstocks/datasource/feedstocks'
 </script>
 
 <template>

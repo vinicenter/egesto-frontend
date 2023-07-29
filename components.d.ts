@@ -9,7 +9,7 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
-    BrandForm: typeof import('./src/modules/records/brands/components/BrandForm.vue')['default']
+    BrandForm: typeof import('./src/modules/brands/components/BrandForm.vue')['default']
     EError: typeof import('./src/core/components/EError.vue')['default']
     EForm: typeof import('./src/core/components/EForm.vue')['default']
     EGenericIdView: typeof import('./src/core/components/EGeneric/EGenericIdView.vue')['default']
@@ -26,17 +26,17 @@ declare module '@vue/runtime-core' {
     ETableActionButtons: typeof import('./src/core/components/ETable/ETableActionButtons.vue')['default']
     ETableCellUpdate: typeof import('./src/core/components/ETable/ETableCellUpdate.vue')['default']
     ETableGenericList: typeof import('./src/core/components/ETable/ETableGenericList.vue')['default']
-    FamiliesForm: typeof import('./src/modules/records/families/components/FamiliesForm.vue')['default']
-    FeedStockForm: typeof import('./src/modules/records/feedstocks/components/feedStockForm.vue')['default']
-    LoginForm: typeof import('./src/modules/auth/users/components/LoginForm.vue')['default']
-    PersonForm: typeof import('./src/modules/records/people/components/PersonForm.vue')['default']
-    ProductDetailsInfo: typeof import('./src/modules/records/products/components/ProductDetailsModel/tabs/ProductDetailsInfo.vue')['default']
-    ProductDetailsModel: typeof import('./src/modules/records/products/components/ProductDetailsModel/ProductDetailsModel.vue')['default']
-    ProductDetailsProduction: typeof import('./src/modules/records/products/components/ProductDetailsModel/tabs/ProductDetailsProduction.vue')['default']
-    ProductDetailsSkeleton: typeof import('./src/modules/records/products/components/ProductDetailsModel/ProductDetailsSkeleton.vue')['default']
-    ProductForm: typeof import('./src/modules/records/products/components/ProductForm.vue')['default']
+    FamiliesForm: typeof import('./src/modules/families/components/FamiliesForm.vue')['default']
+    FeedStockForm: typeof import('./src/modules/feedstocks/components/feedStockForm.vue')['default']
+    LoginForm: typeof import('./src/modules/users/components/LoginForm.vue')['default']
+    PersonForm: typeof import('./src/modules/people/components/PersonForm.vue')['default']
+    ProductDetailsInfo: typeof import('./src/modules/products/components/ProductDetailsModel/tabs/ProductDetailsInfo.vue')['default']
+    ProductDetailsModel: typeof import('./src/modules/products/components/ProductDetailsModel/ProductDetailsModel.vue')['default']
+    ProductDetailsProduction: typeof import('./src/modules/products/components/ProductDetailsModel/tabs/ProductDetailsProduction.vue')['default']
+    ProductDetailsSkeleton: typeof import('./src/modules/products/components/ProductDetailsModel/ProductDetailsSkeleton.vue')['default']
+    ProductForm: typeof import('./src/modules/products/components/ProductForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
-    UserForm: typeof import('./src/modules/auth/users/components/UserForm.vue')['default']
+    UserForm: typeof import('./src/modules/users/components/UserForm.vue')['default']
   }
 }

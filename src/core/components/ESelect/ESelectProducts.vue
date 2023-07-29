@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import { getProducts } from '@/src/modules/records/products/datasource/products'
+import { getProducts } from '@/src/modules/products/datasource/products'
 </script>
 
 <template>
