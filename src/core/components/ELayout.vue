@@ -54,30 +54,6 @@ const items: Item[][] = [
       divider: true,
       icon: 'mdi-tag',
     },
-    {
-      title: 'Categorias',
-      onClick: () => router.push({ name: 'list-categories' }),
-      icon: 'mdi-tag-multiple-outline',
-    },
-  ],
-  [
-    {
-      title: 'Blog',
-      onClick: () => router.push({ name: 'list-posts' }),
-      divider: true,
-      icon: 'mdi-file-document',
-    },
-    {
-      title: 'Notícias',
-      onClick: () => router.push({ name: 'list-news' }),
-      icon: 'mdi-file-document',
-    },
-    {
-      title: 'Receitas',
-      onClick: () => router.push({ name: 'list-recipes' }),
-      divider: true,
-      icon: 'mdi-file-document',
-    },
   ],
   [
     {
