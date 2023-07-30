@@ -39,6 +39,7 @@ const loadCostsFromFamily = async (family: IFamily) => {
       />
 
       <ESelectFamilies
+        :disabled="disabled"
         :loading="loadingLoadCosts"
         label="Selecione uma família para copiar custos"
         @update:model-value="loadCostsFromFamily($event);"

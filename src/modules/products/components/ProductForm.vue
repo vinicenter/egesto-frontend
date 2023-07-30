@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { IProduct } from '../types/product';
 import { required } from '@/src/core/utils/form-validator';
-import { toRef } from 'vue';
+import { computed, toRef } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
@@ -15,6 +15,8 @@ const props = defineProps<{
 
 const model = toRef(props, 'model');
 const emit = defineEmits(['submit']);
+
+const disabled = computed(() => props.loading || props.disabled);
 </script>
 
 <template>

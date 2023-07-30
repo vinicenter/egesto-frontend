@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import type { ICostsTable } from '../types/costsTable';
 import { required } from '@/src/core/utils/form-validator';
-import { ref } from 'vue';
+import { computed, ref } from 'vue';
 import { toRef } from 'vue';
 import { useRouter } from 'vue-router';
 
@@ -18,6 +18,8 @@ const model = toRef(props, 'model');
 const emit = defineEmits(['submit']);
 
 const tab = ref('taxes');
+
+const disabled = computed(() => props.loading || props.disabled);
 </script>
 
 <template>

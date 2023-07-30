@@ -15,7 +15,6 @@ const columns = [
   { label: 'ICMS', style: 'width: 100px', tooltip: 'Você pode editar este campo clicando sobre ele na tabela.' },
   { label: 'Preço Sem ICMS', style: 'width: 100px', tooltip: 'Este campo é processado automáticamente.' },
   { label: 'Marca', style: 'width: 100px' },
-  { label: 'NCM', style: 'width: 90px' },
 ]
 
 const updatePrice = async (id: string, price: Number) => {
@@ -68,7 +67,6 @@ const updateIcms = async (id: string, icms: Number) => {
       </td>
       <td>{{ formatPrice(item.priceWithoutIcms) || '-' }}</td>
       <td>{{ item.brand?.name || '-' }}</td>
-      <td>{{ item.ncm || '-' }}</td>
     </template>
 
     <template #actions="{ item }">

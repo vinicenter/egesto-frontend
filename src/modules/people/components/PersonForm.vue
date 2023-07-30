@@ -1,11 +1,12 @@
 <script lang="ts" setup>
 import type { IPeople } from '../types/people';
 import { required } from '@/src/core/utils/form-validator';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-defineProps<{
+const props = defineProps<{
   model: IPeople;
   disabled: boolean;
   buttonLabel: string | undefined,
@@ -13,6 +14,8 @@ defineProps<{
 }>();
 
 const emit = defineEmits(['submit']);
+
+const disabled = computed(() => props.loading || props.disabled);
 </script>
 
 <template>
