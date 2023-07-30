@@ -20,7 +20,7 @@ const closeView = (open = false) => {
 
 <script lang="ts">
 export default {
-    inheritAttrs: false,
+  inheritAttrs: false,
 }
 </script>
 
@@ -48,7 +48,7 @@ export default {
     </template>
   </ETableGenericList>
 
-  <ProductDetailsModel
+  <CostTableDetailsModel
     :model-value="!!viewId"
     :id="viewId"
     @update:model-value="closeView"
