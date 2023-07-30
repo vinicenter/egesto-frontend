@@ -49,7 +49,7 @@ const tab = ref('taxes');
       </VTabs>
 
       <VWindow v-model="tab">
-        <VWindowItem value="taxes" class="m-t-sm">
+        <VWindowItem value="taxes" class="m-t-sm" eager>
           <EEditableListItem
             v-model="model.taxes"
             class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm"
@@ -82,7 +82,7 @@ const tab = ref('taxes');
           </EEditableListItem>
         </VWindowItem>
   
-        <VWindowItem value="shipping-families" class="m-t-sm">
+        <VWindowItem value="shipping-families" class="m-t-sm" eager>
           <EEditableListItem
             v-model="model.shipments.families"
             class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm"
@@ -115,7 +115,7 @@ const tab = ref('taxes');
           </EEditableListItem>
         </VWindowItem>
   
-        <VWindowItem value="shipping-products" class="m-t-sm">
+        <VWindowItem value="shipping-products" class="m-t-sm" eager>
           <EEditableListItem
             v-model="model.shipments.products"
             class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm"
