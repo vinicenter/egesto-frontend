@@ -1,6 +1,6 @@
 import { reactive } from "vue"
 
-type Type = 'success' | 'error' 
+type Type = 'success' | 'error' | 'warning'
 
 const notifyState = reactive({
   model: false,
@@ -13,6 +13,7 @@ export default () => {
     const colors = {
       success: 'green-darken-2',
       error: 'red-darken-4',
+      warning: 'yellow-darken-2',
     }
 
     return colors[type]
