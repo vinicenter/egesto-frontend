@@ -69,6 +69,11 @@ const items: Item[][] = [
   ],
   [
     {
+      title: 'Configurações',
+      icon: 'mdi-cog-outline',
+      onClick: () => router.push({ name: 'settings' }),
+    },
+    {
       title: 'Usuários',
       icon: 'mdi-account-multiple',
       onClick: () => router.push({ name: 'list-users' }),

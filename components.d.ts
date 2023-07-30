@@ -39,6 +39,7 @@ declare module '@vue/runtime-core' {
     ProductForm: typeof import('./src/modules/products/components/ProductForm.vue')['default']
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
+    SettingsForm: typeof import('./src/modules/settings/components/SettingsForm.vue')['default']
     UserForm: typeof import('./src/modules/users/components/UserForm.vue')['default']
   }
 }
