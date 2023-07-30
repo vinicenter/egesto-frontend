@@ -23,5 +23,5 @@ defineProps<{
 name: create-products
 path: criar
 meta:
-  title: Criar produto
+  title: Criar Produto
 </route>

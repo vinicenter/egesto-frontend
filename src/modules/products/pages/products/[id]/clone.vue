@@ -12,16 +12,16 @@ defineProps<{
 <template>
   <ProductForm
     :disabled="false"
-    button-label="Salvar"
+    button-label="Clonar"
     :model="model"
     :loading="loading"
-    @submit="emit('submit', 'edit')"
+    @submit="emit('submit', 'create')"
   />
 </template>
 
 <route lang="yaml">
-name: edit-products
-path: editar
+name: clone-products
+path: clonar
 meta:
-  title: Editar Produto
+  title: Clonar Produto
 </route>

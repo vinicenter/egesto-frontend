@@ -23,5 +23,5 @@ defineProps<{
 name: delete-products
 path: deletar
 meta:
-  title: Excluir produto
+  title: Excluir Produto
 </route>
