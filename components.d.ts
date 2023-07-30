@@ -10,6 +10,8 @@ export {}
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
     BrandForm: typeof import('./src/modules/brands/components/BrandForm.vue')['default']
+    CostsTableForm: typeof import('./src/modules/costsTable/components/CostsTableForm.vue')['default']
+    EEditableListItem: typeof import('./src/core/components/EInput/EEditableListItem.vue')['default']
     EError: typeof import('./src/core/components/EError.vue')['default']
     EForm: typeof import('./src/core/components/EForm.vue')['default']
     EGenericIdView: typeof import('./src/core/components/EGeneric/EGenericIdView.vue')['default']

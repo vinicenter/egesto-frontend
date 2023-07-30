@@ -16,20 +16,8 @@ const props = defineProps<{
 }>();
 
 const costs = toRef(props.model, 'costs');
-
 const emit = defineEmits(['submit']);
-
 const disabled = computed(() => props.loading || props.disabled);
-
-const addNewCost = () => {
-  const value: IFamily['costs'][0] = { name: '', value: undefined };
-
-  costs.value.push(value);
-};
-
-const removeCost = (index: number) => {
-  costs.value.splice(index, 1);
-};
 
 const loadingLoadCosts = ref(false);
 
@@ -61,17 +49,14 @@ const loadCostsFromFamily = async (family: IFamily) => {
 
       <div class="font-bold">Custos</div>
 
-      <div v-if="costs.length === 0" class="flex flex-col justify-center">
-        <div>Nenhum custo cadastrado</div>
-      </div>
-
-      <template v-else>
-        <div
-          v-for="(cost, index) in costs" :key="`cost-${index}`"
-          class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
-        >
+      <EEditableListItem
+        v-model="costs"
+        class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
+        :disabled="disabled"
+      >
+        <template #default="{ item, removeItem }">
           <VTextField
-            v-model="cost.name"
+            v-model="item.name"
             :disabled="disabled"
             label="Nome"
             :rules="[required]"
@@ -79,7 +64,7 @@ const loadCostsFromFamily = async (family: IFamily) => {
 
           <div class="flex gap-x-sm">
             <EInputPct
-              v-model="cost.value"
+              v-model="item.value"
               :rules="[required]"
               :disabled="disabled"
               label="Custo (%)"
@@ -88,14 +73,12 @@ const loadCostsFromFamily = async (family: IFamily) => {
             <VBtn 
               :disabled="disabled"
               color="red"
-              @click="removeCost(index)"
+              @click="removeItem"
               icon="mdi-trash-can"
             />
           </div>
-        </div>
-      </template>
-
-      <VBtn @click="addNewCost" color="green" icon="mdi-plus" />
+        </template>
+      </EEditableListItem>
     </div>
 
     <VDivider class="m-y-sm" />

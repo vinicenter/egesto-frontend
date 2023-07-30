@@ -14,21 +14,6 @@ const props = defineProps<{
 }>();
 
 const model = toRef(props, 'model');
-
-const addNewFormulation = () => {
-  const value = {
-    value: undefined,
-    feedstock: undefined,
-    considerInWeightCalculation: false
-  };
-
-  model.value.production.formulation.push(value);
-};
-
-const removeFormulation = (index: number) => {
-  model.value.production.formulation.splice(index, 1);
-};
-
 const emit = defineEmits(['submit']);
 </script>
 
@@ -170,56 +155,46 @@ const emit = defineEmits(['submit']);
     <section>
       <div class="font-bold">Formulação</div>
 
-      <div
-        v-for="(formulation, index) in model.production.formulation" :key="`formulation-${index}`"
+      <EEditableListItem
+        v-model="model.production.formulation"
         class="grid grid-cols-1 md:grid-cols-3 gap-x-sm"
-      >
-        <ESelectFeedstocks
-          :disabled="disabled"
-          v-model="formulation.feedstock"
-          return-object
-          :rules="[required]"
-        />
-
-        <VTextField
-          :disabled="disabled"
-          type="number"
-          v-model="formulation.value"
-          label="Volume usado"
-          :rules="[required]"
-        />
-
-        <div class="flex gap-x-sm">
-          <VSelect
-            item-title="label"
-            v-model="formulation.considerInWeightCalculation"
-            :return-object="false"
-            :disabled="disabled"
-            :items="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
-            label="Considerar no cálculo de peso"
-          />
-
-          <VBtn 
-            :disabled="disabled"
-            color="red"
-            @click="removeFormulation(index)"
-            icon="mdi-trash-can"
-          />
-        </div>
-
-        <div class="flex justify-center grid-col-span-3">
-          <div class="w-98%">
-            <VDivider class="m-b-sm grid-col-span-3" />
-          </div>
-        </div>
-      </div>
-
-      <VBtn 
         :disabled="disabled"
-        @click="addNewFormulation"
-        color="green"
-        icon="mdi-plus"
-      />
+      >
+        <template #default="{ item, removeItem }">
+          <ESelectFeedstocks
+            :disabled="disabled"
+            v-model="item.feedstock"
+            return-object
+            :rules="[required]"
+          />
+
+          <VTextField
+            :disabled="disabled"
+            type="number"
+            v-model="item.value"
+            label="Volume usado"
+            :rules="[required]"
+          />
+
+          <div class="flex gap-x-sm">
+            <VSelect
+              item-title="label"
+              v-model="item.considerInWeightCalculation"
+              :return-object="false"
+              :disabled="disabled"
+              :items="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
+              label="Considerar no cálculo de peso"
+            />
+
+            <VBtn 
+              :disabled="disabled"
+              color="red"
+              @click="removeItem"
+              icon="mdi-trash-can"
+            />
+          </div>
+        </template>
+      </EEditableListItem>
     </section>
 
     <VDivider class="m-y-sm" />
