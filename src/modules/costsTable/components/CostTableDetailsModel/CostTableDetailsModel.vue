@@ -1,8 +1,8 @@
 <script setup lang="ts">
-import { getCostsTable } from '../datasource/costsTable'
+import { getCostsTable } from '../../datasource/costsTable'
 import useNotify from '@/src/core/composables/useNotify'
 import { computed, ref, watch } from 'vue';
-import { ICostsTable } from '../types/costsTable'
+import { ICostsTable } from '../../types/costsTable'
 import { useRouter } from 'vue-router';
 
 const router = useRouter()
@@ -64,7 +64,7 @@ const tableColumn = [
           title="Visualizar Tabela de Custo"
         />
 
-        <ProductDetailsSkeleton v-if="loading" />
+        <CostTableDetailsSkeleton v-if="loading" />
 
         <template v-else>
           <div class="p-sm">
