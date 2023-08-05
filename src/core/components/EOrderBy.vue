@@ -32,7 +32,7 @@ const menu = ref(false)
   <VMenu
     v-model="menu"
     :close-on-content-click="false"
-    location="end"
+    location="bottom"
   >
     <template v-slot:activator="{ props }">
       <VBtn
@@ -43,13 +43,13 @@ const menu = ref(false)
       </VBtn>
     </template>
 
-    <VCard min-width="300">
+    <VCard title="Ordenação" min-width="300">
       <VSelect
         v-model="order"
         :items="orderOptions"
         item-title="label"
         item-value="value"
-        label="Ordenar por"
+        label="Ordem"
         class="ml-sm"
       />
 

@@ -94,7 +94,7 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
 <template>
   <div>
     <div class="flex mb-sm">
-      <div class="flex items-center w-50">
+      <div class="flex items-center w-50 gap-x-sm">
         <VBtn
           @click="emit('new')"
           class="p-sm"
