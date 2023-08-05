@@ -2,8 +2,8 @@ import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
 import { ICostsTable } from '../types/costsTable'
 
-export const getAllCostsTable = async ({ page, limit, search }: tableParams) => {
-  const { data } = await axios.get('/costs-table', { params: { page, limit, search } })
+export const getAllCostsTable = async (params: tableParams) => {
+  const { data } = await axios.get('/costs-table', { params: params })
 
   return data
 }

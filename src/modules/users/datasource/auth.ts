@@ -32,8 +32,8 @@ export const getUser = async (id: string) => {
   return data
 }
 
-export const getUsers = async ({ page, limit, search }: tableParams) => {
-  const { data } = await axios.get('/users', { params: { page, limit, search } })
+export const getUsers = async (params: tableParams) => {
+  const { data } = await axios.get('/users', { params })
 
   return data
 }

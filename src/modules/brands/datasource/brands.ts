@@ -27,8 +27,8 @@ export const getBrand = async (id: string): Promise<IBrandRoot> => {
   return data
 }
 
-export const getBrands = async ({ page, limit, search }: tableParams): Promise<paginationRoot<IBrandRoot>> => {
-  const { data } = await axios.get('/brands', { params: { page, limit, search } })
+export const getBrands = async (params: tableParams): Promise<paginationRoot<IBrandRoot>> => {
+  const { data } = await axios.get('/brands', { params: params })
 
   return data
 }

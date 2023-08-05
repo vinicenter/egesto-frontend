@@ -1,8 +1,8 @@
 import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
 
-export const getFeedStocks = async ({ page, limit, search }: tableParams) => {
-  const { data } = await axios.get('/feedstocks', { params: { page, limit, search } })
+export const getFeedStocks = async (params: tableParams) => {
+  const { data } = await axios.get('/feedstocks', { params })
 
   return data
 }
