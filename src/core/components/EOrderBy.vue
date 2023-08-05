@@ -43,24 +43,27 @@ const menu = ref(false)
       </VBtn>
     </template>
 
-    <VCard title="Ordenação" min-width="300">
-      <VSelect
-        v-model="order"
-        :items="orderOptions"
-        item-title="label"
-        item-value="value"
-        label="Ordem"
-        class="ml-sm"
-      />
-
-      <VSelect
-        v-model="orderBy"
-        :items="columnsToOrder"
-        item-title="label"
-        item-value="orderByValue"
-        label="Ordenar por"
-        class="ml-sm"
-      />
+    <VCard
+      title="Ordenação"
+      min-width="300"
+    >
+      <div class="mx-sm">
+        <VSelect
+          v-model="order"
+          :items="orderOptions"
+          item-title="label"
+          item-value="value"
+          label="Ordem"
+        />
+  
+        <VSelect
+          v-model="orderBy"
+          :items="columnsToOrder"
+          item-title="label"
+          item-value="orderByValue"
+          label="Ordenar por"
+        />
+      </div>
     </VCard>
   </VMenu>
 </template>
