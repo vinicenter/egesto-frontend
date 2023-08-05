@@ -31,7 +31,6 @@ const columns = [
   {
     label: 'Preço Sem ICMS',
     style: 'width: 100px',
-    orderByValue: 'priceWithoutIcms',
     tooltip: 'Este campo é processado automáticamente.'
   },
   {
