@@ -2,11 +2,24 @@
 import { humanizeDateRange, capitalizeFirstLetter } from '~utils/format'
 import dayjs from '~utils/dayjs'
 
-const props = defineProps<{
-  columns: { label: string, style: string }[];
-  queryKey: string;
-  listDataSource: Function;
-}>();
+interface Column {
+  label: string;
+  orderByValue?: string;
+  defaultOrderByValue?: boolean;
+  style?: string;
+}
+
+const props = withDefaults(
+  defineProps<{
+    columns: Column[];
+    defaultOrder: 'DESC' | 'ASC';
+    queryKey: string;
+    listDataSource: Function;
+  }>(),
+  {
+    defaultOrder: 'ASC',
+  }
+)
 
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { ref, unref } from 'vue';
@@ -14,6 +27,28 @@ import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 
 const emit = defineEmits([ 'new' ])
 
+const columns: Column[] = [
+  ...props.columns,
+  {
+    label: 'Última atualização',
+    style: 'width: 20px',
+    orderByValue: 'updatedAt'
+  },
+  {
+    label: 'Criação',
+    style: 'width: 20px',
+    orderByValue: 'createdAt'
+  },
+  {
+    label: '',
+    style: 'width: 10px'
+  }
+]
+
+const defaultOrderBy = columns.find(column => column.defaultOrderByValue)?.orderByValue || columns[0].orderByValue
+
+const order = ref<'DESC' | 'ASC' | undefined>(props.defaultOrder)
+const orderBy = ref<string | undefined>(defaultOrderBy)
 const search = ref<string | undefined>(undefined)
 
 const {
@@ -24,8 +59,15 @@ const {
   isFetchingNextPage,
   isFetching,
 } = useInfiniteQuery({
-  queryKey: [ props.queryKey, search ],
-  queryFn: ({ pageParam, queryKey }) => props.listDataSource({ page: pageParam, search: unref(queryKey[1]) }),
+  queryKey: [ props.queryKey, search, orderBy, order ],
+  queryFn: ({ pageParam, queryKey }) => {
+    return props.listDataSource({
+      page: pageParam,
+      search: unref(queryKey[1]),
+      orderBy: unref(queryKey[2]),
+      order: unref(queryKey[3])
+    })
+  },
   getNextPageParam: (lastPage) => lastPage?.nextPage,
   select: (data) => {
     const dataSelect = data?.pages?.reduce((acc, page) => {
@@ -36,22 +78,6 @@ const {
   },
 })
 
-const columns = [
-  ...props.columns,
-  {
-    label: 'Última atualização',
-    style: 'width: 20px'
-  },
-  {
-    label: 'Criação',
-    style: 'width: 20px'
-  },
-  {
-    label: '',
-    style: 'width: 10px'
-  }
-]
-
 const formatDate = (date: string) => {
   return date ? dayjs(date).format('DD/MM/YYYY HH:mm:ss') : '-'
 }
@@ -61,6 +87,8 @@ const humanizeDate = (date: string) => {
     ? capitalizeFirstLetter(humanizeDateRange(new Date, date))
     : '-'
 }
+
+const columnsToOrder = columns.filter(column => column.orderByValue)
 </script>
 
 <template>
@@ -74,6 +102,13 @@ const humanizeDate = (date: string) => {
         >
           Novo
         </VBtn>
+
+        <EOrderBy
+          v-if="columnsToOrder.length > 0"
+          v-model:order="order"
+          v-model:orderBy="orderBy"
+          :columnsToOrder="columnsToOrder"
+        />
       </div>
 
       <VTextField
