@@ -6,7 +6,12 @@ import { ref } from 'vue';
 const router = useRouter();
 
 const columns = [
-  { label: 'Nome', style: 'width: 200px' },
+  {
+    label: 'Nome',
+    style: 'width: 200px',
+    orderByValue: 'name',
+    defaultOrderByValue: true
+  },
 ]
 
 const viewId = ref(null)

@@ -5,7 +5,12 @@ import { getPeople } from '../../datasource/people';
 const router = useRouter();
 
 const columns = [
-  { label: 'Razão Social', style: 'width: 200px' },
+  {
+    label: 'Razão Social',
+    style: 'width: 200px',
+    orderByValue: 'corporateName',
+    defaultOrderByValue: true,
+  },
   { label: 'Documento', style: 'width: 100px' },
   { label: 'Cidade', style: 'width: 100px' },
   { label: 'Estado', style: 'width: 100px' }

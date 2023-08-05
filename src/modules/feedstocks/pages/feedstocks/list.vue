@@ -10,11 +10,34 @@ const queryClient = useQueryClient();
 const { formatPrice } = priceFormat();
 
 const columns = [
-  { label: 'Nome', style: 'width: 250px' },
-  { label: 'Preço', style: 'width: 100px', tooltip: 'Você pode editar este campo clicando sobre ele na tabela.' },
-  { label: 'ICMS', style: 'width: 100px', tooltip: 'Você pode editar este campo clicando sobre ele na tabela.' },
-  { label: 'Preço Sem ICMS', style: 'width: 100px', tooltip: 'Este campo é processado automáticamente.' },
-  { label: 'Marca', style: 'width: 100px' },
+  {
+    label: 'Nome',
+    style: 'width: 250px',
+    orderByValue: 'name',
+    defaultOrderByValue: true,
+  },
+  {
+    label: 'Preço',
+    style: 'width: 100px',
+    orderByValue: 'price',
+    tooltip: 'Você pode editar este campo clicando sobre ele na tabela.',
+  },
+  {
+    label: 'ICMS',
+    style: 'width: 100px',
+    orderByValue: 'icms',
+    tooltip: 'Você pode editar este campo clicando sobre ele na tabela.'
+  },
+  {
+    label: 'Preço Sem ICMS',
+    style: 'width: 100px',
+    orderByValue: 'priceWithoutIcms',
+    tooltip: 'Este campo é processado automáticamente.'
+  },
+  {
+    label: 'Marca',
+    style: 'width: 100px'
+  },
 ]
 
 const updatePrice = async (id: string, price: Number) => {

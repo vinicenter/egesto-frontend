@@ -5,9 +5,22 @@ import { getUsers } from '../../datasource/auth';
 const router = useRouter();
 
 const columns = [
-  { label: 'Username', style: 'width: 100px' },
-  { label: 'Nome', style: 'width: 200px' },
-  { label: 'Email', style: 'width: 50px' }
+  {
+    label: 'Username',
+    style: 'width: 100px',
+    orderByValue: 'username',
+    defaultOrderByValue: true,
+  },
+  {
+    label: 'Nome',
+    style: 'width: 200px',
+    orderByValue: 'name',
+  },
+  {
+    label: 'Email',
+    style: 'width: 50px',
+    orderByValue: 'email',
+  }
 ]
 </script>
 

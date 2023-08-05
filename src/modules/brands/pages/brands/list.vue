@@ -6,8 +6,17 @@ const router = useRouter();
 import { getBrands } from '../../datasource/brands';
 
 const columns = [
-  { label: 'Nome', style: 'width: 100px' },
-  { label: 'Descrição', style: 'width: 200px' },
+  {
+    label: 'Nome',
+    style: 'width: 100px',
+    defaultOrderByValue: true,
+    orderByValue: 'name'
+  },
+  {
+    label: 'Descrição',
+    style: 'width: 200px',
+    orderByValue: 'description'
+  },
 ]
 </script>
 

@@ -5,8 +5,16 @@ import { getFamilies } from '../../datasource/families';
 const router = useRouter();
 
 const columns = [
-  { label: 'Nome', style: 'width: 100px' },
-  { label: 'Custo total', style: 'width: 100px' },
+  {
+    label: 'Nome',
+    style: 'width: 100px',
+    orderByValue: 'name',
+    defaultOrderByValue: true
+  },
+  {
+    label: 'Custo total',
+    style: 'width: 100px',
+  },
 ]
 </script>
 

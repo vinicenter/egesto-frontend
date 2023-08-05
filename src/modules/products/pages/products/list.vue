@@ -6,8 +6,8 @@ import { ref } from 'vue';
 const router = useRouter();
 
 const columns = [
-  { label: 'Código', style: 'width: 100px' },
-  { label: 'Nome', style: 'width: 200px' },
+  { label: 'Código', style: 'width: 100px', orderByValue: 'code' },
+  { label: 'Nome', style: 'width: 200px', orderByValue: 'name', defaultOrderByValue: true },
   { label: 'Família', style: 'width: 100px' },
   { label: 'Marca', style: 'width: 100px' },
 ]
