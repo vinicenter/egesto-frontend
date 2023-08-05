@@ -1,4 +1,10 @@
-export interface tableParams { page?: number, limit?: number, search?: string }
+export interface tableParams {
+  page?: number,
+  limit?: number,
+  search?: string,
+  orderBy?: string,
+  order?: string,
+}
 
 export interface paginationRoot<T> {
   docs: T[],
