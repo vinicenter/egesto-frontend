@@ -98,8 +98,16 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
 
 <template>
   <div>
-    <div class="flex mb-sm">
-      <div class="flex items-center w-50 gap-x-sm">
+    <div class="flex-col mb-sm space-y-sm">
+      <VTextField
+        label="Pesquisar"
+        hide-details="auto"
+        clearable
+        @click:clear="search = undefined"
+        @keyup.enter="search = $event.target.value"
+      />
+
+      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-sm">
         <VBtn
           @click="emit('new')"
           class="p-sm"
@@ -114,15 +122,9 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
           v-model:orderBy="orderBy"
           :columnsToOrder="columnsToOrder"
         />
-      </div>
 
-      <VTextField
-        label="Pesquisar"
-        hide-details="auto"
-        clearable
-        @click:clear="search = undefined"
-        @keyup.enter="search = $event.target.value"
-      />
+        <slot name="menu" />
+      </div>
     </div>
 
     <div v-if="isLoading">
