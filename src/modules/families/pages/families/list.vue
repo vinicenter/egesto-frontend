@@ -14,6 +14,7 @@ const columns = [
   {
     label: 'Custo total',
     style: 'width: 100px',
+    tooltip: 'É a somatória de todos os custos da família',
   },
 ]
 </script>

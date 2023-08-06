@@ -7,6 +7,7 @@ interface Column {
   orderByValue?: string;
   defaultOrderByValue?: boolean;
   style?: string;
+  tooltip?: string;
 }
 
 const props = withDefaults(
@@ -24,6 +25,7 @@ const props = withDefaults(
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { ref, unref } from 'vue';
 import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
+import ETable from './ETable.vue';
 
 const emit = defineEmits([ 'new' ])
 
@@ -74,7 +76,10 @@ const {
       return [ ...acc, ...page.docs ]
     }, [])
 
-    return dataSelect
+    return {
+      ...data,
+      pages: dataSelect
+    }
   },
 })
 
@@ -133,7 +138,7 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
       v-else
       class="p-sm"
       :columns="columns"
-      :data="data"
+      :data="data?.pages"
       :next-page="fetchNextPage"
       :has-next-page="hasNextPage"
       :loading="isFetchingNextPage || isFetching"

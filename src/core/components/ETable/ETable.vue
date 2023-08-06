@@ -1,10 +1,8 @@
 <script lang="ts" setup>
-type AvoidValidation<T> = T
-
 withDefaults(defineProps<{
-  columns: { label: string, style: string, tooltip?: string }[];
-  data: AvoidValidation<{ [key: string]: any; }[] | undefined>;
-  hasNextPage: AvoidValidation<boolean | undefined>;
+  columns: { label: string, style?: string, tooltip?: string }[];
+  data?: any[];
+  hasNextPage?: boolean;
   loading: boolean;
   noDataText?: string;
   nextPage: Function;
