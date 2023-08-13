@@ -1,4 +1,5 @@
 export interface IPeople {
+  _id?: string
   document: string
   stateRegistration?: string
   corporateName: string

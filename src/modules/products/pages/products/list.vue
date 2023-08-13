@@ -2,14 +2,18 @@
 import { useRouter } from 'vue-router'
 import { getProducts } from '../../datasource/products';
 import { ref } from 'vue';
+import { priceFormat } from '@/src/core/utils/format';
 
 const router = useRouter();
+const { formatPrice } = priceFormat();
 
 const columns = [
   { label: 'Código', style: 'width: 100px', orderByValue: 'code' },
   { label: 'Nome', style: 'width: 200px', orderByValue: 'name', defaultOrderByValue: true },
   { label: 'Família', style: 'width: 100px' },
-  { label: 'Marca', style: 'width: 100px' },
+  { label: 'Unidade por Pack', style: 'width: 100px' },
+  { label: 'Custo unitário', style: 'width: 100px' },
+  { label: 'Custo total', style: 'width: 100px' },
 ]
 
 const viewId = ref(null)
@@ -38,7 +42,9 @@ export default {
       <td>{{ item.code || '-' }}</td>
       <td>{{ item.name || '-' }}</td>
       <td>{{ item.family?.name || '-' }}</td>
-      <td>{{ item.brand?.name || '-' }}</td>
+      <td>{{ item.pack?.numberOfUnitsInPack || '-' }}</td>
+      <td>{{ item.production?.cost?.unitCost ? formatPrice(item.production?.cost?.unitCost) : '-' }}</td>
+      <td>{{ item.production?.cost?.packCost ? formatPrice(item.production?.cost?.packCost) : '-' }}</td>
     </template>
 
     <template #actions="{ item }">

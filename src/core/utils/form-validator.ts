@@ -1,4 +1,8 @@
-export const required = (v: string) => !!v || 'Campo obrigatório';
+export const required = (v: any) => {
+  if(v === undefined || v === null || v === '') return 'Campo obrigatório'
+
+  return true
+};
 
 export const emailValidation = (value: string) => {
   if(!value) return true 
