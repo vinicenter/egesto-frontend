@@ -96,11 +96,11 @@ const drawer = ref(false)
 <template>
   <VLayout>
     <VAppBar v-if="enableNavbar">
-      <VAppBarTitle>eGesto</VAppBarTitle>
       <VAppBarNavIcon @click="drawer = !drawer" />
+      <VAppBarTitle>eGesto</VAppBarTitle>
     </VAppBar>
     
-    <VNavigationDrawer v-model="drawer" location="right" width="250" v-if="enableNavbar">
+    <VNavigationDrawer v-model="drawer" location="left" width="250" v-if="enableNavbar">
       <VList density="compact" nav>
         <template v-for="(buttons) in items">
           <template v-for="button in buttons">
