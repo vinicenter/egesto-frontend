@@ -32,7 +32,6 @@ const {
 
 <template>
   <VCombobox
-    single-line
     :items="data?.pages"
     :loading="isLoading"
     :return-object="false"
