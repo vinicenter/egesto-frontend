@@ -94,12 +94,12 @@ const drawer = ref(false)
 </script>
 
 <template>
-  <VLayout>
+  <VLayout class="h-100vh">
     <VAppBar v-if="enableNavbar">
       <VAppBarNavIcon @click="drawer = !drawer" />
       <VAppBarTitle>eGesto</VAppBarTitle>
     </VAppBar>
-    
+
     <VNavigationDrawer v-model="drawer" location="left" width="250" v-if="enableNavbar">
       <VList density="compact" nav>
         <template v-for="(buttons) in items">
@@ -117,7 +117,7 @@ const drawer = ref(false)
     </VNavigationDrawer>
 
     <VMain>
-      <VContainer>
+      <VContainer class="h-100vh">
         <h1>{{ route.meta.title }}</h1>
 
         <slot />

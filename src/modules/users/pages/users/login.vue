@@ -51,7 +51,12 @@ const submit = async () => {
 
 <template>
   <div class="flex justify-center items-center h-full">
-    <div class="w-300px h-300px">
+    <div class="w-300px h-300px space-y-sm">
+      <div class="flex flex-col items-center">
+        <div class="text-3xl">eGesto</div>
+        <div class="text-1xl">um gesto digital</div>
+      </div>
+
       <LoginForm
         :model="model"
         :loading="loading"
