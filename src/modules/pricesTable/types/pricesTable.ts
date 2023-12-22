@@ -22,5 +22,6 @@ export namespace IPricesTable {
     expense: number;
     tax: number;
     productionLost: number;
+    margin: number;
   }
 }

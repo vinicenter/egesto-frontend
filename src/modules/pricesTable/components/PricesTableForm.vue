@@ -6,9 +6,11 @@ import { computed } from 'vue';
 import { toRef } from 'vue';
 import { useRouter } from 'vue-router';
 import ESelectProducts from '@/src/core/components/ESelect/ESelectProducts.vue';
-import { IProduct } from '../../products/types/product';
+import useNotify from '@/src/core/composables/useNotify';
+import PricesTabelaSummary from './PricesTabelaSummary.vue';
 
 const router = useRouter();
+const { displayMessage } = useNotify();
 
 const props = defineProps<{
   model: IPricesTable.Root;
@@ -22,11 +24,37 @@ const emit = defineEmits(['submit']);
 
 const disabled = computed(() => props.loading || props.disabled);
 
-const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['prices'][0]) => {
-  row.productCost = product.production?.cost?.packCost || 0;
+const setProductMargin = (row: IPricesTable.Root['prices'][0]) => {
+  const volume = row.volume;
+  const price = Number(row.price);
+  const shipment = row.shipment/100;
+  const tax = row.tax/100;
+  const expense = row.expense/100;
+  const productionLost = row.productionLost/100;
+  const productCost = row.productCost*volume;
+
+  const totalRevenue = volume * price;
+  const shipmentValue = shipment * totalRevenue;
+  const unitTotal = totalRevenue-shipmentValue;
+  const taxes = tax * unitTotal;
+
+  const netRevenue = unitTotal - taxes;
+  const expensesVariables = expense*totalRevenue;
+  const lost = productionLost*totalRevenue;
+
+  row.margin = Number((((netRevenue - expensesVariables - productCost - lost)/totalRevenue)*100).toPrecision(5));
+  row.netSales = netRevenue;
+  row.grossRevenue = totalRevenue;
+}
+
+const setProductDataToPrice = (row: IPricesTable.Root['prices'][0]) => {
+  const product = row.product
+
+  row.productCost = product?.production?.cost?.packCost || 0;
   row.expense = product.family?.totalCosts || 0;
   row.productionLost = product?.production?.lost || 0;
-  row.volume = 1;
+  row.volume = row.volume || 1;
+  row.price = row.price || 0;
 
   row.tax = model.value.costTable?.taxes.reduce((acc, tax) => {
     return acc + (tax.cost || 0);
@@ -40,6 +68,50 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
     row.shipment = model.value.costTable?.shipments.families.find((shipment) => shipment.family._id === product.family?._id)?.cost || 0;
   }
 }
+
+const syncAllProducts = () => {
+  model.value.prices.forEach((price) => {
+    setProductDataToPrice(price);
+    setProductMargin(price);
+  });
+
+  displayMessage({ 
+    message: 'Produtos sincronizados com a tabela de preço e família',
+    type: 'success'
+  })
+}
+
+const volumeTotal = computed(() => {
+  return model.value.prices.reduce((acc, price) => {
+    return price.netSales
+      ? acc + Number(price.volume)
+      : acc;
+  }, 0);
+})
+
+const grossRevenue = computed(() => {
+  return model.value.prices.reduce((acc, price) => {
+    return price.grossRevenue
+      ? acc + Number(price.grossRevenue)
+      : acc;
+  }, 0);
+})
+
+const totalNetRevenue = computed(() => {
+  return model.value.prices.reduce((acc, price) => {
+    return price.netSales
+      ? acc + Number(price.netSales)
+      : acc;
+  }, 0);
+})
+
+const mediumMargin = computed(() => {
+  return model.value.prices.reduce((acc, price) => {
+    return price.margin ?
+      acc + Number(price.margin)
+      : acc;
+  }, 0)/(model.value.prices.length) || 0;
+})
 </script>
 
 <template>
@@ -66,17 +138,36 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
         label="Cliente"
       />
 
-      <VSwitch
-        :disabled="disabled"
-        v-model="model.archived"
-        label="Arquivar"
+      <div class="flex items-left">
+        <VSwitch
+          :disabled="disabled"
+          v-model="model.archived"
+          label="Arquivar"
+          class="w-100px"
+        />
+
+        <VTooltip>
+          <template v-slot:activator="{ props }">
+            <VBtn @click="syncAllProducts" v-bind="props" icon="mdi-sync" />
+          </template>
+          <span>Sincronizar produtos com tabela de custo e familia</span>
+        </VTooltip>
+      </div>
+
+      <VDivider class="m-y-sm" />
+
+      <PricesTabelaSummary
+        :volumeTotal="volumeTotal"
+        :grossRevenue="grossRevenue"
+        :totalNetRevenue="totalNetRevenue"
+        :mediumMargin="mediumMargin"
       />
 
-      <VDivider class="m-b-sm" />
+      <VDivider class="m-y-sm" />
 
       <EEditableListItem
         v-model="model.prices"
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm"
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-sm"
         :disabled="disabled"
       >
         <template #default="{ removeItem, item }">
@@ -86,7 +177,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
               :disabled="disabled"
               :rules="[required]"
               label="Produto"
-              @update:model-value="setProductDataToPrice($event, item)"
+              @update:model-value="setProductDataToPrice(item)"
               return-object
             />
           </div>
@@ -95,6 +186,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
             v-model="item.price"
             :rules="[required]"
             :disabled="disabled"
+            @update:model-value="setProductMargin(item)"
             label="Preço de venda"
           />
 
@@ -102,6 +194,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
             v-model="item.volume"
             :rules="[required]"
             :disabled="disabled"
+            @update:model-value="setProductMargin(item)"
             type="number"
             label="Volume"
           />
@@ -110,6 +203,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
             v-model="item.productCost"
             :rules="[required]"
             :disabled="disabled"
+            @update:model-value="setProductMargin(item)"
             label="Custo do produto"
           />
 
@@ -117,6 +211,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
             v-model="item.shipment"
             :rules="[required]"
             :disabled="disabled"
+            @update:model-value="setProductMargin(item)"
             label="Frete (%)"
           />
 
@@ -124,6 +219,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
             v-model="item.expense"
             :rules="[required]"
             :disabled="disabled"
+            @update:model-value="setProductMargin(item)"
             label="Despesas (%)"
           />
 
@@ -131,6 +227,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
             v-model="item.productionLost"
             :rules="[required]"
             :disabled="disabled"
+            @update:model-value="setProductMargin(item)"
             label="Perdas de produção (%)"
           />
 
@@ -138,16 +235,18 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
             v-model="item.tax"
             :rules="[required]"
             :disabled="disabled"
+            @update:model-value="setProductMargin(item)"
             label="Impostos (%)"
           />
 
+          <EInputPct
+            v-model="item.margin"
+            :rules="[required]"
+            :disabled="disabled"
+            label="Margem (%)"
+          />
+
           <div class="flex gap-x-sm">
-            <EInputPct
-              v-model="item.price"
-              :rules="[required]"
-              :disabled="disabled"
-              label="Margem (%)"
-            />
 
             <VBtn 
               :disabled="disabled"
@@ -163,7 +262,7 @@ const setProductDataToPrice = (product: IProduct.Root, row: IPricesTable.Root['p
       </EEditableListItem>
     </section>
 
-    <VDivider class="m-b-sm" />
+    <VDivider class="m-y-sm" />
 
     <section class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-sm">
       <VBtn

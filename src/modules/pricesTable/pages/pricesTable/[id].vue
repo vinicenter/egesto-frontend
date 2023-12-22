@@ -41,6 +41,7 @@ const formatSubmit = (data: IPricesTable.Root) => {
       netSales: Number(price.netSales),
       productCost: Number(price.productCost),
       productionLost: Number(price.productionLost),
+      margin: Number(price.margin),
     }))
   }
 }

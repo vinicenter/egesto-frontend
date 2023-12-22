@@ -40,6 +40,7 @@ declare module '@vue/runtime-core' {
     FeedStockForm: typeof import('./src/modules/feedstocks/components/feedStockForm.vue')['default']
     LoginForm: typeof import('./src/modules/users/components/LoginForm.vue')['default']
     PersonForm: typeof import('./src/modules/people/components/PersonForm.vue')['default']
+    PricesTabelaSummary: typeof import('./src/modules/pricesTable/components/PricesTabelaSummary.vue')['default']
     PricesTableForm: typeof import('./src/modules/pricesTable/components/PricesTableForm.vue')['default']
     ProductDetailsInfo: typeof import('./src/modules/products/components/ProductDetailsModel/tabs/ProductDetailsInfo.vue')['default']
     ProductDetailsModel: typeof import('./src/modules/products/components/ProductDetailsModel/ProductDetailsModel.vue')['default']

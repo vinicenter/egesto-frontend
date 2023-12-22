@@ -6,7 +6,7 @@ import { getAllCostsTable } from '@/src/modules/costsTable/datasource/costsTable
   <ESelectQuery
     item-title="name"
     item-value="_id"
-    label="Tabelas de Preços"
+    label="Tabelas de Custos"
     queryKey="select-costs-table"
     :query-fn="getAllCostsTable"
   />

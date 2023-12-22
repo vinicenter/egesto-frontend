@@ -32,7 +32,7 @@ export default {
 
   <div v-for="(item, index) in model" :key="`generic-list-${index}`">
     <div v-bind="attrs">
-      <slot :item="item" :remove-item="() => removeItem(index)" />
+      <slot :item="item" :index="index" :remove-item="() => removeItem(index)" />
     </div>
 
     <div class="flex justify-center grid-col-span-3">
