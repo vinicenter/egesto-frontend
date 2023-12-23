@@ -5,21 +5,13 @@ import { createLogin } from '../../datasource/auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useNotify from '@/src/core/composables/useNotify';
-import { useForm } from 'vee-validate';
-
-interface FormValues {
-  tenant: string
-  username: string
-  password: string
-}
-
-const form = useForm<FormValues>()
+import { LoginFormValues } from '../../components/LoginForm.vue';
 
 const loading = ref(false);
 const router = useRouter();
 const { displayMessage } = useNotify();
 
-const submit = form.handleSubmit(async(values) => {
+const submit = async (values: LoginFormValues) => {
   saveTenant(values.tenant)
 
   try {
@@ -44,7 +36,7 @@ const submit = form.handleSubmit(async(values) => {
   finally {
     loading.value = false
   }
-})
+}
 </script>
 
 <template>
@@ -55,18 +47,10 @@ const submit = form.handleSubmit(async(values) => {
         <div class="text-1xl">um gesto digital</div>
       </div>
 
-      <form @submit.prevent="submit">
-        <LoginFields />
-
-        <VBtn
-          :loading="loading"
-          type="submit"
-          class="mt-2"
-          block
-        >
-          Entrar
-        </VBtn>
-      </form>
+      <LoginForm
+        @submit="submit"
+        :loading="loading"
+      />
     </div>
   </div>
 </template>

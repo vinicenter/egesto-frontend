@@ -17,6 +17,7 @@ declare module '@vue/runtime-core' {
     EEditableListItem: typeof import('./src/core/components/EInput/EEditableListItem.vue')['default']
     EError: typeof import('./src/core/components/EError.vue')['default']
     EForm: typeof import('./src/core/components/EForm.vue')['default']
+    EGenericIdForm: typeof import('./src/core/components/EGeneric/EGenericIdForm.vue')['default']
     EGenericIdView: typeof import('./src/core/components/EGeneric/EGenericIdView.vue')['default']
     EInputPct: typeof import('./src/core/components/EInput/EInputPct.vue')['default']
     EInputPrice: typeof import('./src/core/components/EInput/EInputPrice.vue')['default']
@@ -54,6 +55,7 @@ declare module '@vue/runtime-core' {
     RouterLink: typeof import('vue-router')['RouterLink']
     RouterView: typeof import('vue-router')['RouterView']
     SettingsForm: typeof import('./src/modules/settings/components/SettingsForm.vue')['default']
+    UserFields: typeof import('./src/modules/users/components/UserFields.vue')['default']
     UserForm: typeof import('./src/modules/users/components/UserForm.vue')['default']
   }
 }

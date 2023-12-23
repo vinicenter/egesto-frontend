@@ -29,7 +29,7 @@ const columns = [
     :columns="columns"
     :list-data-source="getUsers"
     query-key="users"
-    @new="router.push({ name: 'create-user', params: { id: 'novo' } })"
+    @new="router.push({ name: 'user', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.username || '-' }}</td>

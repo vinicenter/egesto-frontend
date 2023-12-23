@@ -32,9 +32,9 @@ const itemsFiltered = items.filter(item => item.visible)
 
 const goTo = (type: string) => {
   const paths: Record<string, Function> = {
-    edit: () => router.push({ name: `edit-${props.page}`, params: { id: props.id } }),
-    clone: () => router.push({ name: `clone-${props.page}`, params: { id: props.id } }),
-    delete: () => router.push({ name: `delete-${props.page}`, params: { id: props.id } }),
+    edit: () => router.push({ name: props.page, params: { id: props.id, type: 'editar' } }),
+    clone: () => router.push({ name: props.page, params: { id: props.id, type: 'clonar' } }),
+    delete: () => router.push({ name: props.page, params: { id: props.id, type: 'deletar' } }),
     view: () => emit('view', props.id),
   }
 

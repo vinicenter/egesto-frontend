@@ -3,24 +3,33 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import type { IUser } from '../types/auth';
 import { emailValidation, required } from '@/src/core/utils/form-validator';
+import { useForm } from 'vee-validate';
 
 const router = useRouter();
 
 const props = defineProps<{
-  model: IUser;
   disabled: boolean,
   buttonLabel: string | undefined,
   loading: boolean;
   passwordRequired: boolean,
+  initialValues: IUser
 }>();
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits<{
+  (e: 'submit', values: IUser): void
+}>();
 
 const disabled = computed(() => props.loading || props.disabled);
+
+const { handleSubmit } = useForm<IUser>({
+  initialValues: props.initialValues
+})
+
+const submit = handleSubmit(async (values) => emit('submit', values))
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
+  <form @submit.prevent="submit">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
       <EInputText
         name="name"
@@ -40,7 +49,7 @@ const disabled = computed(() => props.loading || props.disabled);
         name="email"
         :disabled="disabled"
         label="Email"
-        :rules="[emailValidation]"
+        :rules="[required, emailValidation]"
       />
 
       <EInputText
@@ -73,5 +82,5 @@ const disabled = computed(() => props.loading || props.disabled);
         Voltar
       </VBtn>
     </div>
-  </EForm>
+  </form>
 </template>
