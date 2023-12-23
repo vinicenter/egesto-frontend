@@ -1,33 +1,33 @@
 <script setup lang="ts">
-import type { AxiosError } from 'axios';
-import LoginForm from '../../components/LoginForm.vue'
 import { saveTenant } from '~utils/tenant'
 import { saveToken } from '~utils/auth'
 import { createLogin } from '../../datasource/auth';
-import { reactive, ref } from 'vue';
+import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useNotify from '@/src/core/composables/useNotify';
+import { useForm } from 'vee-validate';
 
-const router = useRouter();
+interface FormValues {
+  tenant: string
+  username: string
+  password: string
+}
+
+const form = useForm<FormValues>()
+
 const loading = ref(false);
+const router = useRouter();
+const { displayMessage } = useNotify();
 
-const { displayMessage } = useNotify()
-
-const model = reactive({
-  tenant: '',
-  username: '',
-  password: '',
-})
-
-const submit = async () => {
-  saveTenant(model.tenant)
+const submit = form.handleSubmit(async(values) => {
+  saveTenant(values.tenant)
 
   try {
     loading.value = true
-    const data = await createLogin(model.username, model.password)
+    const data = await createLogin(values.username, values.password)
 
     saveToken(data.token)
-    
+
     router.push({ name: 'home' })
 
     displayMessage({
@@ -35,18 +35,16 @@ const submit = async () => {
       type: 'success'
     })
   }
-  catch (err) {
-    const error = err as AxiosError<{ error: string }>
-
+  catch {
     displayMessage({
-      message: error.response?.data.error as string || 'Erro ao efetuar login. Verifique suas credências e tente novamente',
+      message: 'Erro ao efetuar login. Verifique suas credências e tente novamente',
       type: 'error'
     })
   }
   finally {
     loading.value = false
   }
-}
+})
 </script>
 
 <template>
@@ -57,11 +55,18 @@ const submit = async () => {
         <div class="text-1xl">um gesto digital</div>
       </div>
 
-      <LoginForm
-        :model="model"
-        :loading="loading"
-        @submit="submit"
-      />
+      <form @submit.prevent="submit">
+        <LoginFields />
+
+        <VBtn
+          :loading="loading"
+          type="submit"
+          class="mt-2"
+          block
+        >
+          Entrar
+        </VBtn>
+      </form>
     </div>
   </div>
 </template>

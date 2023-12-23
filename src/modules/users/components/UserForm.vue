@@ -22,29 +22,29 @@ const disabled = computed(() => props.loading || props.disabled);
 <template>
   <EForm @submit="emit('submit', $event)">
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
-      <VTextField
-        v-model="model.name"
+      <EInputText
+        name="name"
         :disabled="disabled"
         label="Nome"
         :rules="[required]"
       />
 
-      <VTextField
-        v-model="model.username"
+      <EInputText
+        name="username"
         :disabled="disabled"
         label="Usuário"
         :rules="[required]"
       />
 
-      <VTextField
-        v-model="model.email"
+      <EInputText
+        name="email"
         :disabled="disabled"
         label="Email"
         :rules="[emailValidation]"
       />
 
-      <VTextField
-        v-model="model.password"
+      <EInputText
+        name="password"
         :disabled="disabled"
         label="Senha"
         type="password"
