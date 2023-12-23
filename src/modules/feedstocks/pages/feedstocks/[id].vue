@@ -3,18 +3,30 @@ import { useRouter } from 'vue-router';
 import { createFeedStock, deleteFeedStock, getFeedStock, updateFeedStock } from '../../datasource/feedstocks'
 import { IFeedstock } from '../../types/feedstocks';
 
-defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
+const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 
 const router = useRouter()
 
 const formatSubmitFeedStock = async (data: IFeedstock) => {
+  const brand = props.type === 'criar'
+    ? data.brand?._id ? data.brand._id : undefined
+    : data.brand?._id ? data.brand._id : null 
+
   return {
     name: data.name,
     price: Number(data.price),
     icms: Number(data.icms),
     ncm: data.ncm,
-    brand: data.brand?._id ? data.brand._id : null,
+    brand: brand,
   }
+}
+
+const initialValuesCreate = {
+  name: '',
+  price: '',
+  icms: '',
+  ncm: '',
+  brand: null,
 }
 </script>
 
@@ -27,6 +39,7 @@ const formatSubmitFeedStock = async (data: IFeedstock) => {
     :create-fn="createFeedStock"
     :update-fn="updateFeedStock"
     :format-submit-fn="formatSubmitFeedStock"
+    :initial-values-create="initialValuesCreate"
     @finish="router.push({ name: 'list-feedstocks' })"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
