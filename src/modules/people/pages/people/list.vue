@@ -22,7 +22,7 @@ const columns = [
     :columns="columns"
     :list-data-source="getPeople"
     query-key="people"
-    @new="router.push({ name: 'create-people', params: { id: 'novo' } })"
+    @new="router.push({ name: 'person', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.corporateName || '-' }}</td>
@@ -37,7 +37,7 @@ const columns = [
         delete
         edit
         :clone="false"
-        page="people"
+        page="person"
       />
     </template>
   </ETableGenericList>

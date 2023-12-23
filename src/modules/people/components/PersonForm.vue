@@ -1,108 +1,121 @@
 <script lang="ts" setup>
 import type { IPeople } from '../types/people';
-import { required } from '@/src/core/utils/form-validator';
+import { emailValidation, required, cpfCnpjValidator } from '@/src/core/utils/form-validator';
+import { useForm } from 'vee-validate';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 const props = defineProps<{
-  model: IPeople;
   disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;
+  initialValues: IPeople;
 }>();
 
-const emit = defineEmits(['submit']);
+const emit = defineEmits<{
+  (e: 'submit', values: IPeople): void
+}>();
+
+const form = useForm<IPeople>({
+  initialValues: props.initialValues,
+})
 
 const disabled = computed(() => props.loading || props.disabled);
+
+const submit = form.handleSubmit(async (values) => {
+  emit('submit', values);
+});
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
+  <form @submit.prevent="submit">
 
     <section>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
-        <VTextField
+        <EInputText
+          name="corporateName"
           :disabled="disabled"
-          v-model="model.corporateName"
           label="Razão Social"
           :rules="[required]"
         />
 
-        <VTextField
+        <EInputText
+          name="fantasyName"
           :disabled="disabled"
-          v-model="model.fantasyName"
           label="Nome Fantasia"
           :rules="[required]"
         />
 
-        <VTextField
+        <EInputText
+          name="document"
           :disabled="disabled"
-          v-model="model.document"
           label="CNPJ / CPF"
-          :rules="[required]"
+          :rules="[required, cpfCnpjValidator]"
         />
 
-        <VTextField
+        <EInputText
+          name="stateRegistration"
           :disabled="disabled"
-          v-model="model.stateRegistration"
           label="Inscrição Estadual"
         />
 
-        <VTextField
+        <EInputText
+          name="phone"
           :disabled="disabled"
-          v-model="model.phone"
           label="Celular"
         />
 
-        <VTextField
+        <EInputText
+          name="email"
           :disabled="disabled"
-          v-model="model.email"
           label="E-mail"
+          :rules="[emailValidation]"
         />
 
-        <VTextField
+        <EInputText
+          name="address.zipCode"
           :disabled="disabled"
-          v-model="model.address.zipCode"
           label="CEP"
         />
 
         <ESelectStates
+          name="address.federativeUnit"
           :disabled="disabled"
-          v-model="model.address.federativeUnit"
           label="UF"
+          :rules="[required]"
         />
 
-        <VTextField
+        <EInputText
+          name="address.city"
           :disabled="disabled"
-          v-model="model.address.city"
           label="Cidade"
         />
 
-        <VTextField
+        <EInputText
+          name="address.neighborhood"
           :disabled="disabled"
-          v-model="model.address.neighborhood"
           label="Bairro"
         />
 
-        <VTextField
+        <EInputText
+          name="address.street"
           :disabled="disabled"
-          v-model="model.address.street"
           label="Rua"
         />
 
-        <VTextField
+        <EInputText
+          name="address.number"
           :disabled="disabled"
-          v-model="model.address.number"
           label="Número"
         />
       </div>
     </section>
 
-    <VTextarea
+    <ETextarea
+      name="observation"
       :disabled="disabled"
-      v-model="model.observation"
       label="Observação"
     />
 
@@ -127,5 +140,5 @@ const disabled = computed(() => props.loading || props.disabled);
         Voltar
       </VBtn>
     </div>
-  </EForm>
+  </form>
 </template>
