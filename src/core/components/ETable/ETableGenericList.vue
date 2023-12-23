@@ -24,7 +24,6 @@ const props = withDefaults(
 
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { ref, unref } from 'vue';
-import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 import ETable from './ETable.vue';
 
 const emit = defineEmits([ 'new' ])

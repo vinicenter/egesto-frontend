@@ -1,6 +1,5 @@
 <script lang="ts" setup>
 import { useInfiniteQuery } from '@tanstack/vue-query';
-import { VSkeletonLoader } from 'vuetify/labs/VSkeletonLoader'
 import { ref, unref } from 'vue';
 
 const props = defineProps<{

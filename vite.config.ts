@@ -17,7 +17,11 @@ export default defineConfig({
     },
   },
   plugins: [
-    vue(),
+    vue({
+      script: {
+        defineModel: true,
+      },
+    }),
     vuetify({ autoImport: true }),
     UnoCSS(),
     Pages({ dirs: [ 'src/modules/**/pages' ] }),

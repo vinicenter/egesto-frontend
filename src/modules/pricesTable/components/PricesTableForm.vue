@@ -7,10 +7,12 @@ import { toRef } from 'vue';
 import { useRouter } from 'vue-router';
 import ESelectProducts from '@/src/core/components/ESelect/ESelectProducts.vue';
 import useNotify from '@/src/core/composables/useNotify';
-import PricesTabelaSummary from './PricesTabelaSummary.vue';
+import PricesTableSummary from './PricesTableSummary.vue';
+import { priceFormat } from '@/src/core/utils/format';
 
 const router = useRouter();
 const { displayMessage } = useNotify();
+const { formatPrice } = priceFormat();
 
 const props = defineProps<{
   model: IPricesTable.Root;
@@ -116,6 +118,16 @@ const mediumMargin = computed(() => {
 
 <template>
   <EForm @submit="emit('submit', $event)">
+    <PricesTableSummary
+      class="m-y-sm"
+      :volumeTotal="volumeTotal"
+      :grossRevenue="grossRevenue"
+      :totalNetRevenue="totalNetRevenue"
+      :mediumMargin="mediumMargin"
+    />
+
+    <VDivider class="m-y-sm" />
+
     <section>
       <VTextField
         :disabled="disabled"
@@ -156,22 +168,13 @@ const mediumMargin = computed(() => {
 
       <VDivider class="m-y-sm" />
 
-      <PricesTabelaSummary
-        :volumeTotal="volumeTotal"
-        :grossRevenue="grossRevenue"
-        :totalNetRevenue="totalNetRevenue"
-        :mediumMargin="mediumMargin"
-      />
-
-      <VDivider class="m-y-sm" />
-
       <EEditableListItem
         v-model="model.prices"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-sm"
         :disabled="disabled"
       >
         <template #default="{ removeItem, item }">
-          <div class="col-span-full">
+          <div class="col-span-full flex gap-sm">
             <ESelectProducts
               v-model="item.product"
               :disabled="disabled"
@@ -179,6 +182,24 @@ const mediumMargin = computed(() => {
               label="Produto"
               @update:model-value="setProductDataToPrice(item)"
               return-object
+            />
+
+            <VBtn 
+              :disabled="disabled"
+              color="red"
+              @click="removeItem"
+              icon="mdi-trash-can"
+            />
+
+            <PricesTableCostsDetail
+              v-model:shipment="item.shipment"
+              v-model:tax="item.tax"
+              v-model:expense="item.expense"
+              v-model:productionLost="item.productionLost"
+              @update:shipment="setProductMargin(item)"
+              @update:tax="setProductMargin(item)"
+              @update:expense="setProductMargin(item)"
+              @update:productionLost="setProductMargin(item)"
             />
           </div>
 
@@ -199,46 +220,6 @@ const mediumMargin = computed(() => {
             label="Volume"
           />
 
-          <EInputPrice
-            v-model="item.productCost"
-            :rules="[required]"
-            :disabled="disabled"
-            @update:model-value="setProductMargin(item)"
-            label="Custo do produto"
-          />
-
-          <EInputPct
-            v-model="item.shipment"
-            :rules="[required]"
-            :disabled="disabled"
-            @update:model-value="setProductMargin(item)"
-            label="Frete (%)"
-          />
-
-          <EInputPct
-            v-model="item.expense"
-            :rules="[required]"
-            :disabled="disabled"
-            @update:model-value="setProductMargin(item)"
-            label="Despesas (%)"
-          />
-
-          <EInputPct
-            v-model="item.productionLost"
-            :rules="[required]"
-            :disabled="disabled"
-            @update:model-value="setProductMargin(item)"
-            label="Perdas de produção (%)"
-          />
-
-          <EInputPct
-            v-model="item.tax"
-            :rules="[required]"
-            :disabled="disabled"
-            @update:model-value="setProductMargin(item)"
-            label="Impostos (%)"
-          />
-
           <EInputPct
             v-model="item.margin"
             :rules="[required]"
@@ -246,17 +227,11 @@ const mediumMargin = computed(() => {
             label="Margem (%)"
           />
 
-          <div class="flex gap-x-sm">
-
-            <VBtn 
-              :disabled="disabled"
-              color="red"
-              @click="removeItem"
-              icon="mdi-trash-can"
-            />
-
-            <div>Faturamento liquido: {{ item.netSales }}</div>
-            <div>Faturamento bruto: {{ item.grossRevenue }}</div>
+          <div class="flex flex-col gap-x-sm">
+            <div>Família: {{ item.product?.family?.name }}</div>
+            <div>Custo: {{ formatPrice(item.productCost) }}</div>
+            <div>Fat. liquido: {{ formatPrice(item.netSales) }}</div>
+            <div>Fat. bruto: {{ formatPrice(item.grossRevenue) }}</div>
           </div>
         </template>
       </EEditableListItem>
