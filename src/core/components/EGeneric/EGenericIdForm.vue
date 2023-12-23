@@ -4,7 +4,7 @@ import useNotify from '../../composables/useNotify';
 
 const props = defineProps<{
   id: string | 'novo',
-  type: 'criar' | 'deletar' | 'editar'
+  type: 'criar' | 'deletar' | 'editar' | 'clonar'
   getFn: Function
   createFn: Function
   deleteFn: Function
@@ -41,6 +41,7 @@ const buttonLabel = computed(() => {
     criar: 'Criar',
     deletar: 'Deletar',
     editar: 'Editar',
+    clonar: 'Clonar',
   }
 
   return options[props.type]
@@ -54,6 +55,7 @@ const submit = async (values: unknown) => {
   const options: Record<typeof props.type, () => void> = {
     criar: () => saveModel('create', values),
     editar: () => saveModel('edit', values), 
+    clonar: () => saveModel('create', values),
     deletar: () => saveModel('delete'),
   }
 

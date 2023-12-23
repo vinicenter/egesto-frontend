@@ -115,7 +115,7 @@ const tableColumn = [
                     <td>
                       <RouterLink
                         v-if="item?.family?.name"
-                        :to="{ name: 'edit-families', params: { id: item?.family?._id } }"
+                        :to="{ name: 'family', params: { id: item?.family?._id, type: 'edit' } }"
                       >
                         {{ item?.family?.name }}
                       </RouterLink>
@@ -170,7 +170,7 @@ const tableColumn = [
           <VBtn
             variant="flat"
             color="primary"
-            @click="router.push({ name: 'edit-costs-table', params: { id: costsTableData?._id } })"
+            @click="router.push({ name: 'cost-table', params: { id: costsTableData?._id, type: 'editar' } })"
           >
             Editar
           </VBtn>

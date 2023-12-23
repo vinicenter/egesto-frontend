@@ -1,14 +1,13 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { createCostsTable, deleteCostsTable, getCostsTable, updateCostsTable } from '../../datasource/costsTable';
-import { ICostsTable } from '../../types/costsTable'
-import { reactive } from 'vue';
-
-defineProps<{ id: string }>()
+import { ICostsTable } from '../../types/costsTable';
 
 const router = useRouter();
 
-const model = reactive<ICostsTable.Root>({
+defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
+
+const initialValues = {
   name: '',
   shipments: {
     families: [],
@@ -17,12 +16,6 @@ const model = reactive<ICostsTable.Root>({
   taxes: [],
   updatedAt: '',
   createdAt: '',
-})
-
-const loadModel = (data: ICostsTable.Root) => {
-  model.name = data.name;
-  model.taxes = data.taxes;
-  model.shipments = data.shipments;
 }
 
 const formatSubmit = (data: ICostsTable.Root) => {
@@ -47,27 +40,32 @@ const formatSubmit = (data: ICostsTable.Root) => {
 </script>
 
 <template>
-  <EGenericIdView
+  <EGenericIdForm
     :id="id"
-    :format-submit-fn="formatSubmit"
-    :create-fn="createCostsTable"
-    :delete-fn="deleteCostsTable"
+    :type="type"
     :get-fn="getCostsTable"
+    :delete-fn="deleteCostsTable"
+    :create-fn="createCostsTable"
     :update-fn="updateCostsTable"
-    :model="model"
-    @load="loadModel"
-    @finish="router.push({  name: 'list-costs-table' })"
+    :format-submit-fn="formatSubmit"
+    :initial-values-create="initialValues"
+    @finish="router.push({ name: 'list-costs-table' })"
   >
-    <template #default="{ loading, submit }">
-      <RouterView
-        :loading="loading"
-        :model="model"
+    <template #default="{ data, buttonLabel, submit, loadingSubmit }">
+      <CostsTableForm
+        :initialValues="data"
+        :button-label="buttonLabel"
+        :loading="loadingSubmit"
+        :disabled="type === 'deletar'"
         @submit="submit"
       />
     </template>
-  </EGenericIdView>
+  </EGenericIdForm>
 </template>
 
 <route lang="yaml">
-path: /tabelas-de-custos/:id
+name: cost-table
+path: /tabelas-de-custos/:id/:type
+meta:
+  title: Tabela de Custo
 </route>

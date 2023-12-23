@@ -1,6 +1,7 @@
 <script lang="ts" generic="T" inherit-attrs="false" setup>
 import { useFormValues, useSetFieldValue } from 'vee-validate';
 import { computed, useAttrs } from 'vue';
+import { resolve } from '@/src/core/utils/utils';
 
 const props = defineProps<{
   name: string
@@ -9,14 +10,14 @@ const props = defineProps<{
 
 const setField = useSetFieldValue(props.name)
 const values = useFormValues()
-const value = computed(() => values.value[props.name])
+const field = computed(() => resolve(props.name, values.value))
 
 const attrs = useAttrs()
 
 const emit = defineEmits(['update:model-value'])
 
-const removeItem = (index: number) => value.value.splice(index, 1)
-const addItem = () => setField([ ...value.value, {} ])
+const removeItem = (index: number) => field.value.splice(index, 1)
+const addItem = () => setField([ ...field.value, {} ])
 </script>
 
 <script lang="ts">
@@ -26,11 +27,11 @@ export default {
 </script>
 
 <template>
-  <div v-if="!value.length">
+  <div v-if="!field.length">
     Nenhum item adicionado
   </div>
 
-  <div v-for="(item, index) in value" :key="`generic-list-${index}`">
+  <div v-for="(item, index) in field" :key="`generic-list-${index}`">
     <div v-bind="attrs">
       <slot :item="item" :index="index" :remove-item="() => removeItem(index)" />
     </div>

@@ -1,34 +1,43 @@
 <script lang="ts" setup>
+import { useForm } from 'vee-validate';
 import type { ICostsTable } from '../types/costsTable';
 import { required } from '@/src/core/utils/form-validator';
 import { computed, ref } from 'vue';
-import { toRef } from 'vue';
 import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
 const props = defineProps<{
-  model: ICostsTable.Root;
   disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;
+  initialValues: ICostsTable.Root;
 }>();
 
-const model = toRef(props, 'model');
-const emit = defineEmits(['submit']);
-
-const tab = ref('taxes');
+const emit = defineEmits<{
+  (e: 'submit', values: ICostsTable.Root): void,
+}>();
 
 const disabled = computed(() => props.loading || props.disabled);
+
+const form = useForm({
+  initialValues: props.initialValues,
+});
+
+const submit = form.handleSubmit((values) => {
+  emit('submit', values);
+});
+
+const tab = ref('taxes');
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
+  <form @submit.prevent="submit">
     <section>
       <div>
-        <VTextField
+        <EInputText
+          name="name"
           :disabled="disabled"
-          v-model="model.name"
           label="Identificador"
           :rules="[required]"
         />
@@ -53,13 +62,13 @@ const disabled = computed(() => props.loading || props.disabled);
       <VWindow v-model="tab">
         <VWindowItem value="taxes" class="m-t-sm" eager>
           <EEditableListItem
-            v-model="model.taxes"
+            name="taxes"
             class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm"
             :disabled="disabled"
           >
-            <template #default="{ removeItem, item }">
-              <VTextField
-                v-model="item.name"
+            <template #default="{ index, removeItem }">
+              <EInputText
+                :name="`taxes.${index}.name`"
                 :disabled="disabled"
                 label="Nome"
                 :rules="[required]"
@@ -67,13 +76,13 @@ const disabled = computed(() => props.loading || props.disabled);
 
               <div class="flex gap-x-sm">
                 <EInputPct
-                  v-model="item.cost"
+                  :name="`taxes.${index}.cost`"
                   :rules="[required]"
                   :disabled="disabled"
                   label="Custo (%)"
                 />
 
-                <VBtn 
+                <VBtn
                   :disabled="disabled"
                   color="red"
                   @click="removeItem"
@@ -86,21 +95,21 @@ const disabled = computed(() => props.loading || props.disabled);
   
         <VWindowItem value="shipping-families" class="m-t-sm" eager>
           <EEditableListItem
-            v-model="model.shipments.families"
+            name="shipments.families"
             class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm"
             :disabled="disabled"
           >
-            <template #default="{ removeItem, item }">
+            <template #default="{ removeItem, index }">
               <ESelectFamilies
+                :name="`shipments.families.${index}.family`"
                 :disabled="disabled"
-                v-model="item.family"
                 return-object
                 :rules="[required]"
               />
 
               <div class="flex gap-x-sm">
                 <EInputPct
-                  v-model="item.cost"
+                  :name="`shipments.families.${index}.cost`"
                   :rules="[required]"
                   :disabled="disabled"
                   label="Custo (%)"
@@ -119,21 +128,21 @@ const disabled = computed(() => props.loading || props.disabled);
   
         <VWindowItem value="shipping-products" class="m-t-sm" eager>
           <EEditableListItem
-            v-model="model.shipments.products"
+            name="shipments.products"
             class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm"
             :disabled="disabled"
           >
-            <template #default="{ removeItem, item }">
+            <template #default="{ removeItem, index }">
               <ESelectProducts
+                :name="`shipments.products.${index}.product`"
                 :disabled="disabled"
-                v-model="item.product"
                 return-object
                 :rules="[required]"
               />
 
               <div class="flex gap-x-sm">
                 <EInputPct
-                  v-model="item.cost"
+                  :name="`shipments.products.${index}.cost`"
                   :rules="[required]"
                   :disabled="disabled"
                   label="Custo (%)"
@@ -175,5 +184,5 @@ const disabled = computed(() => props.loading || props.disabled);
         Voltar
       </VBtn>
     </section>
-  </EForm>
+  </form>
 </template>
