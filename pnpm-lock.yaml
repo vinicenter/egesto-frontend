@@ -20,6 +20,9 @@ dependencies:
   v-mask:
     specifier: ^2.3.0
     version: 2.3.0
+  vee-validate:
+    specifier: ^4.12.3
+    version: 4.12.3(vue@3.3.13)
   vite-plugin-vuetify:
     specifier: ^1.0.2
     version: 1.0.2(vite@4.5.1)(vue@3.3.13)(vuetify@3.4.8)
@@ -1813,6 +1816,11 @@ packages:
     engines: {node: '>=6'}
     dev: true
 
+  /type-fest@4.8.3:
+    resolution: {integrity: sha512-//BaTm14Q/gHBn09xlnKNqfI8t6bmdzx2DXYfPBNofN0WUybCEUDcbCWcTa0oF09lzLjZgPphXAsvRiMK0V6Bw==}
+    engines: {node: '>=16'}
+    dev: false
+
   /typescript@5.3.3:
     resolution: {integrity: sha512-pXWcraxM0uxAS+tN0AG/BF2TyqmHO014Z070UsJ+pFvYuRSq8KH8DmWpnbXe0pEPDHXZV3FcAbJkijJ5oNEnWw==}
     engines: {node: '>=14.17'}
@@ -1915,6 +1923,16 @@ packages:
 
   /v-mask@2.3.0:
     resolution: {integrity: sha512-ap7pTtCTvj25CqX4VYXqudCBd0+XvYyhiiLbzWQQR7AMQosJ2+DPu0a94P9stk0EGmGcmYxJaPkFkfjD8hquWQ==}
+    dev: false
+
+  /vee-validate@4.12.3(vue@3.3.13):
+    resolution: {integrity: sha512-+ux21pFm2beGK21Q8LFDJdYqCu/7yd0HDIGolNvr7GjjlBTrK0JXm2y+h01jssyIlT1/+sSTNwAEqlSs0Nz0QA==}
+    peerDependencies:
+      vue: ^3.3.11
+    dependencies:
+      '@vue/devtools-api': 6.5.1
+      type-fest: 4.8.3
+      vue: 3.3.13(typescript@5.3.3)
     dev: false
 
   /vite-plugin-pages@0.29.1(vite@4.5.1):
