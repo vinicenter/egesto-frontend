@@ -24,7 +24,7 @@ const columns = [
     :columns="columns"
     :list-data-source="getFamilies"
     query-key="families"
-    @new="router.push({ name: 'create-families', params: { id: 'novo' } })"
+    @new="router.push({ name: 'family', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
@@ -37,7 +37,7 @@ const columns = [
         delete
         edit
         :clone="false"
-        page="families"
+        page="family"
       />
     </template>
   </ETableGenericList>

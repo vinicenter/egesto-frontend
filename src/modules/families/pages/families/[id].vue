@@ -1,21 +1,15 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { createFamily, deleteFamily, getFamily, updateFamily } from '../../datasource/families'
-import { reactive } from 'vue';
 import { IFamily } from '../../types/family'
-
-defineProps<{ id: string }>()
 
 const router = useRouter();
 
-const model = reactive<IFamily>({
-  name: '',
-  costs: [],
-})
+defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 
-const loadModel = (data: IFamily) => {
-  model.name = data.name;
-  model.costs = data.costs;
+const initialValues = {
+  name: '',
+  costs: []
 }
 
 const formatSubmit = async (data: IFamily) => {
@@ -32,27 +26,32 @@ const formatSubmit = async (data: IFamily) => {
 </script>
 
 <template>
-  <EGenericIdView
+  <EGenericIdForm
     :id="id"
-    :create-fn="createFamily"
-    :delete-fn="deleteFamily"
+    :type="type"
     :get-fn="getFamily"
+    :delete-fn="deleteFamily"
+    :create-fn="createFamily"
     :update-fn="updateFamily"
     :format-submit-fn="formatSubmit"
-    :model="model"
-    @load="loadModel"
-    @finish="router.push({  name: 'list-families' })"
+    :initial-values-create="initialValues"
+    @finish="router.push({ name: 'list-families' })"
   >
-    <template #default="{ loading, submit }">
-      <RouterView
-        :loading="loading"
-        :model="model"
+    <template #default="{ data, buttonLabel, submit, loadingSubmit }">
+      <FamiliesForm
+        :initialValues="data"
+        :button-label="buttonLabel"
+        :loading="loadingSubmit"
+        :disabled="type === 'deletar'"
         @submit="submit"
       />
     </template>
-  </EGenericIdView>
+  </EGenericIdForm>
 </template>
 
 <route lang="yaml">
-path: /familias/:id
+name: family
+path: /familias/:id/:type
+meta:
+  title: Família
 </route>

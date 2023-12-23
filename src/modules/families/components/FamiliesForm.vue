@@ -1,46 +1,54 @@
 <script lang="ts" setup>
+import type { IFamily } from '../types/family';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import type { IFamily } from '../types/family';
 import { required } from '@/src/core/utils/form-validator';
-import { toRef } from 'vue';
-import { ref } from 'vue';
+import { useForm } from 'vee-validate';
+import EInputText from '@/src/core/components/EInput/EInputText.vue';
 
 const router = useRouter();
 
 const props = defineProps<{
-  model: IFamily;
   disabled: boolean,
   buttonLabel: string | undefined,
   loading: boolean;
+  initialValues?: IFamily;
 }>();
 
-const costs = toRef(props.model, 'costs');
-const emit = defineEmits(['submit']);
-const disabled = computed(() => props.loading || props.disabled);
+const form = useForm<IFamily>({
+  initialValues: props.initialValues
+})
 
-const loadingLoadCosts = ref(false);
+const emit = defineEmits<{
+  (e: 'submit', value: IFamily): void;
+}>();
+
+const submit = form.handleSubmit(async (values) => {
+  emit('submit', values);
+})
+
+const disabled = computed(() => props.loading || props.disabled);
 
 const loadCostsFromFamily = async (family: IFamily) => {
   if(family?.costs) {
-    costs.value = family.costs
+    form.setFieldValue('costs', family.costs)
   }
 }
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
+  <form @submit.prevent="submit">
     <div class="grid grid-cols-1 gap-x-sm">
-      <VTextField
-        v-model="model.name"
+      <EInputText
+        name="name"
         :disabled="disabled"
         label="Nome"
         :rules="[required]"
       />
 
       <ESelectFamilies
+        name="copyFromFamily"
         :disabled="disabled"
-        :loading="loadingLoadCosts"
         label="Selecione uma família para copiar custos"
         @update:model-value="loadCostsFromFamily($event);"
         return-object
@@ -51,13 +59,13 @@ const loadCostsFromFamily = async (family: IFamily) => {
       <div class="font-bold">Custos</div>
 
       <EEditableListItem
-        v-model="costs"
+        name="costs"
         class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
         :disabled="disabled"
       >
-        <template #default="{ item, removeItem }">
-          <VTextField
-            v-model="item.name"
+        <template #default="{ index, removeItem }">
+          <EInputText
+            :name="`costs.${index}.name`"
             :disabled="disabled"
             label="Nome"
             :rules="[required]"
@@ -65,7 +73,7 @@ const loadCostsFromFamily = async (family: IFamily) => {
 
           <div class="flex gap-x-sm">
             <EInputPct
-              v-model="item.value"
+              :name="`costs.${index}.value`"
               :rules="[required]"
               :disabled="disabled"
               label="Custo (%)"
@@ -105,5 +113,5 @@ const loadCostsFromFamily = async (family: IFamily) => {
         Voltar
       </VBtn>
     </div>
-  </EForm>
+  </form>
 </template>

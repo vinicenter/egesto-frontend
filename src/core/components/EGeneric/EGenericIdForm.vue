@@ -10,11 +10,12 @@ const props = defineProps<{
   deleteFn: Function
   updateFn: Function
   formatSubmitFn: Function
+  initialValuesCreate: unknown
 }>()
 
 const loadingGet = ref(false);
 const errorGet = ref(false);
-const data = ref<any>();
+const data = ref<unknown>(props.initialValuesCreate);
 
 const emit = defineEmits<{
   (e: 'finish'): void
@@ -49,8 +50,8 @@ const { displayMessage } = useNotify();
 
 const loadingSubmit = ref(false);
 
-const submit = async (values: any) => {
-  const options: Record<typeof props.type, any> = {
+const submit = async (values: unknown) => {
+  const options: Record<typeof props.type, () => void> = {
     criar: () => saveModel('create', values),
     editar: () => saveModel('edit', values), 
     deletar: () => saveModel('delete'),
@@ -59,7 +60,7 @@ const submit = async (values: any) => {
   options[props.type]()
 }
 
-const saveModel = async (mode: 'edit' | 'create' | 'delete', values?: any) => {
+const saveModel = async (mode: 'edit' | 'create' | 'delete', values?: unknown) => {
   const modes: Record<string, Function> = {
     edit: async () => {
       const data = await props.formatSubmitFn(values)

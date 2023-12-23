@@ -1,22 +1,22 @@
 <script lang="ts" generic="T" inherit-attrs="false" setup>
+import { useFormValues, useSetFieldValue } from 'vee-validate';
 import { computed, useAttrs } from 'vue';
 
 const props = defineProps<{
-  modelValue: T[];
+  name: string
   disabled: boolean;
 }>()
+
+const setField = useSetFieldValue(props.name)
+const values = useFormValues()
+const value = computed(() => values.value[props.name])
 
 const attrs = useAttrs()
 
 const emit = defineEmits(['update:model-value'])
 
-const model = computed({
-  get: () => props.modelValue,
-  set: (value: T[]) => emit('update:model-value', value),
-})
-
-const removeItem = (index: number) => model.value.splice(index, 1)
-const addItem = () => model.value.push({} as T)
+const removeItem = (index: number) => value.value.splice(index, 1)
+const addItem = () => setField([ ...value.value, {} ])
 </script>
 
 <script lang="ts">
@@ -26,11 +26,11 @@ export default {
 </script>
 
 <template>
-  <div v-if="!model.length">
+  <div v-if="!value.length">
     Nenhum item adicionado
   </div>
 
-  <div v-for="(item, index) in model" :key="`generic-list-${index}`">
+  <div v-for="(item, index) in value" :key="`generic-list-${index}`">
     <div v-bind="attrs">
       <slot :item="item" :index="index" :remove-item="() => removeItem(index)" />
     </div>
