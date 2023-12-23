@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import useNotify from '../../composables/useNotify';
-import { RouteLocationRaw, useRouter } from 'vue-router';
 
 const props = defineProps<{
   id: string | 'novo',
@@ -10,12 +9,16 @@ const props = defineProps<{
   createFn: Function
   deleteFn: Function
   updateFn: Function
-  redirectTo: RouteLocationRaw
+  formatSubmitFn: Function
 }>()
 
 const loadingGet = ref(false);
 const errorGet = ref(false);
 const data = ref<any>();
+
+const emit = defineEmits<{
+  (e: 'finish'): void
+}>()
 
 const fetchModel = async () => {
   try {
@@ -42,83 +45,49 @@ const buttonLabel = computed(() => {
   return options[props.type]
 })
 
-const router = useRouter();
 const { displayMessage } = useNotify();
 
 const loadingSubmit = ref(false);
 
 const submit = async (values: any) => {
   const options: Record<typeof props.type, any> = {
-    criar: () => create(values),
-    editar: () => update(values), 
-    deletar: () => remove(),
+    criar: () => saveModel('create', values),
+    editar: () => saveModel('edit', values), 
+    deletar: () => saveModel('delete'),
   }
-
-  console.log(props.type)
 
   options[props.type]()
 }
 
-const create = async (values: any) => {
-  try {
-    loadingSubmit.value = true
+const saveModel = async (mode: 'edit' | 'create' | 'delete', values?: any) => {
+  const modes: Record<string, Function> = {
+    edit: async () => {
+      const data = await props.formatSubmitFn(values)
 
-    await props.createFn(values)
+      await props.updateFn(props.id as string, data)
+    },
+    create: async () => {
+      const data = await props.formatSubmitFn(values)
 
-    router.push(props.redirectTo)
-
-    displayMessage({
-      type: 'success',
-      message: 'Criado com sucesso'
-    })
-  } catch {
-    displayMessage({
-      type: 'error',
-      message: 'Erro ao criar'
-    })
-  } finally {
-    loadingSubmit.value = false
+      await props.createFn(data)
+    },
+    delete: async () => await props.deleteFn(props.id as string),
   }
-}
 
-const remove = async () => {
   try {
     loadingSubmit.value = true
+    await modes[mode]()
 
-    await props.deleteFn(props.id)
-
-    router.push(props.redirectTo)
+    emit('finish')
 
     displayMessage({
-      type: 'success',
-      message: 'Deletado com sucesso'
+      message: 'Salvo com sucesso',
+      type: 'success'
     })
-  } catch {
+  } catch(e) {
     displayMessage({
-      type: 'error',
-      message: 'Erro ao deletar'
-    })
-  } finally {
-    loadingSubmit.value = false
-  }
-}
-
-const update = async (values: any) => {
-  try {
-    loadingSubmit.value = true
-
-    await props.updateFn(props.id, values)
-
-    router.push(props.redirectTo)
-
-    displayMessage({
-      type: 'success',
-      message: 'Editado com sucesso'
-    })
-  } catch {
-    displayMessage({
-      type: 'error',
-      message: 'Erro ao editar'
+      message: 'Erro ao salvar',
+      type: 'error'
     })
   } finally {
     loadingSubmit.value = false

@@ -13,7 +13,7 @@ interface Column {
 const props = withDefaults(
   defineProps<{
     columns: Column[];
-    defaultOrder: 'DESC' | 'ASC';
+    defaultOrder?: 'DESC' | 'ASC';
     queryKey: string;
     listDataSource: Function;
   }>(),

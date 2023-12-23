@@ -11,7 +11,7 @@ const props = defineProps<{
   disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;
-  initialValues: IPeople;
+  initialValues?: IPeople;
 }>();
 
 const emit = defineEmits<{

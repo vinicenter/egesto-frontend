@@ -5,67 +5,76 @@ import type { IFeedstock } from '../types/feedstocks';
 import { required } from '@/src/core/utils/form-validator';
 import { watch } from 'vue';
 import minimumFractionDigits from '~constants/minimumFractionDigits'
-import { ref } from 'vue';
+import { useForm } from 'vee-validate';
+import EInputText from '@/src/core/components/EInput/EInputText.vue';
 
 const router = useRouter();
 
 const props = defineProps<{
-  model: IFeedstock;
   disabled: boolean,
   buttonLabel: string | undefined,
   loading: boolean;
+  initialValues?: IFeedstock;
 }>();
 
-const priceWithoutIcms = ref(props.model.priceWithoutIcms);
-
-watch([() => props.model.icms, () => props.model.price], () => {
-  const newPriceWithoutIcms = (props.model.price * (1 - (props.model.icms / 100)))
-
-  priceWithoutIcms.value = Number(newPriceWithoutIcms.toFixed(minimumFractionDigits));
+const form = useForm<IFeedstock>({
+  initialValues: props.initialValues,
 });
 
-const emit = defineEmits(['submit']);
+watch([() => form.values.icms, () => form.values.price], () => {
+  const newPriceWithoutIcms = (form.values.price * (1 - (form.values.icms / 100)))
+
+  form.setFieldValue('priceWithoutIcms', Number(newPriceWithoutIcms.toFixed(minimumFractionDigits)));
+});
+
+const emit = defineEmits<{
+  (e: 'submit', values: IFeedstock): void
+}>()
+
+const submit = form.handleSubmit((values) => {
+  emit('submit', values);
+});
 
 const disabled = computed(() => props.loading || props.disabled);
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
+  <form @submit.prevent="submit">
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
-      <VTextField
-        v-model="model.name"
+      <EInputText
+        name="name"
         :disabled="disabled"
         label="Nome"
         :rules="[required]"
       />
 
       <ESelectBrands
-        v-model="model.brand"
+        name="brand"
         :disabled="disabled"
         return-object
       />
 
-      <VTextField
-        v-model="model.ncm"
+      <EInputText
+        name="ncm"
         :disabled="disabled"
         label="NCM"
       />
 
       <EInputPrice
-        v-model="model.price"
+        name="price"
         :disabled="disabled"
         :rules="[required]"
       />
 
       <EInputPct
-        v-model="model.icms"
+        name="icms"
         :disabled="disabled"
         label="ICMS (%)"
         :rules="[required]"
       />
 
-      <VTextField
-        v-model="priceWithoutIcms"
+      <EInputText
+        name="priceWithoutIcms"
         :disabled="disabled"
         prefix="R$"
         label="Preço sem ICMS"
@@ -95,5 +104,5 @@ const disabled = computed(() => props.loading || props.disabled);
         Voltar
       </VBtn>
     </div>
-  </EForm>
+  </form>
 </template>

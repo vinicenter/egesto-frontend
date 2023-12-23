@@ -1,5 +1,8 @@
 <script lang="ts" setup>
+import { useRouter } from 'vue-router';
 import { createPerson, deletePerson, getPerson, updatePerson } from '../../datasource/people';
+
+const router = useRouter();
 
 defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 </script>
@@ -12,7 +15,8 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
     :delete-fn="deletePerson"
     :create-fn="createPerson"
     :update-fn="updatePerson"
-    :redirect-to="{ name: 'list-people' }"
+    :format-submit-fn="(data: IPeople) => ({ ...data })"
+    @finish="router.push({ name: 'list-people' })"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <PersonForm

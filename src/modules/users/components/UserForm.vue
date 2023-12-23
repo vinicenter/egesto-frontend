@@ -12,7 +12,7 @@ const props = defineProps<{
   buttonLabel: string | undefined,
   loading: boolean;
   passwordRequired: boolean,
-  initialValues: IUser
+  initialValues?: IUser
 }>();
 
 const emit = defineEmits<{

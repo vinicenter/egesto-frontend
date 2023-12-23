@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { getFeedStocks, updateFeedStock } from '../../datasource/feedstocks';
 import { priceFormat } from '~utils/format';
 import { useQueryClient } from '@tanstack/vue-query';
+import { required } from '@/src/core/utils/form-validator';
 
 const router = useRouter();
 const queryClient = useQueryClient();
@@ -57,32 +58,38 @@ const updateIcms = async (id: string, icms: Number) => {
     :columns="columns"
     :list-data-source="getFeedStocks"
     query-key="feedstocks"
-    @new="router.push({ name: 'create-feedstocks', params: { id: 'novo' } })"
+    @new="router.push({ name: 'feedstock', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
       <td>
         <ETableCellUpdate
           :label="formatPrice(item.price) || '-'"
+          :initial-values="{ price: item.price }"
+          @submit="updatePrice(item._id, $event.price)"
         >
           <template #content>
             <EInputPrice
-              :model-value="item.price"
+              name="price"
               hide-details
               class="w-60"
-              @keyup.enter="updatePrice(item._id, $event.target.value)"
+              :rules="[required]"
             />
           </template>
         </ETableCellUpdate>
       </td>
       <td>
-        <ETableCellUpdate :label="item.icms ? `${item.icms}%` : '-'">
+        <ETableCellUpdate
+          :label="item.icms ? `${item.icms}%` : '-'"
+          :initial-values="{ icms: item.icms }"
+          @submit="updateIcms(item._id, $event.icms)"
+        >
           <template #content>
             <EInputPct
-              :model-value="item.icms"
+              name="icms"
               hide-details
               class="w-40"
-              @keyup.enter="updateIcms(item._id, $event.target.value)"
+              :rules="[required]"
             />
           </template>
         </ETableCellUpdate>
@@ -97,7 +104,7 @@ const updateIcms = async (id: string, icms: Number) => {
         delete
         edit
         :clone="false"
-        page="feedstocks"
+        page="feedstock"
       />
     </template>
   </ETableGenericList>

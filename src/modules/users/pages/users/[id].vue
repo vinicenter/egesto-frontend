@@ -1,5 +1,9 @@
 <script lang="ts" setup>
+import { useRouter } from 'vue-router';
 import { createUser, getUser, deleteUser, updateUser } from '../../datasource/auth';
+import { IUser } from '../../types/auth';
+
+const router = useRouter()
 
 defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 </script>
@@ -12,7 +16,8 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
     :delete-fn="deleteUser"
     :create-fn="createUser"
     :update-fn="updateUser"
-    :redirect-to="{ name: 'list-users' }"
+    :format-submit-fn="(data: IUser) => ({ ...data })"
+    @finish="router.push({ name: 'list-users' })"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <UserForm

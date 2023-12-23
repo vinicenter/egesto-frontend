@@ -1,30 +1,11 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { createFeedStock, deleteFeedStock, getFeedStock, updateFeedStock } from '../../datasource/feedstocks'
-import { reactive } from 'vue';
-import { IFeedstock } from '../../types/feedstocks'
+import { IFeedstock } from '../../types/feedstocks';
 
-defineProps<{ id: string }>()
+defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 
-const router = useRouter();
-
-const model = reactive<IFeedstock>({
-  name: '',
-  price: 0,
-  icms: 0,
-  priceWithoutIcms: 0,
-  brand: undefined,
-  ncm: '',
-})
-
-const loadModel = (data: IFeedstock) => {
-  model.name = data.name;
-  model.price = data.price;
-  model.icms = data.icms;
-  model.priceWithoutIcms = data.priceWithoutIcms;
-  model.brand = data.brand;
-  model.ncm = data.ncm;
-}
+const router = useRouter()
 
 const formatSubmitFeedStock = async (data: IFeedstock) => {
   return {
@@ -38,27 +19,31 @@ const formatSubmitFeedStock = async (data: IFeedstock) => {
 </script>
 
 <template>
-  <EGenericIdView
+  <EGenericIdForm
     :id="id"
-    :create-fn="createFeedStock"
-    :delete-fn="deleteFeedStock"
+    :type="type"
     :get-fn="getFeedStock"
+    :delete-fn="deleteFeedStock"
+    :create-fn="createFeedStock"
     :update-fn="updateFeedStock"
     :format-submit-fn="formatSubmitFeedStock"
-    :model="model"
-    @load="loadModel"
-    @finish="router.push({  name: 'list-feedstocks' })"
+    @finish="router.push({ name: 'list-feedstocks' })"
   >
-    <template #default="{ loading, submit }">
-      <RouterView
-        :loading="loading"
-        :model="model"
+    <template #default="{ data, buttonLabel, submit, loadingSubmit }">
+      <FeedStockForm
+        :initialValues="data"
+        :button-label="buttonLabel"
+        :disabled="type === 'deletar'"
+        :loading="loadingSubmit"
         @submit="submit"
       />
     </template>
-  </EGenericIdView>
+  </EGenericIdForm>
 </template>
 
 <route lang="yaml">
-path: /materias-primas/:id
+name: feedstock
+path: /materias-primas/:id/:type
+meta:
+  title: Matéria Prima
 </route>

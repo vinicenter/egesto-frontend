@@ -1,6 +1,13 @@
 <script setup lang="ts">
+import { Form } from 'vee-validate';
+
 defineProps<{
   label: string
+  initialValues: any
+}>()
+
+const emit = defineEmits<{
+  (e: 'submit', values: any): void
 }>()
 </script>
 
@@ -14,9 +21,11 @@ defineProps<{
     </template>
 
     <template #default>
-      <VCard>
-        <slot name="content" />
-      </VCard>
+      <Form :initial-values="initialValues" @submit="emit('submit', $event)">
+        <VCard>
+          <slot name="content" />
+        </VCard>
+      </Form>
     </template>
   </VMenu>
 </template>
