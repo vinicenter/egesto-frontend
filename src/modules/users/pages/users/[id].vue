@@ -19,6 +19,7 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
         :initialValues="data"
         :button-label="buttonLabel"
         :password-required="id === 'novo'"
+        :disabled="type === 'deletar'"
         :loading="loadingSubmit"
         @submit="submit"
       />

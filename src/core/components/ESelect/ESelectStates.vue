@@ -3,7 +3,7 @@ import { brazilianStates } from '~constants/states';
 </script>
 
 <template>
-  <VCombobox
+  <ESelect
     :items="brazilianStates"
     :return-object="false"
     item-title="label"

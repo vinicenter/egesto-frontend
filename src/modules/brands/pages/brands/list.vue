@@ -25,7 +25,7 @@ const columns = [
     :columns="columns"
     :list-data-source="getBrands"
     query-key="brands"
-    @new="router.push({ name: 'create-brands', params: { id: 'novo' } })"
+    @new="router.push({ name: 'brand', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
@@ -38,7 +38,7 @@ const columns = [
         delete
         edit
         :clone="false"
-        page="brands"
+        page="brand"
       />
     </template>
   </ETableGenericList>

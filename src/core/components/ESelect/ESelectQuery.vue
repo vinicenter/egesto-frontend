@@ -30,7 +30,7 @@ const {
 </script>
 
 <template>
-  <VCombobox
+  <ESelect
     :items="data?.pages"
     :loading="isLoading"
     :return-object="false"
@@ -67,5 +67,5 @@ const {
         <VSkeletonLoader type="list-item" />
       </template>
     </template>
-  </VCombobox>
+  </ESelect>
 </template>

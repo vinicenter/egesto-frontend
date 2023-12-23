@@ -3,11 +3,13 @@ import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import type { IBrand } from '../types/brand';
 import { required } from '@/src/core/utils/form-validator';
+import { useForm } from 'vee-validate';
+import EInputText from '@/src/core/components/EInput/EInputText.vue';
 
 const router = useRouter();
 
 const props = defineProps<{
-  model: IBrand;
+  initialValues: IBrand;
   disabled: boolean,
   buttonLabel: string | undefined,
   loading: boolean;
@@ -15,22 +17,30 @@ const props = defineProps<{
 
 const emit = defineEmits(['submit']);
 
+const form = useForm<IBrand>({
+  initialValues: props.initialValues,
+})
+
 const disabled = computed(() => props.loading || props.disabled);
+
+const submit = form.handleSubmit(async (values) => {
+  emit('submit', values);
+});
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
+  <form @submit.prevent="submit">
     <div>
-      <VTextField
-        v-model="model.name"
+      <EInputText
+        name="name"
         :disabled="disabled"
         label="Nome"
         :rules="[required]"
       />
 
-      <VTextarea
+      <ETextarea
         :disabled="disabled"
-        v-model="model.description"
+        name="description"
         label="Observação"
       />
     </div>
@@ -56,5 +66,5 @@ const disabled = computed(() => props.loading || props.disabled);
         Voltar
       </VBtn>
     </div>
-  </EForm>
+  </form>
 </template>
