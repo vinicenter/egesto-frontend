@@ -1,7 +1,16 @@
 <script lang="ts" setup>
+import { useRouter } from 'vue-router';
 import { createBrand, getBrand, deleteBrand, updateBrand } from '../../datasource/brands';
+import { IBrand } from '../../types/brand';
+
+const router = useRouter()
 
 defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
+
+const initialValuesCreate = {
+  name: '',
+  description: '',
+}
 </script>
 
 <template>
@@ -12,7 +21,9 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
     :delete-fn="deleteBrand"
     :create-fn="createBrand"
     :update-fn="updateBrand"
-    :redirect-to="{ name: 'list-brands' }"
+    :initial-values-create="initialValuesCreate"
+    :formatSubmitFn="(data: IBrand) => ({ ...data })"
+    @finish="router.push({ name: 'list-brands' })"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <BrandForm
