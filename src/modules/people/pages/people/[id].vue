@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { createPerson, deletePerson, getPerson, updatePerson } from '../../datasource/people';
+import { IPeople } from '../../types/people';
 
 const router = useRouter();
 
