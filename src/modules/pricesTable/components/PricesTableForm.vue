@@ -36,7 +36,7 @@ const submit = form.handleSubmit((values) => {
 
 const disabled = computed(() => props.loading || props.disabled);
 
-const setProductMargin = (row: IPricesTable.Root['prices'][0]) => {
+const setProductMargin = (row: IPricesTable.Root['prices'][0], index: number) => {
   const volume = row.volume;
   const price = Number(row.price);
   const shipment = row.shipment/100;
@@ -54,37 +54,47 @@ const setProductMargin = (row: IPricesTable.Root['prices'][0]) => {
   const expensesVariables = expense*totalRevenue;
   const lost = productionLost*totalRevenue;
 
-  row.margin = Number((((netRevenue - expensesVariables - productCost - lost)/totalRevenue)*100).toPrecision(5));
-  row.netSales = netRevenue;
-  row.grossRevenue = totalRevenue;
+  const margin = Number((((netRevenue - expensesVariables - productCost - lost)/totalRevenue)*100).toPrecision(5));
+  const netSales = netRevenue;
+  const grossRevenue = totalRevenue;
+
+  form.setFieldValue(`prices.${index}.margin`, margin);
+  form.setFieldValue(`prices.${index}.netSales`, netSales);
+  form.setFieldValue(`prices.${index}.grossRevenue`, grossRevenue);
 }
 
-const setProductDataToPrice = (row: IPricesTable.Root['prices'][0]) => {
+const setProductDataToPrice = (row: IPricesTable.Root['prices'][0], index: number) => {
   const product = row.product
 
-  row.productCost = product?.production?.cost?.packCost || 0;
-  row.expense = product.family?.totalCosts || 0;
-  row.productionLost = product?.production?.lost || 0;
-  row.volume = row.volume || 1;
-  row.price = row.price || 0;
+  const productCost = product?.production?.cost?.packCost || 0;
+  const expense = product?.family?.totalCosts || 0;
+  const productionLost = product?.production?.lost || 0;
+  const volume = row.volume || 1;
+  const price = row.price || 0;
 
-  row.tax = form.values.costTable?.taxes.reduce((acc, tax) => {
+  const tax = form.values.costTable?.taxes.reduce((acc, tax) => {
     return acc + (tax.cost || 0);
   }, 0) || 0;
 
   const productsIdsShipments = form.values.costTable?.shipments.products.map((shipment) => shipment.product?._id) || [];
 
-  if(productsIdsShipments.includes(product._id)) {
-    row.shipment = form.values.costTable?.shipments.products.find((shipment) => shipment.product._id === product._id)?.cost || 0;
-  } else {
-    row.shipment = form.values.costTable?.shipments.families.find((shipment) => shipment.family._id === product.family?._id)?.cost || 0;
-  }
+  const shipment = productsIdsShipments.includes(product._id)
+    ? form.values.costTable?.shipments.products.find((shipment) => shipment.product._id === product._id)?.cost || 0
+    : form.values.costTable?.shipments.families.find((shipment) => shipment.family._id === product.family?._id)?.cost || 0;
+
+  form.setFieldValue(`prices.${index}.shipment`, shipment);
+  form.setFieldValue(`prices.${index}.productCost`, productCost);
+  form.setFieldValue(`prices.${index}.expense`, expense);
+  form.setFieldValue(`prices.${index}.productionLost`, productionLost);
+  form.setFieldValue(`prices.${index}.volume`, volume);
+  form.setFieldValue(`prices.${index}.price`, price);
+  form.setFieldValue(`prices.${index}.tax`, tax);
 }
 
 const syncAllProducts = () => {
-  form.values.prices.forEach((price) => {
-    setProductDataToPrice(price);
-    setProductMargin(price);
+  form.values.prices.forEach((price, index) => {
+    setProductDataToPrice(price, index);
+    setProductMargin(price, index);
   });
 
   displayMessage({ 
@@ -191,6 +201,7 @@ const mediumMargin = computed(() => {
               :rules="[required]"
               label="Produto"
               return-object
+              @update:modelValue="setProductDataToPrice(item, index)"
             />
 
             <VBtn 
@@ -201,6 +212,7 @@ const mediumMargin = computed(() => {
             />
 
             <PricesTableCostsDetail
+              eager
               :disabled="disabled"
               :shipment="`prices.${index}.shipment`"
               :tax="`prices.${index}.tax`"
@@ -214,6 +226,7 @@ const mediumMargin = computed(() => {
             :rules="[required]"
             :disabled="disabled"
             label="Preço de venda"
+            @update:model-value="setProductMargin(item, index)"
           />
 
           <EInputText
@@ -222,6 +235,7 @@ const mediumMargin = computed(() => {
             :disabled="disabled"
             type="number"
             label="Volume"
+            @update:model-value="setProductMargin(item, index)"
           />
 
           <EInputPct
