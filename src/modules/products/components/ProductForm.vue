@@ -139,7 +139,6 @@ const submit = form.handleSubmit((values) => {
           name="marketing.color"
           title="asdas"
           :disabled="disabled"
-          :rules="[required]"
           :modes="['hex']"
         />
       </div>
