@@ -142,7 +142,7 @@ const tableColumn = [
                     <td>
                       <RouterLink
                         v-if="item?.product?.name"
-                        :to="{ name: 'edit-products', params: { id: item?.product?._id } }"
+                        :to="{ name: 'product', params: { id: item?.product?._id, type: 'editar' } }"
                       >
                         {{ item?.product?.name }}
                       </RouterLink>
