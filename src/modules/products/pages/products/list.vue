@@ -36,7 +36,7 @@ export default {
     :columns="columns"
     :list-data-source="getProducts"
     query-key="products"
-    @new="router.push({ name: 'create-products', params: { id: 'novo' } })"
+    @new="router.push({ name: 'product', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.code || '-' }}</td>
@@ -54,7 +54,7 @@ export default {
         edit
         clone
         view
-        page="products"
+        page="product"
         @view="viewId = $event"
       />
     </template>

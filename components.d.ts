@@ -14,6 +14,7 @@ declare module '@vue/runtime-core' {
     CostTableDetailsModel: typeof import('./src/modules/costsTable/components/CostTableDetailsModel/CostTableDetailsModel.vue')['default']
     CostTableDetailsSkeleton: typeof import('./src/modules/costsTable/components/CostTableDetailsModel/CostTableDetailsSkeleton.vue')['default']
     CostTableInfoModel: typeof import('./src/modules/costsTable/components/CostTableInfoModel/CostTableInfoModel.vue')['default']
+    EColorPicker: typeof import('./src/core/components/EInput/EColorPicker.vue')['default']
     EEditableListItem: typeof import('./src/core/components/EInput/EEditableListItem.vue')['default']
     EError: typeof import('./src/core/components/EError.vue')['default']
     EForm: typeof import('./src/core/components/EForm.vue')['default']

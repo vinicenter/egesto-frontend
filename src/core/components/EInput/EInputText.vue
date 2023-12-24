@@ -19,6 +19,7 @@ const { value, handleBlur, errorMessage } = useField<string>(props.name, props.r
     :type="type"
     :label="label"
     :disabled="disabled"
+    step="any"
     :error-messages="errorMessage"
     @blur="handleBlur"
   />

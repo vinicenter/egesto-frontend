@@ -1,108 +1,118 @@
 <script lang="ts" setup>
+import EInputText from '@/src/core/components/EInput/EInputText.vue';
 import type { IProduct } from '../types/product';
 import { required } from '@/src/core/utils/form-validator';
-import { computed, toRef } from 'vue';
+import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import { useForm } from 'vee-validate';
 
 const router = useRouter();
 
 const props = defineProps<{
-  model: IProduct.Root;
   disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;
+  initialValues: IProduct.Root;
 }>();
 
-const model = toRef(props, 'model');
-const emit = defineEmits(['submit']);
+const emit = defineEmits<{
+  (e: 'submit', value: IProduct.Root): void;
+}>();
 
 const disabled = computed(() => props.loading || props.disabled);
+
+const form = useForm<IProduct.Root>({
+  initialValues: props.initialValues,
+});
+
+const submit = form.handleSubmit((values) => {
+  emit('submit', values);
+});
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
-
+  <form @submit.prevent="submit">
     <section>
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
-        <VTextField
+        <EInputText
+          name="code"
           :disabled="disabled"
-          v-model="model.code"
           label="Código"
           :rules="[required]"
         />
 
-        <VTextField
+        <EInputText
+          name="name"
           :disabled="disabled"
-          v-model="model.name"
           label="Nome"
           :rules="[required]"
         />
 
         <ESelectFamilies
+          name="family"
           :disabled="disabled"
-          v-model="model.family"
           return-object
         />
 
         <ESelectBrands
+          name="brand"
           :disabled="disabled"
-          v-model="model.brand"
           return-object
         />
       </div>
 
 
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-sm">
-        <VTextField
+        <EInputText
+          name="pack.numberOfUnitsInPack"
           :disabled="disabled"
           type="number"
-          v-model="model.pack.numberOfUnitsInPack"
           label="Unidades por pack"
         />
 
-        <VTextField
+        <EInputText
+          name="unit.weight"
           :disabled="disabled"
           type="number"
-          v-model="model.unit.weight"
           label="Peso unitário"
         />
 
-        <VTextField
+        <EInputText
+          name="pack.numberOfPacksInPallet"
           :disabled="disabled"
           type="number"
-          v-model="model.pack.numberOfPacksInPallet"
           label="Quantidade de pack no pallet"
         />
 
-        <VTextField
+        <EInputText
+          name="UnitOfMeasurement"
           :disabled="disabled"
-          v-model="model.UnitOfMeasurement"
           label="Unidade de medida"
         />
       </div>
       
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
-        <VTextField
+        <EInputText
+          name="unit.barcodeEan13"
           :disabled="disabled"
-          v-model="model.unit.barcodeEan13"
           label="EAN-13"
         />
 
-        <VTextField
+        <EInputText
+          name="pack.barcodeDun14"
           :disabled="disabled"
-          v-model="model.pack.barcodeDun14"
           label="DUN-14"
         />
 
-        <VTextField
+        <EInputText
+          name="taxes.cest"
           :disabled="disabled"
-          v-model="model.taxes.cest"
           label="CEST"
         />
 
-        <VTextField
+        <EInputText
+          name="taxes.ncm"
           :disabled="disabled"
-          v-model="model.taxes.ncm"
           label="NCM"
         />
       </div>
@@ -110,12 +120,12 @@ const disabled = computed(() => props.loading || props.disabled);
 
     <VDivider class="m-y-sm" />
 
-    <section>
+    <section class="space-y-4">
       <div class="font-bold">Marketing</div>
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
-        <VSelect
-          v-model="model.marketing.isPublic"
+      <div class="flex">
+        <ESelect
+          name="marketing.isPublic"
           :disabled="disabled"
           :items="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
           :return-object="false"
@@ -125,16 +135,21 @@ const disabled = computed(() => props.loading || props.disabled);
           label="Produto público"
         />
 
-        <VColorPicker
-          v-model="model.marketing.color"
+        <EColorPicker
+          name="marketing.color"
+          title="asdas"
           :disabled="disabled"
+          :rules="[required]"
           :modes="['hex']"
         />
       </div>
 
-      <VTextarea
-        v-model="model.marketing.description"
-        type="textarea"
+      <ETextarea
+        name="marketing.description"
+        label="Descrição"
+        hint="Esta descrição será exibida no site, caso o produto seja público."
+        persistent-hint
+        :disabled="disabled"
       />
     </section>
 
@@ -145,7 +160,7 @@ const disabled = computed(() => props.loading || props.disabled);
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
         <EInputPct
-          v-model="model.production.lost"
+          name="production.lost"
           :disabled="disabled"
           label="Perda de produção"
         />
@@ -158,34 +173,35 @@ const disabled = computed(() => props.loading || props.disabled);
       <div class="font-bold">Formulação</div>
 
       <EEditableListItem
-        v-model="model.production.formulation"
+        name="production.formulation"
         class="grid grid-cols-1 md:grid-cols-3 gap-x-sm"
         :disabled="disabled"
       >
-        <template #default="{ item, removeItem }">
+        <template #default="{ index, removeItem }">
           <ESelectFeedstocks
+            :name="`production.formulation.${index}.feedstock`"
             :disabled="disabled"
-            v-model="item.feedstock"
             return-object
             :rules="[required]"
           />
 
-          <VTextField
+          <EInputText
+            :name="`production.formulation.${index}.value`"
             :disabled="disabled"
             type="number"
-            v-model="item.value"
             label="Volume usado"
             :rules="[required]"
           />
 
           <div class="flex gap-x-sm">
-            <VSelect
+            <ESelect
+              :name="`production.formulation.${index}.considerInWeightCalculation`"
               item-title="label"
-              v-model="item.considerInWeightCalculation"
               :return-object="false"
               :disabled="disabled"
               :items="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
               label="Considerar no cálculo de peso"
+              :rules="[required]"
             />
 
             <VBtn 
@@ -222,5 +238,5 @@ const disabled = computed(() => props.loading || props.disabled);
         Voltar
       </VBtn>
     </section>
-  </EForm>
+  </form>
 </template>

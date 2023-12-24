@@ -2,13 +2,12 @@
 import { useRouter } from 'vue-router';
 import { createProduct, deleteProduct, getProduct, updateProduct } from '../../datasource/products';
 import { IProduct } from '../../types/product'
-import { reactive } from 'vue';
-
-defineProps<{ id: string }>()
 
 const router = useRouter();
 
-const model = reactive<IProduct.Root>({
+defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
+
+const initialValuesCreate: IProduct.Root = {
   code: '',
   name: '',
   family: undefined,
@@ -37,29 +36,6 @@ const model = reactive<IProduct.Root>({
     weight: 0,
   },
   UnitOfMeasurement: '',
-})
-
-const loadModel = (data: IProduct.Root) => {
-  model.code = data.code
-  model.name = data.name
-  model.family = data.family
-  model.brand = data.brand
-  model.marketing = data.marketing
-  model.production = data.production
-  model.taxes = {
-    ncm: data.taxes?.ncm,
-    cest: data.taxes?.cest,
-  }
-  model.pack = {
-    barcodeDun14: data.pack.barcodeDun14,
-    numberOfUnitsInPack: data.pack.numberOfUnitsInPack,
-    numberOfPacksInPallet: data.pack.numberOfPacksInPallet,
-  }
-  model.unit = {
-    barcodeEan13: data.unit.barcodeEan13,
-    weight: data.unit.weight,
-  }
-  model.UnitOfMeasurement = data.UnitOfMeasurement
 }
 
 const formatSubmit = (data: IProduct.Root) => {
@@ -95,27 +71,32 @@ const formatSubmit = (data: IProduct.Root) => {
 </script>
 
 <template>
-  <EGenericIdView
+  <EGenericIdForm
     :id="id"
-    :format-submit-fn="formatSubmit"
-    :create-fn="createProduct"
-    :delete-fn="deleteProduct"
+    :type="type"
     :get-fn="getProduct"
+    :delete-fn="deleteProduct"
+    :create-fn="createProduct"
     :update-fn="updateProduct"
-    :model="model"
-    @load="loadModel"
-    @finish="router.push({  name: 'list-products' })"
+    :format-submit-fn="formatSubmit"
+    :initial-values-create="initialValuesCreate"
+    @finish="router.push({ name: 'list-products' })"
   >
-    <template #default="{ loading, submit }">
-      <RouterView
-        :loading="loading"
-        :model="model"
+    <template #default="{ data, buttonLabel, submit, loadingSubmit }">
+      <ProductForm
+        :initialValues="data"
+        :button-label="buttonLabel"
+        :loading="loadingSubmit"
+        :disabled="type === 'deletar'"
         @submit="submit"
       />
     </template>
-  </EGenericIdView>
+  </EGenericIdForm>
 </template>
 
 <route lang="yaml">
-path: /produtos/:id
+name: product
+path: /produtos/:id/:type
+meta:
+  title: Produto
 </route>
