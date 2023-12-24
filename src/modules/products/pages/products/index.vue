@@ -69,7 +69,6 @@ export default {
 
 <route lang="yaml">
 name: list-products
-path: listar
 meta:
   title: Produtos
 </route>

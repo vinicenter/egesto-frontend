@@ -45,7 +45,6 @@ const columns = [
 
 <route lang="yaml">
 name: list-families
-path: listar
 meta:
   title: Famílias
 </route>

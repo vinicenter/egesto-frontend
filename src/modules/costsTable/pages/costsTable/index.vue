@@ -62,7 +62,6 @@ export default {
 
 <route lang="yaml">
 name: list-costs-table
-path: listar
 meta:
   title: Tabelas de Custos
 </route>

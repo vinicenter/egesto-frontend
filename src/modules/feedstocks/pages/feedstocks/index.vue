@@ -112,7 +112,6 @@ const updateIcms = async (id: string, icms: Number) => {
 
 <route lang="yaml">
 name: list-feedstocks
-path: listar
 meta:
   title: Matérias Primas
 </route>

@@ -46,7 +46,6 @@ const columns = [
 
 <route lang="yaml">
 name: list-brands
-path: listar
 meta:
   title: Marcas
 </route>

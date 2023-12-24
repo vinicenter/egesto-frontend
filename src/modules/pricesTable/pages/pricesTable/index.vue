@@ -62,7 +62,6 @@ export default {
 
 <route lang="yaml">
 name: list-prices-table
-path: listar
 meta:
   title: Tabelas de Preços
 </route>

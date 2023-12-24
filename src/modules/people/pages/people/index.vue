@@ -45,7 +45,6 @@ const columns = [
 
 <route lang="yaml">
 name: list-people
-path: listar
 meta:
   title: Pessoas
 </route>
