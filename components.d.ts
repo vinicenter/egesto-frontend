@@ -35,6 +35,7 @@ declare module '@vue/runtime-core' {
     ESelectProducts: typeof import('./src/core/components/ESelect/ESelectProducts.vue')['default']
     ESelectQuery: typeof import('./src/core/components/ESelect/ESelectQuery.vue')['default']
     ESelectStates: typeof import('./src/core/components/ESelect/ESelectStates.vue')['default']
+    ESwitch: typeof import('./src/core/components/EInput/ESwitch.vue')['default']
     ETable: typeof import('./src/core/components/ETable/ETable.vue')['default']
     ETableActionButtons: typeof import('./src/core/components/ETable/ETableActionButtons.vue')['default']
     ETableCellUpdate: typeof import('./src/core/components/ETable/ETableCellUpdate.vue')['default']

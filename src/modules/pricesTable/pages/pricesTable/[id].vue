@@ -2,26 +2,17 @@
 import { useRouter } from 'vue-router';
 import { createPricesTable, deletePricesTable, getPricesTable, updatePricesTable } from '../../datasource/pricesTable';
 import { IPricesTable } from '../../types/pricesTable'
-import { reactive } from 'vue';
 
-defineProps<{ id: string }>()
+const router = useRouter()
 
-const router = useRouter();
+defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 
-const model = reactive<IPricesTable.Root>({
+const initialValues = {
   name: '',
   archived: false,
   costTable: undefined,
   customer: undefined,
   prices: []
-})
-
-const loadModel = (data: IPricesTable.Root) => {
-  model.name = data.name;
-  model.archived = data.archived;
-  model.costTable = data.costTable;
-  model.customer = data.customer;
-  model.prices = data.prices || [];
 }
 
 const formatSubmit = (data: IPricesTable.Root) => {
@@ -48,27 +39,32 @@ const formatSubmit = (data: IPricesTable.Root) => {
 </script>
 
 <template>
-  <EGenericIdView
+  <EGenericIdForm
     :id="id"
-    :format-submit-fn="formatSubmit"
-    :create-fn="createPricesTable"
-    :delete-fn="deletePricesTable"
+    :type="type"
     :get-fn="getPricesTable"
+    :delete-fn="deletePricesTable"
+    :create-fn="createPricesTable"
     :update-fn="updatePricesTable"
-    :model="model"
-    @load="loadModel"
-    @finish="router.push({  name: 'list-prices-table' })"
+    :format-submit-fn="formatSubmit"
+    :initial-values-create="initialValues"
+    @finish="router.push({ name: 'list-prices-table' })"
   >
-    <template #default="{ loading, submit }">
-      <RouterView
-        :loading="loading"
-        :model="model"
+    <template #default="{ data, buttonLabel, submit, loadingSubmit }">
+      <PricesTableForm
+        :initialValues="data"
+        :button-label="buttonLabel"
+        :disabled="type === 'deletar'"
+        :loading="loadingSubmit"
         @submit="submit"
       />
     </template>
-  </EGenericIdView>
+  </EGenericIdForm>
 </template>
 
 <route lang="yaml">
-path: /tabelas-de-precos/:id
+name: price-table
+path: /tabelas-de-precos/:id/:type
+meta:
+  title: Tabela de preço
 </route>

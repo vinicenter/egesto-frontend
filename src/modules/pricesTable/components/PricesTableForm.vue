@@ -1,28 +1,38 @@
 <script lang="ts" setup>
-// import EEditableListItem from '@/src/core/components/EInput/EEditableListItem.vue';
+import EEditableListItem from '@/src/core/components/EInput/EEditableListItem.vue';
 import type { IPricesTable } from '../types/pricesTable';
 import { required } from '@/src/core/utils/form-validator';
 import { computed } from 'vue';
-import { toRef } from 'vue';
 import { useRouter } from 'vue-router';
-// import ESelectProducts from '@/src/core/components/ESelect/ESelectProducts.vue';
+import ESelectProducts from '@/src/core/components/ESelect/ESelectProducts.vue';
 import useNotify from '@/src/core/composables/useNotify';
 import PricesTableSummary from './PricesTableSummary.vue';
-// import { priceFormat } from '@/src/core/utils/format';
+import { useForm } from 'vee-validate';
+import { priceFormat } from '@/src/core/utils/format';
+import EInputText from '@/src/core/components/EInput/EInputText.vue';
 
 const router = useRouter();
 const { displayMessage } = useNotify();
-// const { formatPrice } = priceFormat();
+const { formatPrice } = priceFormat();
 
 const props = defineProps<{
-  model: IPricesTable.Root;
   disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;
+  initialValues: IPricesTable.Root;
 }>();
 
-const model = toRef(props, 'model');
-const emit = defineEmits(['submit']);
+const form = useForm<IPricesTable.Root>({
+  initialValues: props.initialValues,
+})
+
+const emit = defineEmits<{
+  (e: 'submit', value: IPricesTable.Root): void;
+}>();
+
+const submit = form.handleSubmit((values) => {
+  emit('submit', values);
+})
 
 const disabled = computed(() => props.loading || props.disabled);
 
@@ -58,21 +68,21 @@ const setProductDataToPrice = (row: IPricesTable.Root['prices'][0]) => {
   row.volume = row.volume || 1;
   row.price = row.price || 0;
 
-  row.tax = model.value.costTable?.taxes.reduce((acc, tax) => {
+  row.tax = form.values.costTable?.taxes.reduce((acc, tax) => {
     return acc + (tax.cost || 0);
   }, 0) || 0;
 
-  const productsIdsShipments = model.value.costTable?.shipments.products.map((shipment) => shipment.product?._id) || [];
+  const productsIdsShipments = form.values.costTable?.shipments.products.map((shipment) => shipment.product?._id) || [];
 
   if(productsIdsShipments.includes(product._id)) {
-    row.shipment = model.value.costTable?.shipments.products.find((shipment) => shipment.product._id === product._id)?.cost || 0;
+    row.shipment = form.values.costTable?.shipments.products.find((shipment) => shipment.product._id === product._id)?.cost || 0;
   } else {
-    row.shipment = model.value.costTable?.shipments.families.find((shipment) => shipment.family._id === product.family?._id)?.cost || 0;
+    row.shipment = form.values.costTable?.shipments.families.find((shipment) => shipment.family._id === product.family?._id)?.cost || 0;
   }
 }
 
 const syncAllProducts = () => {
-  model.value.prices.forEach((price) => {
+  form.values.prices.forEach((price) => {
     setProductDataToPrice(price);
     setProductMargin(price);
   });
@@ -84,7 +94,7 @@ const syncAllProducts = () => {
 }
 
 const volumeTotal = computed(() => {
-  return model.value.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc, price) => {
     return price.netSales
       ? acc + Number(price.volume)
       : acc;
@@ -92,7 +102,7 @@ const volumeTotal = computed(() => {
 })
 
 const grossRevenue = computed(() => {
-  return model.value.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc, price) => {
     return price.grossRevenue
       ? acc + Number(price.grossRevenue)
       : acc;
@@ -100,7 +110,7 @@ const grossRevenue = computed(() => {
 })
 
 const totalNetRevenue = computed(() => {
-  return model.value.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc, price) => {
     return price.netSales
       ? acc + Number(price.netSales)
       : acc;
@@ -108,16 +118,16 @@ const totalNetRevenue = computed(() => {
 })
 
 const mediumMargin = computed(() => {
-  return model.value.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc, price) => {
     return price.margin ?
       acc + Number(price.margin)
       : acc;
-  }, 0)/(model.value.prices.length) || 0;
+  }, 0)/(form.values.prices.length) || 0;
 })
 </script>
 
 <template>
-  <EForm @submit="emit('submit', $event)">
+  <form @submit.prevent="submit">
     <PricesTableSummary
       class="m-y-sm"
       :volumeTotal="volumeTotal"
@@ -129,31 +139,31 @@ const mediumMargin = computed(() => {
     <VDivider class="m-y-sm" />
 
     <section>
-      <VTextField
+      <EInputText
+        name="name"
         :disabled="disabled"
-        v-model="model.name"
         label="Nome"
         :rules="[required]"
       />
 
       <ESelectCostsTable
+        name="costTable"
         :disabled="disabled"
-        v-model="model.costTable"
         return-object
         :rules="[required]"
       />
 
       <ESelectPeople
+        name="customer"
         :disabled="disabled"
-        v-model="model.customer"
         return-object
         label="Cliente"
       />
 
       <div class="flex items-left">
-        <VSwitch
+        <ESwitch
+          name="archived"
           :disabled="disabled"
-          v-model="model.archived"
           label="Arquivar"
           class="w-100px"
         />
@@ -168,19 +178,18 @@ const mediumMargin = computed(() => {
 
       <VDivider class="m-y-sm" />
 
-      <!-- <EEditableListItem
-        v-model="model.prices"
+      <EEditableListItem
+        name="prices"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-sm"
         :disabled="disabled"
       >
-        <template #default="{ removeItem, item }">
+        <template #default="{ removeItem, item, index }">
           <div class="col-span-full flex gap-sm">
             <ESelectProducts
-              v-model="item.product"
+              :name="`prices.${index}.product`"
               :disabled="disabled"
               :rules="[required]"
               label="Produto"
-              @update:model-value="setProductDataToPrice(item)"
               return-object
             />
 
@@ -192,36 +201,31 @@ const mediumMargin = computed(() => {
             />
 
             <PricesTableCostsDetail
-              v-model:shipment="item.shipment"
-              v-model:tax="item.tax"
-              v-model:expense="item.expense"
-              v-model:productionLost="item.productionLost"
-              @update:shipment="setProductMargin(item)"
-              @update:tax="setProductMargin(item)"
-              @update:expense="setProductMargin(item)"
-              @update:productionLost="setProductMargin(item)"
+              :disabled="disabled"
+              :shipment="`prices.${index}.shipment`"
+              :tax="`prices.${index}.tax`"
+              :expense="`prices.${index}.expense`"
+              :productionLost="`prices.${index}.productionLost`"
             />
           </div>
 
           <EInputPrice
-            v-model="item.price"
+            :name="`prices.${index}.price`"
             :rules="[required]"
             :disabled="disabled"
-            @update:model-value="setProductMargin(item)"
             label="Preço de venda"
           />
 
-          <VTextField
-            v-model="item.volume"
+          <EInputText
+            :name="`prices.${index}.volume`"
             :rules="[required]"
             :disabled="disabled"
-            @update:model-value="setProductMargin(item)"
             type="number"
             label="Volume"
           />
 
           <EInputPct
-            v-model="item.margin"
+            :name="`prices.${index}.margin`"
             :rules="[required]"
             :disabled="disabled"
             label="Margem (%)"
@@ -234,7 +238,7 @@ const mediumMargin = computed(() => {
             <div>Fat. bruto: {{ formatPrice(item.grossRevenue) }}</div>
           </div>
         </template>
-      </EEditableListItem> -->
+      </EEditableListItem>
     </section>
 
     <VDivider class="m-y-sm" />
@@ -260,5 +264,5 @@ const mediumMargin = computed(() => {
         Voltar
       </VBtn>
     </section>
-  </EForm>
+  </form>
 </template>

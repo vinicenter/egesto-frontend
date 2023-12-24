@@ -34,7 +34,7 @@ export default {
     :columns="columns"
     :list-data-source="getAllPricesTable"
     query-key="pricesTable"
-    @new="router.push({ name: 'create-prices-table', params: { id: 'novo' } })"
+    @new="router.push({ name: 'price-table', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
@@ -47,7 +47,7 @@ export default {
         edit
         clone
         view
-        page="prices-table"
+        page="price-table"
         @view="viewId = $event"
       />
     </template>
