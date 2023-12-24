@@ -62,7 +62,7 @@ watch(() => props.modelValue, async () => {
         <ProductDetailsSkeleton v-if="loading" />
 
         <template v-else>
-          <VTabs fixed-tabs v-model="tab">
+          <VTabs grow v-model="tab">
             <VTab value="info">
               Informações básicas
             </VTab>
@@ -95,7 +95,7 @@ watch(() => props.modelValue, async () => {
           <VBtn
             variant="flat"
             color="primary"
-            @click="router.push({ name: 'edit-products', params: { id: productData?._id } })"
+            @click="router.push({ name: 'product', params: { id: productData?._id, type: 'editar' } })"
           >
             Editar
           </VBtn>

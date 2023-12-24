@@ -58,7 +58,7 @@ const productionFormulationColumns = [
           <td>
             <RouterLink
               v-if="item?.feedstock?.name"
-              :to="{ name: 'edit-feedstocks', params: { id: item?.feedstock?._id } }"
+              :to="{ name: 'feedstock', params: { id: item?.feedstock?._id, type: 'editar' } }"
             >
               {{ item?.feedstock?.name }}
             </RouterLink>
