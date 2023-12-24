@@ -47,7 +47,7 @@ const tab = ref('taxes');
     <VDivider />
 
     <section>
-      <VTabs fixed-tabs v-model="tab">
+      <VTabs grow v-model="tab">
         <VTab value="taxes">
           Impostos
         </VTab>
