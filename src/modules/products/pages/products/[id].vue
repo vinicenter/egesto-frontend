@@ -5,7 +5,7 @@ import { IProduct } from '../../types/product'
 
 const router = useRouter();
 
-defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
+const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
 
 const initialValuesCreate: IProduct.Root = {
   code: '',
@@ -39,6 +39,16 @@ const initialValuesCreate: IProduct.Root = {
 }
 
 const formatSubmit = (data: IProduct.Root) => {
+  const isSelectUndefined = (props.type === 'criar' || props.type === 'clonar')
+
+  const family = isSelectUndefined
+    ? data.family?._id ? data.family._id : undefined
+    : data.family?._id ? data.family._id : null
+
+  const brand = isSelectUndefined
+    ? data.brand?._id ? data.brand._id : undefined
+    : data.brand?._id ? data.brand._id : null
+
   return {
     code: data.code,
     name: data.name,
@@ -64,8 +74,8 @@ const formatSubmit = (data: IProduct.Root) => {
       weight: Number(data.unit.weight),
     },
     UnitOfMeasurement: data.UnitOfMeasurement,
-    family: data.family?._id ? data.family._id : undefined,
-    brand: data.brand?._id ? data.brand._id : undefined,
+    family: family,
+    brand: brand,
   }
 }
 </script>

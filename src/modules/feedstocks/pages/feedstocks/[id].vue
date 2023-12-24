@@ -3,12 +3,14 @@ import { useRouter } from 'vue-router';
 import { createFeedStock, deleteFeedStock, getFeedStock, updateFeedStock } from '../../datasource/feedstocks'
 import { IFeedstock } from '../../types/feedstocks';
 
-const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
+const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
 
 const router = useRouter()
 
 const formatSubmitFeedStock = async (data: IFeedstock) => {
-  const brand = props.type === 'criar'
+  const isSelectUndefined = (props.type === 'criar' || props.type === 'clonar')
+
+  const brand = isSelectUndefined
     ? data.brand?._id ? data.brand._id : undefined
     : data.brand?._id ? data.brand._id : null 
 
