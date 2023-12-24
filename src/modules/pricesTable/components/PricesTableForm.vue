@@ -1,18 +1,18 @@
 <script lang="ts" setup>
-import EEditableListItem from '@/src/core/components/EInput/EEditableListItem.vue';
+// import EEditableListItem from '@/src/core/components/EInput/EEditableListItem.vue';
 import type { IPricesTable } from '../types/pricesTable';
 import { required } from '@/src/core/utils/form-validator';
 import { computed } from 'vue';
 import { toRef } from 'vue';
 import { useRouter } from 'vue-router';
-import ESelectProducts from '@/src/core/components/ESelect/ESelectProducts.vue';
+// import ESelectProducts from '@/src/core/components/ESelect/ESelectProducts.vue';
 import useNotify from '@/src/core/composables/useNotify';
 import PricesTableSummary from './PricesTableSummary.vue';
-import { priceFormat } from '@/src/core/utils/format';
+// import { priceFormat } from '@/src/core/utils/format';
 
 const router = useRouter();
 const { displayMessage } = useNotify();
-const { formatPrice } = priceFormat();
+// const { formatPrice } = priceFormat();
 
 const props = defineProps<{
   model: IPricesTable.Root;
@@ -168,7 +168,7 @@ const mediumMargin = computed(() => {
 
       <VDivider class="m-y-sm" />
 
-      <EEditableListItem
+      <!-- <EEditableListItem
         v-model="model.prices"
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-sm"
         :disabled="disabled"
@@ -234,7 +234,7 @@ const mediumMargin = computed(() => {
             <div>Fat. bruto: {{ formatPrice(item.grossRevenue) }}</div>
           </div>
         </template>
-      </EEditableListItem>
+      </EEditableListItem> -->
     </section>
 
     <VDivider class="m-y-sm" />
