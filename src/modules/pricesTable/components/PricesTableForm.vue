@@ -91,11 +91,13 @@ const setProductDataToPrice = (row: IPricesTable.Root['prices'][0], index: numbe
   form.setFieldValue(`prices.${index}.tax`, tax);
 }
 
+const syncProduct = (price: IPricesTable.Root['prices'][0], index: number) => {
+  setProductDataToPrice(price, index);
+  setProductMargin(price, index);
+}
+
 const syncAllProducts = () => {
-  form.values.prices.forEach((price, index) => {
-    setProductDataToPrice(price, index);
-    setProductMargin(price, index);
-  });
+  form.values.prices.forEach((price, index) => syncProduct(price, index));
 
   displayMessage({ 
     message: 'Produtos sincronizados com a tabela de preço e família',
@@ -182,7 +184,7 @@ const mediumMargin = computed(() => {
           <template v-slot:activator="{ props }">
             <VBtn @click="syncAllProducts" v-bind="props" icon="mdi-sync" />
           </template>
-          <span>Sincronizar produtos com tabela de custo e familia</span>
+          <span>Sincronizar custo do produto, tabela de custo e custos da família de todos os produtos</span>
         </VTooltip>
       </div>
 
@@ -219,6 +221,13 @@ const mediumMargin = computed(() => {
               :expense="`prices.${index}.expense`"
               :productionLost="`prices.${index}.productionLost`"
             />
+
+            <VTooltip>
+              <template v-slot:activator="{ props }">
+                <VBtn @click="syncProduct(item, index)" v-bind="props" icon="mdi-sync" />
+              </template>
+              <span>Sincronizar custo do produto, tabela de custo e custos da família</span>
+            </VTooltip>
           </div>
 
           <EInputPrice
@@ -238,6 +247,14 @@ const mediumMargin = computed(() => {
             @update:model-value="setProductMargin(item, index)"
           />
 
+          <EInputPrice
+            :name="`prices.${index}.productCost`"
+            :rules="[required]"
+            :disabled="disabled"
+            label="Custo do produto"
+            @update:model-value="setProductMargin(item, index)"
+          />
+
           <EInputPct
             :name="`prices.${index}.margin`"
             :rules="[required]"
@@ -247,7 +264,6 @@ const mediumMargin = computed(() => {
 
           <div class="flex flex-col gap-x-sm">
             <div>Família: {{ item.product?.family?.name }}</div>
-            <div>Custo: {{ formatPrice(item.productCost) }}</div>
             <div>Fat. liquido: {{ formatPrice(item.netSales) }}</div>
             <div>Fat. bruto: {{ formatPrice(item.grossRevenue) }}</div>
           </div>
