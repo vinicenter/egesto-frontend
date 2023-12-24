@@ -9,6 +9,7 @@ export namespace IProduct {
     code: string
     UnitOfMeasurement: string
     pack: Pack
+    packWeight?: number
     unit: Unit
     family?: IFamily
     marketing: Marketing
@@ -17,6 +18,7 @@ export namespace IProduct {
     createdAt?: string
     updatedAt?: string
     production: Production
+    productionCost?: ProductionCost
   }
 
   export interface Marketing {
@@ -35,7 +37,6 @@ export namespace IProduct {
     numberOfUnitsInPack?: number
     barcodeDun14?: string
     numberOfPacksInPallet?: number
-    weight?: number
   }
 
   export interface Unit {
@@ -45,7 +46,6 @@ export namespace IProduct {
 
   export interface Production {
     formulation: Formulation[]
-    cost?: ProductionCost
     lost?: number
   }
 

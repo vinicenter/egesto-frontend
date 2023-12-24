@@ -43,8 +43,8 @@ export default {
       <td>{{ item.name || '-' }}</td>
       <td>{{ item.family?.name || '-' }}</td>
       <td>{{ item.pack?.numberOfUnitsInPack || '-' }}</td>
-      <td>{{ item.production?.cost?.unitCost ? formatPrice(item.production?.cost?.unitCost) : '-' }}</td>
-      <td>{{ item.production?.cost?.packCost ? formatPrice(item.production?.cost?.packCost) : '-' }}</td>
+      <td>{{ item.productionCost?.unitCost ? formatPrice(item.productionCost?.unitCost) : '-' }}</td>
+      <td>{{ item.productionCost?.packCost ? formatPrice(item.productionCost?.packCost) : '-' }}</td>
     </template>
 
     <template #actions="{ item }">

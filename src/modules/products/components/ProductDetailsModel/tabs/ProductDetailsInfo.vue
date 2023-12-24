@@ -42,7 +42,7 @@ defineProps<{ productData: IProduct.Root | undefined }>()
 
       <div>
         <div>Peso por pack</div>
-        {{ format(productData?.pack?.weight) }}
+        {{ format(productData?.packWeight) }}
       </div>
     </div>
 

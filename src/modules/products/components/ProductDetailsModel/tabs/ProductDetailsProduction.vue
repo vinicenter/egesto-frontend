@@ -20,7 +20,7 @@ const productionFormulationColumns = [
     <div class="grid grid-cols-2 gap-sm">
       <div>
         <div>Volume por produção</div>
-        {{ format(productData?.production?.cost?.weightPerFormulation) }}
+        {{ format(productData?.productionCost?.weightPerFormulation) }}
       </div>
 
       <div>
@@ -34,12 +34,12 @@ const productionFormulationColumns = [
     <div class="grid grid-cols-2 gap-sm">
       <div>
         <div>Custo por unidade</div>
-        {{ formatPrice(productData?.production?.cost?.unitCost) }}
+        {{ formatPrice(productData?.productionCost?.unitCost) }}
       </div>
 
       <div>
         <div>Custo por pack</div>
-        {{ formatPrice(productData?.production?.cost?.packCost) }}
+        {{ formatPrice(productData?.productionCost?.packCost) }}
       </div>
     </div>
 

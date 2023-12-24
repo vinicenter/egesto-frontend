@@ -66,7 +66,7 @@ const setProductMargin = (row: IPricesTable.Root['prices'][0], index: number) =>
 const setProductDataToPrice = (row: IPricesTable.Root['prices'][0], index: number) => {
   const product = row.product
 
-  const productCost = product?.production?.cost?.packCost || 0;
+  const productCost = product?.productionCost?.packCost || 0;
   const expense = product?.family?.totalCosts || 0;
   const productionLost = product?.production?.lost || 0;
   const volume = row.volume || 1;
