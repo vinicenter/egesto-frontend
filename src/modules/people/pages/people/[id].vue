@@ -9,7 +9,7 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 
 const formatSubmit = (data: IPeople): IPeople => ({
   ...data,
-  contractExpenses: Number(data.contractExpenses)
+  contractExpenses: Number(data.contractExpenses) || 0
 });
 </script>
 
