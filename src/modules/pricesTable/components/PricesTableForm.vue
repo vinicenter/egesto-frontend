@@ -5,8 +5,10 @@ import { useRouter } from 'vue-router';
 import PricesTableSummary from './PricesTableSummary.vue';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue';
+import useNotify from '@/src/core/composables/useNotify';
 
 const router = useRouter();
+const { displayMessage } = useNotify();
 
 const props = defineProps<{
   disabled: boolean;
@@ -25,7 +27,15 @@ const emit = defineEmits<{
 
 const submit = form.handleSubmit((values) => {
   emit('submit', values);
-})
+}, (errorEvent) => {
+  const error = Object.keys(errorEvent.errors)
+  const errorMessage = `Verifique os campos do formulário: ${error.join(', ')}`
+
+  displayMessage({
+    type: 'error',
+    message: errorMessage,
+  });
+});
 
 const disabled = computed(() => props.loading || props.disabled);
 

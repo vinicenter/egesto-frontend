@@ -4,8 +4,10 @@ import type { ICostsTable } from '../types/costsTable';
 import { required } from '@/src/core/utils/form-validator';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
+import useNotify from '@/src/core/composables/useNotify';
 
 const router = useRouter();
+const { displayMessage } = useNotify();
 
 const props = defineProps<{
   disabled: boolean;
@@ -26,7 +28,16 @@ const form = useForm({
 
 const submit = form.handleSubmit((values) => {
   emit('submit', values);
+}, (errorEvent) => {
+  const error = Object.keys(errorEvent.errors)
+  const errorMessage = `Verifique os campos do formulário: ${error.join(', ')}`
+
+  displayMessage({
+    type: 'error',
+    message: errorMessage,
+  });
 });
+
 
 const tab = ref('taxes');
 </script>
