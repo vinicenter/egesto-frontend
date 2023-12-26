@@ -62,7 +62,7 @@ watch(() => props.modelValue, async () => {
         <ProductDetailsSkeleton v-if="loading" />
 
         <template v-else>
-          <VTabs grow v-model="tab">
+          <VTabs grow v-model="tab" class="overflow-visible">
             <VTab value="info">
               Informações básicas
             </VTab>

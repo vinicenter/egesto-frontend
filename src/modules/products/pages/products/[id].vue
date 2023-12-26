@@ -26,6 +26,7 @@ const initialValuesCreate: IProduct.Root = {
   production: {
     formulation: [],
     lost: 0,
+    useCustomPackCostMultiplier: 0,
   },
   pack: {
     barcodeDun14: '',
@@ -57,6 +58,7 @@ const formatSubmit = (data: IProduct.Root) => {
     taxes: data.taxes,
     production: {
       lost: Number(data.production.lost),
+      useCustomPackCostMultiplier: Number(data.production.useCustomPackCostMultiplier),
       formulation: data.production.formulation.map((item) => {
         return {
           value: Number(item.value),

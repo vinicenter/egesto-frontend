@@ -16,6 +16,15 @@ defineProps<{
         :disabled="disabled"
         label="Perda de produção"
       />
+
+      <EInputText
+        name="production.useCustomPackCostMultiplier"
+        :disabled="disabled"
+        type="number"
+        label="Usar multiplicador de custo por pack personalizado"
+        hint="Caso for mantido em 0, será usado o campo 'Unidades por pack'"
+        persistent-hint
+      />
     </div>
   </section>
 

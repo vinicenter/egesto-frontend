@@ -31,7 +31,7 @@ defineProps<{ productData: IProduct.Root | undefined }>()
 
     <div class="grid grid-cols-3 gap-sm">
       <div>
-        <div>Qtd por pack</div>
+        <div>Unidades por pack</div>
         {{ format(productData?.pack?.numberOfUnitsInPack) }}
       </div>
 

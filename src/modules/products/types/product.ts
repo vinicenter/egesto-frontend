@@ -47,6 +47,7 @@ export namespace IProduct {
   export interface Production {
     formulation: Formulation[]
     lost?: number
+    useCustomPackCostMultiplier: number
   }
 
   export interface Formulation {

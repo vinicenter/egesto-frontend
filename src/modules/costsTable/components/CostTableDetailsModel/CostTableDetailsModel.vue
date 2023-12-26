@@ -72,7 +72,7 @@ const tableColumn = [
             {{ costsTableData?.name || '-' }}
           </div>
 
-          <VTabs grow v-model="tab">
+          <VTabs grow v-model="tab" class="overflow-visible">
             <VTab value="taxes">
               Impostos
             </VTab>
