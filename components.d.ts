@@ -19,7 +19,6 @@ declare module '@vue/runtime-core' {
     EError: typeof import('./src/core/components/EError.vue')['default']
     EForm: typeof import('./src/core/components/EForm.vue')['default']
     EGenericIdForm: typeof import('./src/core/components/EGeneric/EGenericIdForm.vue')['default']
-    EGenericIdView: typeof import('./src/core/components/EGeneric/EGenericIdView.vue')['default']
     EInputPct: typeof import('./src/core/components/EInput/EInputPct.vue')['default']
     EInputPrice: typeof import('./src/core/components/EInput/EInputPrice.vue')['default']
     EInputText: typeof import('./src/core/components/EInput/EInputText.vue')['default']
