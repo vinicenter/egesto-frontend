@@ -6,6 +6,11 @@ import { IPeople } from '../../types/people';
 const router = useRouter();
 
 defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
+
+const formatSubmit = (data: IPeople): IPeople => ({
+  ...data,
+  contractExpenses: Number(data.contractExpenses)
+});
 </script>
 
 <template>
@@ -16,7 +21,7 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
     :delete-fn="deletePerson"
     :create-fn="createPerson"
     :update-fn="updatePerson"
-    :format-submit-fn="(data: IPeople) => ({ ...data })"
+    :format-submit-fn="formatSubmit"
     @finish="router.push({ name: 'list-people' })"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">

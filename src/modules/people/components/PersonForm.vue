@@ -119,6 +119,12 @@ const submit = form.handleSubmit(async (values) => {
       label="Observação"
     />
 
+    <EInputPct
+      name="contractExpenses"
+      :disabled="disabled"
+      label="Despesas de contrato"
+    />
+
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-sm">
       <VBtn
         :loading="loading"
