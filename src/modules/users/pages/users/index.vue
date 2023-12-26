@@ -22,6 +22,10 @@ const columns = [
     orderByValue: 'email',
   }
 ]
+
+defineOptions({
+  name: 'UserList',
+})
 </script>
 
 <template>
