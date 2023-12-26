@@ -26,7 +26,7 @@ defineProps<{
 
     <EEditableListItem
       name="production.formulation"
-      class="grid grid-cols-1 md:grid-cols-3 gap-x-sm"
+      class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
       :disabled="disabled"
     >
       <template #default="{ index, removeItem }">
@@ -45,14 +45,25 @@ defineProps<{
           :rules="[required]"
         />
 
+        <ESelect
+          :name="`production.formulation.${index}.considerInWeightCalculation`"
+          item-title="label"
+          :return-object="false"
+          :disabled="disabled"
+          :items="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
+          label="Considerar no cálculo de peso"
+          :rules="[required]"
+        />
+
         <div class="flex gap-x-sm">
+
           <ESelect
-            :name="`production.formulation.${index}.considerInWeightCalculation`"
+            :name="`production.formulation.${index}.considerInVolumeProduced`"
             item-title="label"
             :return-object="false"
             :disabled="disabled"
             :items="[{ label: 'Sim', value: true }, { label: 'Não', value: false }]"
-            label="Considerar no cálculo de peso"
+            label="É a quantidade de volume produzido"
             :rules="[required]"
           />
 

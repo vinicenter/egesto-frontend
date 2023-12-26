@@ -89,7 +89,7 @@ const syncAllProducts = () => {
 
 <template>
   <section>
-    <VTooltip>
+    <VTooltip open-on-click>
       <template v-slot:activator="{ props }">
         <VBtn @click="syncAllProducts" v-bind="props" icon="mdi-sync" />
       </template>
@@ -128,7 +128,7 @@ const syncAllProducts = () => {
             :productionLost="`prices.${index}.productionLost`"
           />
   
-          <VTooltip>
+          <VTooltip open-on-click>
             <template v-slot:activator="{ props }">
               <VBtn @click="syncProduct(item, index)" v-bind="props" icon="mdi-sync" />
             </template>

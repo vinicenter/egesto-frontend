@@ -53,11 +53,13 @@ export namespace IProduct {
     feedstock?: IFeedstock
     value?: number
     considerInWeightCalculation: boolean
+    considerInVolumeProduced: boolean
   }
 
   export interface ProductionCost {
     unitCost: number
     packCost: number
     weightPerFormulation: number
+    isWeightPerFormulationValid: boolean
   }
 }

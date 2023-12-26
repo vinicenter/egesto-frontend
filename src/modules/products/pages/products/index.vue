@@ -14,6 +14,7 @@ const columns = [
   { label: 'Unidade por Pack', style: 'width: 100px' },
   { label: 'Custo unitário', style: 'width: 100px' },
   { label: 'Custo total', style: 'width: 100px' },
+  { label: '', style: 'width: 100px' },
 ]
 
 const viewId = ref(null)
@@ -45,6 +46,51 @@ export default {
       <td>{{ item.pack?.numberOfUnitsInPack || '-' }}</td>
       <td>{{ item.productionCost?.unitCost ? formatPrice(item.productionCost?.unitCost) : '-' }}</td>
       <td>{{ item.productionCost?.packCost ? formatPrice(item.productionCost?.packCost) : '-' }}</td>
+      <td>
+        <span class="space-x-4 flex">
+          <VTooltip location="top" open-on-click>
+            <template v-slot:activator="{ props }">
+              <VIcon
+                v-bind="props"
+                :class="item.marketing.isPublic ? 'text-green' : 'text-red'"
+              >
+                mdi-bullhorn-outline
+              </VIcon>
+            </template>
+
+            <div class="flex flex-col items-center">
+              <template v-if="item.marketing.isPublic">
+                <span>Produto público</span>
+                <span>Está sendo exibido no site</span>
+              </template>
+  
+              <template v-else>
+                <span>Produto privado</span>
+                <span>Não está sendo exibido no site</span>
+              </template>
+            </div>
+          </VTooltip>
+
+          <VTooltip location="top" open-on-click>
+            <template v-slot:activator="{ props }">
+              <VIcon
+                v-bind="props"
+                :class="item.productionCost.isWeightPerFormulationValid ? 'text-green' : 'text-red'"
+              >
+                mdi-check
+              </VIcon>
+            </template>
+
+            <div v-if="item.productionCost.isWeightPerFormulationValid">
+              Formulação válida
+            </div>
+
+            <div v-else>
+              Formulação inválida
+            </div>
+          </VTooltip>
+        </span>
+      </td>
     </template>
 
     <template #actions="{ item }">

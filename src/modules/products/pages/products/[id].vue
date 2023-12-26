@@ -61,6 +61,7 @@ const formatSubmit = (data: IProduct.Root) => {
           value: Number(item.value),
           feedstock: item.feedstock?._id,
           considerInWeightCalculation: item.considerInWeightCalculation,
+          considerInVolumeProduced: item.considerInVolumeProduced,
         }
       }),
     },

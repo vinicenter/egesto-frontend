@@ -148,7 +148,11 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
         <slot :item="item" />
 
         <td>
-          <VTooltip location="top" :text="formatDate(item.updatedAt)">
+          <VTooltip
+            :text="formatDate(item.updatedAt)"
+            location="top"
+            open-on-click
+          >
             <template v-slot:activator="{ props }">
               <div v-bind="props">
                 {{ humanizeDate(item.updatedAt) }}
@@ -157,7 +161,11 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
           </VTooltip>
         </td>
         <td>
-          <VTooltip location="top" :text="formatDate(item.createdAt)">
+          <VTooltip
+            :text="formatDate(item.createdAt)"
+            location="top"
+            open-on-click
+          >
             <template v-slot:activator="{ props }">
               <div v-bind="props">
                 {{ humanizeDate(item.createdAt) }}

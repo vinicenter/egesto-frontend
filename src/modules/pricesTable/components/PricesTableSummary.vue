@@ -25,7 +25,7 @@ const volume = computed(() => {
 
 <template>
   <div class="grid grid-cols-2 md:grid-cols-4 gap-sm">
-    <VTooltip location="bottom">
+    <VTooltip location="bottom" open-on-click>
       <template #activator="{ props }">
         <VCard
           v-bind="props"
@@ -37,7 +37,7 @@ const volume = computed(() => {
       <span>Soma do volume de todos os produtos</span>
     </VTooltip>
 
-    <VTooltip location="bottom">
+    <VTooltip location="bottom" open-on-click>
       <template #activator="{ props }">
         <VCard
           v-bind="props"
@@ -49,7 +49,7 @@ const volume = computed(() => {
       <span>Soma do faturamento bruto de todos os produtos</span>
     </VTooltip>
 
-    <VTooltip location="bottom">
+    <VTooltip location="bottom" open-on-click>
       <template #activator="{ props }">
         <VCard
           v-bind="props"
@@ -61,7 +61,7 @@ const volume = computed(() => {
       <span>Soma do faturamento liquido de todos os produtos</span>
     </VTooltip>
 
-    <VTooltip location="bottom">
+    <VTooltip location="bottom" open-on-click>
       <template #activator="{ props }">
         <VCard
           v-bind="props"

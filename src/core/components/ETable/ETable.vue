@@ -21,7 +21,12 @@ withDefaults(defineProps<{
         <tr>
           <th :style="column.style" v-for="(column, index) in columns" :key="`e-table-col-${index}`">
             {{ column.label }}
-            <VTooltip location="top" v-if="column.tooltip" :text="column.tooltip">
+            <VTooltip
+              v-if="column.tooltip"
+              :text="column.tooltip"
+              location="top"
+              open-on-click
+            >
               <template v-slot:activator="{ props }">
                 <VIcon size="12" v-bind="props" icon="mdi-information-outline" />
               </template>

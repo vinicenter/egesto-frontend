@@ -1,18 +1,27 @@
 <script setup lang="ts">
 import { numberFormat, priceFormat } from '@/src/core/utils/format';
 import { IProduct } from '../../../types/product';
+import { computed } from 'vue';
 
 const { format } = numberFormat();
 const { formatPrice } = priceFormat();
 
-defineProps<{ productData: IProduct.Root | undefined }>()
+const props = defineProps<{ productData: IProduct.Root | undefined }>()
 
 const productionFormulationColumns = [
   { label: 'Matéria Prima', style: 'width: 150px' },
   { label: 'Preço Sem Icms', style: 'width: 50px' },
   { label: 'Volume usado', style: 'width: 50px' },
-  { label: 'Custo total', style: 'width: 50px' }
+  { label: 'Custo total', style: 'width: 50px' },
+  { label: 'Volume', style: 'width: 50px' },
 ]
+
+const difference = computed(() => {
+  const weightPerFormulation = props.productData?.productionCost?.weightPerFormulation || 0;
+  const weightPerPack = props.productData?.packWeight || 0;
+
+  return weightPerFormulation - weightPerPack;
+});
 </script>
 
 <template>
@@ -45,6 +54,21 @@ const productionFormulationColumns = [
 
     <VDivider />
 
+    <VAlert
+      v-if="productData?.productionCost?.isWeightPerFormulationValid"
+      type="success"
+      title="Formulação válida"
+      text="Peso por pack e Volume por produção conferem."
+    />
+
+    <VAlert
+      v-else
+      type="error"
+      title="Formulação inválida"
+      :text="`Peso por pack e Volume por produção não conferem. Verifique a formulação. Diferença de: ${difference}`"
+    />
+
+
     <div>
       <ETable
         :loading="false"
@@ -73,6 +97,12 @@ const productionFormulationColumns = [
             {{ format(item?.value) }}
           </td>
           <td>{{ formatPrice(item?.value * item?.feedstock?.priceWithoutIcms) }}</td>
+          <td :class="item?.considerInVolumeProduced
+            ? 'text-green'
+            : 'text-red'
+          ">
+            {{ item?.considerInVolumeProduced ? 'Sim' : 'Não' }}
+          </td>
         </template>
       </ETable>
     </div>
