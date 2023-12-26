@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { createProduct, deleteProduct, getProduct, updateProduct } from '../../datasource/products';
 import { IProduct } from '../../types/product'
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter();
 
@@ -79,6 +80,13 @@ const formatSubmit = (data: IProduct.Root) => {
     brand: brand,
   }
 }
+
+const queryClient = useQueryClient()
+
+const finish = () => {
+  queryClient.invalidateQueries(['products'])
+  router.push({ name: 'list-products' })
+}
 </script>
 
 <template>
@@ -91,7 +99,7 @@ const formatSubmit = (data: IProduct.Root) => {
     :update-fn="updateProduct"
     :format-submit-fn="formatSubmit"
     :initial-values-create="initialValuesCreate"
-    @finish="router.push({ name: 'list-products' })"
+    @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <ProductForm
