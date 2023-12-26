@@ -94,11 +94,11 @@ const tab = ref('informations')
     </VTabs>
 
     <VWindow v-model="tab">
-      <VWindowItem value="informations">
+      <VWindowItem value="informations" eager>
         <PricesTableFormInformations :disabled="disabled" />
       </VWindowItem>
 
-      <VWindowItem value="products">
+      <VWindowItem value="products" eager>
         <PricesTableFormProducts :disabled="disabled" :form="form" />
       </VWindowItem>
     </VWindow>
