@@ -5,14 +5,21 @@ import { IFamily } from '../../types/family'
 
 const router = useRouter();
 
-defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
+const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
 
 const initialValues = {
   name: '',
-  costs: []
+  costs: [],
+  linkedFamily: undefined
 }
 
 const formatSubmit = async (data: IFamily) => {
+  const isSelectUndefined = (props.type === 'criar' || props.type === 'clonar')
+
+  const linkedFamily = isSelectUndefined
+    ? data.linkedFamily?._id ? data.linkedFamily?._id : undefined
+    : data.linkedFamily?._id ? data.linkedFamily._id : null
+
   return {
     name: data.name,
     costs: data.costs.map((cost) => {
@@ -21,6 +28,7 @@ const formatSubmit = async (data: IFamily) => {
         value: Number(cost.value)
       }
     }),
+    linkedFamily,
   }
 }
 </script>

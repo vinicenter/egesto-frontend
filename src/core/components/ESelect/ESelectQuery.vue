@@ -31,17 +31,17 @@ const {
 
 <template>
   <ESelect
+    v-model:search="search"
     :items="data?.pages"
     :loading="isLoading"
     :return-object="false"
     item-title="name"
     item-value="_id"
     clearable
-    @update:search="search = $event"
   >
     <template v-slot:no-data />
 
-    <template v-slot:prepend-item>
+    <template v-slot:prepend-search>
       <template v-if="!data?.pages.length">
         <template v-if="isLoading">
           <VSkeletonLoader type="list-item" />

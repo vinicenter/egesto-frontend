@@ -28,12 +28,6 @@ const submit = form.handleSubmit(async (values) => {
 })
 
 const disabled = computed(() => props.loading || props.disabled);
-
-const loadCostsFromFamily = async (family: IFamily) => {
-  if(family?.costs) {
-    form.setFieldValue('costs', family.costs)
-  }
-}
 </script>
 
 <template>
@@ -47,10 +41,9 @@ const loadCostsFromFamily = async (family: IFamily) => {
       />
 
       <ESelectFamilies
-        name="copyFromFamily"
+        name="linkedFamily"
         :disabled="disabled"
-        label="Selecione uma família para copiar custos"
-        @update:model-value="loadCostsFromFamily($event);"
+        label="Família vinculada"
         return-object
       />
 
