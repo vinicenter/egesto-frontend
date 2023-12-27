@@ -16,13 +16,6 @@ const productionFormulationColumns = [
   { label: 'Volume', style: 'width: 50px' },
 ]
 
-const differenceVolumeWeight = computed(() => {
-  const weightPerFormulation = props.productData?.productionCost?.weightPerFormulation || 0;
-  const weightPerPack = props.productData?.packWeight || 0;
-
-  return weightPerFormulation - weightPerPack;
-});
-
 const costPackMultiplier = computed(() => {
   return props.productData?.production.useCustomPackCostMultiplier
     ? format(props.productData?.production.useCustomPackCostMultiplier)
@@ -95,7 +88,9 @@ const costPackMultiplier = computed(() => {
       v-else
       type="error"
       title="Formulação inválida"
-      :text="`Peso por pack e Volume por produção não conferem. Verifique a formulação. Diferença de: ${differenceVolumeWeight}`"
+      :text="
+        `Peso por pack e Volume por produção não conferem. Verifique a formulação. Diferença de: ${productData?.productionCost?.weightFormulationDifference}`
+      "
     />
 
     <div>

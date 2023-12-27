@@ -62,5 +62,6 @@ export namespace IProduct {
     packCost: number
     weightPerFormulation: number
     isWeightPerFormulationValid: boolean
+    weightFormulationDifference: number
   }
 }
