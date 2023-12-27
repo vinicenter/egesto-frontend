@@ -13,7 +13,6 @@ defineProps<{
         name="code"
         :disabled="disabled"
         label="Código"
-        :rules="[required]"
       />
 
       <EInputText
