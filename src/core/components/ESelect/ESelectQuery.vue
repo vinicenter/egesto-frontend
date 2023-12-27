@@ -37,6 +37,7 @@ const {
     :return-object="false"
     item-title="name"
     item-value="_id"
+    searchable
     clearable
   >
     <template v-slot:no-data />

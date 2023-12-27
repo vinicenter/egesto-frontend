@@ -6,6 +6,7 @@ import { MaybeRef } from 'vue';
 const props = defineProps<{
   name: string
   rules?: MaybeRef<RuleExpression<unknown>>
+  searchable?: boolean
 }>()
 
 const search = defineModel<string>('search')
@@ -25,7 +26,10 @@ const { value, errorMessage, handleBlur } = useField<unknown>(props.name, props.
       <div class="flex justify-center my-sm">Nenhum dado encontrado</div>
     </template>
 
-    <template #prepend-item>
+    <template
+      v-if="searchable"
+      #prepend-item
+    >
       <div class="h-60px w-full">
         <div class="bg-white h-60px fixed w-full z-100">
           <VTextField hide-details label="Pesquisar" v-model="search" clearable />

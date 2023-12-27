@@ -19,6 +19,7 @@ const filteredBrazilianStates = computed(() => {
     item-title="label"
     item-value="value"
     label="UF"
+    searchable
     clearable
   />
 </template>
