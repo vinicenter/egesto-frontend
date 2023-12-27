@@ -12,6 +12,10 @@ const columns = [
     defaultOrderByValue: true
   },
   {
+    label: 'Família vinculada',
+    style: 'width: 100px',
+  },
+  {
     label: 'Custo total',
     style: 'width: 100px',
     tooltip: 'É a somatória de todos os custos da família',
@@ -28,6 +32,7 @@ const columns = [
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
+      <td>{{ item.linkedFamily ? item.linkedFamily.name : 'Sem vinculo' }}</td>
       <td>{{ item.totalCosts ? `${item.totalCosts}%` : '-' }}</td>
     </template>
 
