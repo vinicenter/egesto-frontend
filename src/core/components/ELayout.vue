@@ -78,17 +78,14 @@ const items: Item[][] = [
       icon: 'mdi-account-multiple',
       onClick: () => router.push({ name: 'list-users' }),
     },
-    {
-      title: 'Sair',
-      icon: 'mdi-logout',
-      onClick: () => {
-        removeToken()
-        removeTenant()
-        router.push({ name: 'login-user' })
-      },
-    },
   ],
 ]
+
+const logout = () => {
+  removeToken()
+  removeTenant()
+  router.push({ name: 'login-user' })
+}
 
 const drawer = ref(true)
 </script>
@@ -101,6 +98,23 @@ const drawer = ref(true)
     </VAppBar>
 
     <VNavigationDrawer v-model="drawer" location="left" width="250" v-if="enableNavbar">
+      <!-- <VListItem
+        v-if="loginData"
+        :title="loginData.name"
+      >
+        <VListItemSubtitle>
+          <div>
+            {{ loginData.username }}
+          </div>
+          <div>
+            {{ loginData.email }}
+          </div>
+          <div>
+            {{ getTenant() }}
+          </div>
+        </VListItemSubtitle>
+      </VListItem> -->
+
       <VList density="compact" nav>
         <template v-for="(buttons) in items">
           <template v-for="button in buttons">
@@ -114,6 +128,18 @@ const drawer = ref(true)
           <VDivider />
         </template>
       </VList>
+
+      <template v-slot:append>
+        <div class="pa-2">
+          <VBtn
+            block
+            prepend-icon="mdi-logout"
+            @click="logout"
+          >
+            Sair
+          </VBtn>
+        </div>
+      </template>
     </VNavigationDrawer>
 
     <VMain>
