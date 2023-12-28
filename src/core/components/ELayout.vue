@@ -93,6 +93,21 @@ const drawer = ref(true)
 if(!authStorage.value) {
   logout()
 }
+
+const userInitials = computed(() => {
+  if(!authStorage.value) {
+    return ''
+  }
+
+  const names = authStorage.value.name.split(' ')
+
+  const initials = [
+    names[0].charAt(0),
+    names[names.length - 1].charAt(0),
+  ].join('')
+
+  return initials
+})
 </script>
 
 <template>
@@ -107,14 +122,22 @@ if(!authStorage.value) {
         v-if="authStorage && tenantStorage"
         :title="authStorage.name"
       >
+        <template #prepend>
+          <VAvatar
+            color="brown"
+            size="large"
+          >
+            <span class="text-h6">{{ userInitials }}</span>
+          </VAvatar>
+        </template>
+
         <VListItemSubtitle>
           <div>
+            <VIcon>mdi-account</VIcon>
             {{ authStorage.username }}
           </div>
           <div>
-            {{ authStorage.email }}
-          </div>
-          <div>
+            <VIcon>mdi-domain</VIcon>
             {{ tenantStorage }}
           </div>
         </VListItemSubtitle>
