@@ -122,30 +122,34 @@ const userInitials = computed(() => {
     </VAppBar>
 
     <VNavigationDrawer v-model="drawer" location="left" width="250" v-if="enableNavbar">
-      <VListItem
-        v-if="authStorage && tenantStorage"
-        :title="authStorage.name"
-      >
-        <template #prepend>
-          <VAvatar
-            color="brown"
-            size="large"
-          >
-            <span class="text-h6">{{ userInitials }}</span>
-          </VAvatar>
-        </template>
+      <div class="h-100px flex items-center">
+        <VListItem
+          v-if="authStorage && tenantStorage"
+          :title="authStorage.name"
+        >
+          <template #prepend>
+            <VAvatar
+              color="brown"
+              size="large"
+            >
+              <span class="text-h6">{{ userInitials }}</span>
+            </VAvatar>
+          </template>
+  
+          <VListItemSubtitle>
+            <div>
+              <VIcon>mdi-account</VIcon>
+              {{ authStorage.username }}
+            </div>
+            <div>
+              <VIcon>mdi-domain</VIcon>
+              {{ tenantStorage }}
+            </div>
+          </VListItemSubtitle>
+        </VListItem>
+      </div>
 
-        <VListItemSubtitle>
-          <div>
-            <VIcon>mdi-account</VIcon>
-            {{ authStorage.username }}
-          </div>
-          <div>
-            <VIcon>mdi-domain</VIcon>
-            {{ tenantStorage }}
-          </div>
-        </VListItemSubtitle>
-      </VListItem>
+      <VDivider />
 
       <VList density="compact" nav>
         <template v-for="(buttons) in items">
