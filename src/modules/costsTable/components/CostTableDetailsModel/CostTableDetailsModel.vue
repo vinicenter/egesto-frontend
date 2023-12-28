@@ -4,9 +4,11 @@ import useNotify from '@/src/core/composables/useNotify'
 import { computed, ref, watch } from 'vue';
 import { ICostsTable } from '../../types/costsTable'
 import { useRouter } from 'vue-router';
+import { numberFormat } from '@/src/core/utils/format';
 
 const router = useRouter()
 const { displayMessage } = useNotify()
+const { format } = numberFormat();
 
 const props = defineProps<{
   id: string | null
@@ -67,9 +69,16 @@ const tableColumn = [
         <CostTableDetailsSkeleton v-if="loading" />
 
         <template v-else>
-          <div class="p-sm">
-            <div>Nome</div>
-            {{ costsTableData?.name || '-' }}
+          <div class="p-sm grid grid-cols-1 sm:grid-cols-2">
+            <div>
+              <div>Nome</div>
+              {{ costsTableData?.name || '-' }}
+            </div>
+
+            <div>
+              <div>Frete para registros não definidos</div>
+              {{ `${format(costsTableData?.defaultShipmentCost)}%` }}
+            </div>
           </div>
 
           <VTabs grow v-model="tab" class="overflow-visible">
