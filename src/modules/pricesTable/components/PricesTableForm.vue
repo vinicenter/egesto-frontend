@@ -93,7 +93,7 @@ const tab = ref('informations')
       </VTab>
     </VTabs>
 
-    <VWindow v-model="tab">
+    <VWindow v-model="tab" class="p-2">
       <VWindowItem value="informations" eager>
         <PricesTableFormInformations :disabled="disabled" />
       </VWindowItem>

@@ -29,7 +29,7 @@ const setProductMargin = (row: IPricesTable.Product, index: number) => {
   const totalRevenue = volume * price;
   const shipmentValue = shipment * totalRevenue;
   const unitTotal = totalRevenue-shipmentValue;
-  const taxes = tax * unitTotal;
+  const taxes = tax * totalRevenue;
 
   const netRevenue = unitTotal - taxes;
   const expensesVariables = expense*totalRevenue;
@@ -88,13 +88,50 @@ const syncAllProducts = () => {
 </script>
 
 <template>
-  <section>
-    <VTooltip open-on-click>
-      <template v-slot:activator="{ props }">
-        <VBtn @click="syncAllProducts" v-bind="props" icon="mdi-sync" />
-      </template>
-      <span>Sincronizar custo do produto, tabela de custo e custos da família de todos os produtos</span>
-    </VTooltip>
+  <section class="space-y-4">
+    <div class="space-x-4">
+      <VTooltip open-on-click location="bottom">
+        <template v-slot:activator="{ props }">
+          <VBtn
+            @click="syncAllProducts"
+            prepend-icon="mdi-sync"
+            v-bind="props"
+          >
+            Sincronizar produtos
+          </VBtn>
+        </template>
+
+        <span>Sincronizar custo do produto, tabela de custo e custos da família de todos os produtos</span>
+      </VTooltip>
+
+      <VTooltip open-on-click location="bottom">
+        <template v-slot:activator="{ props }">
+          <VBtn
+            prepend-icon="mdi-tag"
+            v-bind="props"
+          >
+            Adicionar família
+          </VBtn>
+        </template>
+
+        <span>Adicione todos os produtos de uma família a tabela de preço</span>
+      </VTooltip>
+
+      <VTooltip open-on-click location="bottom">
+        <template v-slot:activator="{ props }">
+          <VBtn
+            prepend-icon="mdi-pencil-outline"
+            v-bind="props"
+          >
+            Alterações em massa
+          </VBtn>
+        </template>
+
+        <span>Faça alterações em massa em uma família especifica ou em todos os produtos da tabela de preço</span>
+      </VTooltip>
+    </div>
+
+    <VDivider />
 
     <EEditableListItem
       name="prices"
@@ -126,6 +163,7 @@ const syncAllProducts = () => {
             :tax="`prices.${index}.tax`"
             :expense="`prices.${index}.expense`"
             :productionLost="`prices.${index}.productionLost`"
+            @updated="setProductMargin(item, index)"
           />
   
           <VTooltip open-on-click>

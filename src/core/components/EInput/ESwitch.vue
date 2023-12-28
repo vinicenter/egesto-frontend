@@ -17,6 +17,7 @@ const { value, handleBlur } = useField<boolean | undefined>(props.name, props.ru
     v-model="value"
     :disabled="disabled"
     :label="label"
+    inset
     @blur="handleBlur"
   />
 </template>

@@ -19,6 +19,7 @@ defineProps<{
       name="costTable"
       :disabled="disabled"
       return-object
+      :clearable="false"
       :rules="[required]"
     />
 

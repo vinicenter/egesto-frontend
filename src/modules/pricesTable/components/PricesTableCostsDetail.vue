@@ -1,14 +1,16 @@
 <script setup lang="ts">
 import { required } from '@/src/core/utils/form-validator';
 
-const emit = defineEmits([ 'update:order', 'update:orderBy' ]);
-
 defineProps<{
   disabled?: boolean;
   shipment: string,
   tax: string,
   expense: string,
   productionLost: string,
+}>()
+
+const emit = defineEmits<{
+  (e: 'updated'): void
 }>()
 </script>
 
@@ -36,6 +38,7 @@ defineProps<{
           :rules="[required]"
           :disabled="disabled"
           label="Frete (%)"
+          @update:modelValue="emit('updated')"
         />
 
         <EInputPct
@@ -43,6 +46,7 @@ defineProps<{
           :rules="[required]"
           :disabled="disabled"
           label="Despesas (%)"
+          @update:modelValue="emit('updated')"
         />
 
         <EInputPct
@@ -50,6 +54,7 @@ defineProps<{
           :rules="[required]"
           :disabled="disabled"
           label="Perdas de produção (%)"
+          @update:modelValue="emit('updated')"
         />
 
         <EInputPct
@@ -57,6 +62,7 @@ defineProps<{
           :rules="[required]"
           :disabled="disabled"
           label="Impostos (%)"
+          @update:modelValue="emit('updated')"
         />
       </div>
     </VCard>
