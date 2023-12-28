@@ -1,9 +1,9 @@
 import { tableParams } from '@/src/core/types/pagination-types'
-import type { IUser } from '../types/auth'
+import type { IUser, IAuth } from '../types/auth'
 import axios from '~utils/axios'
 
 export const createLogin = async (username: string, password: string) => {
-  const { data } = await axios.post('/auth/login', { username, password })
+  const { data } = await axios.post<IAuth>('/auth/login', { username, password })
 
   return data
 }

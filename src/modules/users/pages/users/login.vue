@@ -1,24 +1,31 @@
 <script setup lang="ts">
-import { saveTenant } from '~utils/tenant'
-import { saveToken } from '~utils/auth'
 import { createLogin } from '../../datasource/auth';
 import { ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useNotify from '@/src/core/composables/useNotify';
 import { LoginFormValues } from '../../components/LoginForm.vue';
+import useAuth from '@/src/core/composables/useAuth';
+import { nextTick } from 'vue';
 
 const loading = ref(false);
 const router = useRouter();
 const { displayMessage } = useNotify();
 
+const {
+  tenantStorage,
+  authStorage,
+} = useAuth();
+
 const submit = async (values: LoginFormValues) => {
-  saveTenant(values.tenant)
+  tenantStorage.value = values.tenant
+  
+  await nextTick()
 
   try {
     loading.value = true
     const data = await createLogin(values.username, values.password)
 
-    saveToken(data.token)
+    authStorage.value = data
 
     router.push({ name: 'home' })
 

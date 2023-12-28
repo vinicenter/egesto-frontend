@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import useAxiosInterceptors from '@/src/core/composables/useAxiosInterceptos'
+import useAxiosInterceptors from '@/src/core/composables/useAxiosInterceptors'
 import useNotify from '@/src/core/composables/useNotify'
 
 const { notifyState } = useNotify()

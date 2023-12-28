@@ -4,3 +4,10 @@ export interface IUser {
   name: string,
   email?: string | null,
 }
+
+export interface IAuth {
+  token: string,
+  username: string,
+  email: string,
+  name: string
+}

@@ -10,8 +10,8 @@ interface Item {
 import { ref } from 'vue'
 import { computed } from 'vue'
 import { useRouter, useRoute } from 'vue-router'
-import { removeToken } from '~utils/auth'
-import { removeTenant } from '~utils/tenant'
+import useAuth from '../composables/useAuth';
+import useAxiosInterceptors from '../composables/useAxiosInterceptors';
 const router = useRouter()
 const route = useRoute()
 
@@ -81,13 +81,18 @@ const items: Item[][] = [
   ],
 ]
 
-const logout = () => {
-  removeToken()
-  removeTenant()
-  router.push({ name: 'login-user' })
-}
+const {
+  authStorage,
+  tenantStorage,
+} = useAuth()
+
+const { logout } = useAxiosInterceptors()
 
 const drawer = ref(true)
+
+if(!authStorage.value) {
+  logout()
+}
 </script>
 
 <template>
@@ -98,22 +103,22 @@ const drawer = ref(true)
     </VAppBar>
 
     <VNavigationDrawer v-model="drawer" location="left" width="250" v-if="enableNavbar">
-      <!-- <VListItem
-        v-if="loginData"
-        :title="loginData.name"
+      <VListItem
+        v-if="authStorage && tenantStorage"
+        :title="authStorage.name"
       >
         <VListItemSubtitle>
           <div>
-            {{ loginData.username }}
+            {{ authStorage.username }}
           </div>
           <div>
-            {{ loginData.email }}
+            {{ authStorage.email }}
           </div>
           <div>
-            {{ getTenant() }}
+            {{ tenantStorage }}
           </div>
         </VListItemSubtitle>
-      </VListItem> -->
+      </VListItem>
 
       <VList density="compact" nav>
         <template v-for="(buttons) in items">
@@ -134,7 +139,7 @@ const drawer = ref(true)
           <VBtn
             block
             prepend-icon="mdi-logout"
-            @click="logout"
+            @click="logout()"
           >
             Sair
           </VBtn>
