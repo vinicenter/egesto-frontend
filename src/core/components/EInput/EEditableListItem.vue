@@ -1,6 +1,7 @@
 <script lang="ts" setup>
-import { useFieldArray } from 'vee-validate'
-import { useAttrs } from 'vue';
+import { useAttrs, computed } from 'vue';
+import { useFieldArray, useFormValues } from 'vee-validate'
+import { resolve } from '@/src/core/utils/utils'
 
 const props = defineProps<{
   name: string;
@@ -8,6 +9,11 @@ const props = defineProps<{
 }>()
 
 const attrs = useAttrs()
+
+const values = useFormValues()
+const arrayValues = computed(() => {
+  return resolve(props.name, values.value)
+})
 
 const { fields, push, remove } = useFieldArray(props.name)
 
@@ -30,7 +36,7 @@ defineOptions({
   <div v-for="(field, idx) in fields" :key="field.key">
     <div v-bind="attrs">
       <slot
-        :item="field.value"
+        :item="arrayValues[idx]"
         :index="idx"
         :removeItem="() => removeItem(idx)"
       />

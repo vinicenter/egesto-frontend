@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { required } from '@/src/core/utils/form-validator';
-import { useForm, useFormValues } from 'vee-validate';
-import { ref } from 'vue';
+import { useForm, useFieldArray, useFormValues } from 'vee-validate';
+import { ref, computed } from 'vue';
 import { getProducts } from '../../products/datasource/products';
 import { IPricesTable } from '../types/pricesTable';
 import useNotify from '@/src/core/composables/useNotify';
@@ -15,7 +15,9 @@ const {
   displayMessage
 } = useNotify()
 
-const fields = useFormValues<IPricesTable.Root>();
+const { fields, insert } = useFieldArray('prices')
+const values = useFormValues()
+const arrayValues = computed(() => values.value.prices)
 
 const emit = defineEmits<{
   (e: 'loadProductData', price: IPricesTable.Price, index: number): void;
@@ -23,12 +25,8 @@ const emit = defineEmits<{
 
 const { handleSubmit } = useForm()
 
-const isProductAlreadyAdded = (productId: string) => {
-  if (!fields.value.prices) {
-    return false
-  }
-
-  return fields.value.prices.some((price: any) => price.product._id === productId)
+const isProductAlreadyAdded = (productId?: string) => {
+  return arrayValues.value.some((price: IPricesTable.Price) => price.product?._id === productId)
 }
 
 const submit = handleSubmit(async (values) => {
@@ -56,7 +54,9 @@ const submit = handleSubmit(async (values) => {
     }))
 
     addPricesToForm(newPrices)
-  } catch {
+  } catch (e) {
+    console.log(e)
+
     displayMessage({
       message: 'Erro ao adicionar produtos da família!',
       type: 'error',
@@ -67,17 +67,13 @@ const submit = handleSubmit(async (values) => {
 })
 
 const addPricesToForm = (newPrices: IPricesTable.Price[]) => {
-  newPrices.forEach((newPrice: any) => {
-    if (!fields.value.prices) {
-      return
-    }
-
+  newPrices.forEach((newPrice: IPricesTable.Price) => {
     if (isProductAlreadyAdded(newPrice.product._id)) {
       return
     }
 
-    const index = fields.value.prices.length || 0
-    fields.value.prices[index] = newPrice
+    const index = fields.value.length || 0
+    insert(index, newPrice)
 
     emit('loadProductData', newPrice, index)
   })
