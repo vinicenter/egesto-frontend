@@ -7,10 +7,21 @@ const props = defineProps<{
   grossRevenue: number;
   totalNetRevenue: number;
   mediumMargin: number;
+  items: number;
 }>()
 
 const { formatPrice } = priceFormat();
 const { format } = numberFormat();
+
+const items = computed(() => {
+  if(!props.items) return 'Adicione itens'
+
+  if(props.items > 1) {
+    return `${props.items} itens`
+  }
+
+  return `${props.items} item`
+})
 
 const volume = computed(() => {
   if(!props.volumeTotal) return 'Adicione volume'
@@ -24,13 +35,25 @@ const volume = computed(() => {
 </script>
 
 <template>
-  <div class="grid grid-cols-2 md:grid-cols-4 gap-sm">
+  <div class="grid grid-cols-2 md:grid-cols-5 gap-sm">
     <VTooltip location="bottom" open-on-click>
       <template #activator="{ props }">
         <VCard
           v-bind="props"
           class="w-full hover:cursor-help"
-          title="Volume"
+          title="Itens"
+          :text="items.toString()"
+        />
+      </template>
+      <span>Total de itens adicionados</span>
+    </VTooltip>
+
+    <VTooltip location="bottom" open-on-click>
+      <template #activator="{ props }">
+        <VCard
+          v-bind="props"
+          class="w-full hover:cursor-help"
+          title="Volumes"
           :text="volume.toString()"
         />
       </template>

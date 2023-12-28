@@ -39,9 +39,13 @@ const submit = form.handleSubmit((values) => {
 
 const disabled = computed(() => props.loading || props.disabled);
 
+const itemsTotal = computed(() => {
+  return form.values.prices.length;
+})
+
 const volumeTotal = computed(() => {
   return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
-    return price.netSales
+    return price.volume
       ? acc + Number(price.volume)
       : acc;
   }, 0);
@@ -96,6 +100,7 @@ const tab = ref('informations')
 
       <VWindowItem value="products" eager class="space-y-4">
         <PricesTableSummary
+          :items="itemsTotal"
           :volumeTotal="volumeTotal"
           :grossRevenue="grossRevenue"
           :totalNetRevenue="totalNetRevenue"

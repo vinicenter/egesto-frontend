@@ -3,6 +3,10 @@ import { IBrand } from "../../brands/types/brand"
 import { IFamily } from "../../families/types/family"
 
 export namespace IProduct {
+  export interface Filters {
+    familyId?: string
+  }
+
   export interface Root {
     _id?: string
     name: string

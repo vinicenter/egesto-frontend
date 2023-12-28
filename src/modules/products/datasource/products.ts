@@ -2,7 +2,7 @@ import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
 import { IProduct } from '../types/product'
 
-export const getProducts = async (params: tableParams) => {
+export const getProducts = async (params: tableParams & IProduct.Filters) => {
   const { data } = await axios.get('/products', { params })
 
   return data

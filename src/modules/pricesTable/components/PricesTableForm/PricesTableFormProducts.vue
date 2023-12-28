@@ -16,7 +16,7 @@ const props = defineProps<{
 const { displayMessage } = useNotify();
 const { formatPrice } = priceFormat();
 
-const fields = useFormValues();
+const fields = useFormValues<IPricesTable.Root>();
 
 const setProductMargin = (row: IPricesTable.Price, index: number) => {
   const volume = row.volume;
@@ -112,7 +112,7 @@ const syncProduct = (price: IPricesTable.Price, index: number, shouldNotify: boo
 }
 
 const syncAllProducts = () => {
-  fields.value.prices.forEach((price: IPricesTable.Price, index: number) => syncProduct(price, index, false));
+  fields.value.prices?.forEach((price: IPricesTable.Price, index: number) => syncProduct(price, index, false));
 
   displayMessage({
     message: 'Produtos sincronizados com a tabela de preço e família',
@@ -124,7 +124,10 @@ const syncAllProducts = () => {
 <template>
   <section class="space-y-4">
     <div class="space-x-4">
-      <VTooltip open-on-click location="bottom">
+      <VTooltip
+        open-on-click
+        location="top"
+      >
         <template v-slot:activator="{ props }">
           <VBtn
             v-bind="props"
@@ -139,23 +142,14 @@ const syncAllProducts = () => {
         <span>Sincronizar custo do produto, tabela de custo e custos da família de todos os produtos</span>
       </VTooltip>
 
-      <VTooltip open-on-click location="bottom">
-        <template v-slot:activator="{ props }">
-          <VBtn
-            v-bind="props"
-            prepend-icon="mdi-tag"
-            :disabled="disabled"
-          >
-            Adicionar família
-          </VBtn>
-        </template>
-
-        <span>Adicione todos os produtos de uma família a tabela de preço</span>
-      </VTooltip>
+      <PricesTableAddFamily
+        :disabled="disabled"
+        @load-product-data="setProductDataToPrice"
+      />
 
       <VTooltip
         open-on-click
-        location="bottom"
+        location="top"
       >
         <template v-slot:activator="{ props }">
           <VBtn
