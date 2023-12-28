@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router'
 import { getProducts } from '../../datasource/products';
 import { ref } from 'vue';
 import { priceFormat } from '@/src/core/utils/format';
+import { formatFamilyLabel } from '../../utils/formatter';
 
 const router = useRouter();
 const { formatPrice } = priceFormat();
@@ -41,7 +42,7 @@ defineOptions({
     <template #default="{ item }">
       <td>{{ item.code || '-' }}</td>
       <td>{{ item.name || '-' }}</td>
-      <td>{{ item.family?.name || '-' }}</td>
+      <td>{{ formatFamilyLabel(item.family) }}</td>
       <td>{{ item.pack?.numberOfUnitsInPack || '-' }}</td>
       <td>{{ item.productionCost?.unitCost ? formatPrice(item.productionCost?.unitCost) : '-' }}</td>
       <td>{{ item.productionCost?.packCost ? formatPrice(item.productionCost?.packCost) : '-' }}</td>

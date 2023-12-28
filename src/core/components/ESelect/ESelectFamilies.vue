@@ -1,15 +1,11 @@
 <script lang="ts" setup>
 import { getFamilies } from '@/src/modules/families/datasource/families'
-import { IFamily } from '@/src/modules/families/types/family';
-
-const formatLabel = (item: IFamily) => {
-  return `${item?.linkedFamily?.name ? `${item?.linkedFamily?.name} > ` : ''}${item?.name}`
-}
+import { formatFamilyLabel } from '@/src/modules/products/utils/formatter';
 </script>
 
 <template>
   <ESelectQuery
-    :item-title="formatLabel"
+    :item-title="formatFamilyLabel"
     item-value="_id"
     label="Familia"
     queryKey="select-families"

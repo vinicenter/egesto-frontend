@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { numberFormat } from '@/src/core/utils/format';
 import { IProduct } from '../../../types/product';
-import { formatProductNameWithCode } from '../../../utils/formatter';
+import { formatProductNameWithCode, formatFamilyLabel } from '../../../utils/formatter';
 
 const { format } = numberFormat();
 
@@ -18,7 +18,7 @@ defineProps<{ productData: IProduct.Root | undefined }>()
 
       <div>
         <div>Familia</div>
-        {{ productData?.family?.name || '-' }}
+        {{ formatFamilyLabel(productData?.family) }}
       </div>
 
       <div>
