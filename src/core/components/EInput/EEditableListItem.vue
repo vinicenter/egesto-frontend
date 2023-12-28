@@ -1,39 +1,39 @@
-<script lang="ts" generic="T" inherit-attrs="false" setup>
-import { useFormValues, useSetFieldValue } from 'vee-validate';
-import { computed, useAttrs } from 'vue';
-import { resolve } from '@/src/core/utils/utils';
+<script lang="ts" setup>
+import { useFieldArray } from 'vee-validate'
+import { useAttrs } from 'vue';
 
 const props = defineProps<{
-  name: string
+  name: string;
   disabled: boolean;
 }>()
 
-const setField = useSetFieldValue(props.name)
-const values = useFormValues()
-const field = computed(() => resolve(props.name, values.value))
-
 const attrs = useAttrs()
+
+const { fields, push, remove } = useFieldArray(props.name)
 
 const emit = defineEmits(['update:model-value'])
 
-const removeItem = (index: number) => field.value.splice(index, 1)
-const addItem = () => setField([ ...field.value, {} ])
-</script>
-
-<script lang="ts">
-export default {
-  inheritAttrs: false,
+function removeItem(idx: number) {
+  remove(idx)
 }
+
+defineOptions({
+  inheritAttrs: false,
+})
 </script>
 
 <template>
-  <div v-if="!field.length">
+  <div v-if="!fields.length">
     Nenhum item adicionado
   </div>
 
-  <div v-for="(item, index) in field" :key="`generic-list-${index}`">
+  <div v-for="(field, idx) in fields" :key="field.key">
     <div v-bind="attrs">
-      <slot :item="item" :index="index" :remove-item="() => removeItem(index)" />
+      <slot
+        :item="field.value"
+        :index="idx"
+        :removeItem="() => removeItem(idx)"
+      />
     </div>
 
     <div class="flex justify-center grid-col-span-3">
@@ -42,10 +42,10 @@ export default {
       </div>
     </div>
   </div>
-
+  
   <VBtn
     class="m-l-sm m-b-sm"
-    @click="addItem"
+    @click="push({})"
     color="green"
     :disabled="disabled"
     icon="mdi-plus"

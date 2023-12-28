@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RuleExpression, useField } from 'vee-validate';
-import { MaybeRef } from 'vue';
+import { MaybeRef, toRef } from 'vue';
 
 const props = defineProps<{
   name: string;
@@ -9,7 +9,7 @@ const props = defineProps<{
   rules?: MaybeRef<RuleExpression<boolean | undefined>>
 }>();
 
-const { value, handleBlur } = useField<boolean | undefined>(props.name, props.rules);
+const { value, handleBlur } = useField<boolean | undefined>(toRef(props, "name"), props.rules);
 </script>
 
 <template>

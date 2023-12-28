@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { RuleExpression, useField } from 'vee-validate';
-import { MaybeRef } from 'vue';
+import { MaybeRef, toRef } from 'vue';
 
 const props = defineProps<{
   name: string,
@@ -10,7 +10,7 @@ const props = defineProps<{
   label: string,
 }>()
 
-const { value, handleBlur, errorMessage } = useField<string>(props.name, props.rules)
+const { value, handleBlur, errorMessage } = useField<string>(toRef(props, "name"), props.rules)
 </script>
 
 <template>

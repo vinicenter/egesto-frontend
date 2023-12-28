@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { RuleExpression, useField } from 'vee-validate';
 import {  } from 'vuetify'
-import { MaybeRef } from 'vue';
+import { MaybeRef, toRef } from 'vue';
 
 const props = defineProps<{
   name: string
@@ -11,7 +11,7 @@ const props = defineProps<{
 
 const search = defineModel<string>('search')
 
-const { value, errorMessage, handleBlur } = useField<unknown>(props.name, props.rules)
+const { value, errorMessage, handleBlur } = useField<unknown>(toRef(props, "name"), props.rules)
 </script>
 
 <template>
