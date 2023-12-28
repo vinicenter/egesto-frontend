@@ -9,6 +9,7 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clona
 
 const initialValues = {
   name: '',
+  defaultShipmentCost: undefined,
   shipments: {
     families: [],
     products: [],
@@ -21,6 +22,7 @@ const initialValues = {
 const formatSubmit = (data: ICostsTable.Root) => {
   return {
     name: data.name,
+    defaultShipmentCost: Number(data.defaultShipmentCost),
     taxes: data.taxes.map(tax => ({
       name: tax.name,
       cost: Number(tax.cost),

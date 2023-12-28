@@ -5,6 +5,7 @@ export namespace ICostsTable {
   export interface Root {
     _id?: string
     name: string
+    defaultShipmentCost: number
     taxes: Taxes[]
     shipments: Shipments
     createdAt: string

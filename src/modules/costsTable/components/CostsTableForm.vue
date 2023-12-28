@@ -5,6 +5,7 @@ import { required } from '@/src/core/utils/form-validator';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import useNotify from '@/src/core/composables/useNotify';
+import EInputPct from '@/src/core/components/EInput/EInputPct.vue';
 
 const router = useRouter();
 const { displayMessage } = useNotify();
@@ -45,11 +46,18 @@ const tab = ref('taxes');
 <template>
   <form @submit.prevent="submit">
     <section>
-      <div>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
         <EInputText
           name="name"
           :disabled="disabled"
-          label="Identificador"
+          label="Nome"
+          :rules="[required]"
+        />
+
+        <EInputPct
+          name="defaultShipmentCost"
+          label="Frete para registros não definidos"
+          :disabled="disabled"
           :rules="[required]"
         />
       </div>
