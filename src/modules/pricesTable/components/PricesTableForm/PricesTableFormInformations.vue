@@ -1,9 +1,13 @@
 <script setup lang="ts">
 import { required } from '@/src/core/utils/form-validator';
+import { useFormValues } from 'vee-validate';
+import { IPricesTable } from '../../types/pricesTable';
 
 defineProps<{
   disabled: boolean;
 }>();
+
+const fields = useFormValues<IPricesTable.Root>()
 </script>
 
 <template>
@@ -25,9 +29,9 @@ defineProps<{
 
     <ESelectPeople
       name="customer"
-      :disabled="disabled"
       return-object
       label="Cliente"
+      :disabled="disabled || !fields.costTable"
     />
 
     <div class="flex items-left">

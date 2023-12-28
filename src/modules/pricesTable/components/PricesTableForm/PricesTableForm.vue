@@ -40,7 +40,7 @@ const submit = form.handleSubmit((values) => {
 const disabled = computed(() => props.loading || props.disabled);
 
 const volumeTotal = computed(() => {
-  return form.values.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
     return price.netSales
       ? acc + Number(price.volume)
       : acc;
@@ -48,7 +48,7 @@ const volumeTotal = computed(() => {
 })
 
 const grossRevenue = computed(() => {
-  return form.values.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
     return price.grossRevenue
       ? acc + Number(price.grossRevenue)
       : acc;
@@ -56,7 +56,7 @@ const grossRevenue = computed(() => {
 })
 
 const totalNetRevenue = computed(() => {
-  return form.values.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
     return price.netSales
       ? acc + Number(price.netSales)
       : acc;
@@ -64,7 +64,7 @@ const totalNetRevenue = computed(() => {
 })
 
 const mediumMargin = computed(() => {
-  return form.values.prices.reduce((acc, price) => {
+  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
     return price.margin ?
       acc + Number(price.margin)
       : acc;
@@ -88,7 +88,11 @@ const tab = ref('informations')
       <VTab value="informations">
         Informações básicas
       </VTab>
-      <VTab value="products">
+
+      <VTab
+        value="products"
+        :disabled="!form.values.costTable"
+      >
         Produtos
       </VTab>
     </VTabs>

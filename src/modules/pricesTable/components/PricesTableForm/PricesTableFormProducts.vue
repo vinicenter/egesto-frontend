@@ -6,6 +6,7 @@ import { required } from '@/src/core/utils/form-validator';
 import { priceFormat } from '@/src/core/utils/format';
 import { IPricesTable } from '../../types/pricesTable';
 import { FormContext, useFormValues } from 'vee-validate';
+import { formatFamilyLabel } from '@/src/modules/products/utils/formatter';
 
 const props = defineProps<{
   disabled: boolean;
@@ -17,25 +18,25 @@ const { formatPrice } = priceFormat();
 
 const fields = useFormValues();
 
-const setProductMargin = (row: IPricesTable.Product, index: number) => {
+const setProductMargin = (row: IPricesTable.Price, index: number) => {
   const volume = row.volume;
   const price = Number(row.price);
-  const shipment = row.shipment/100;
-  const tax = row.tax/100;
-  const expense = row.expense/100;
-  const productionLost = row.productionLost/100;
-  const productCost = row.productCost*volume;
+  const shipment = row.shipment / 100;
+  const tax = row.tax / 100;
+  const expense = row.expense / 100;
+  const productionLost = row.productionLost / 100;
+  const productCost = row.productCost * volume;
 
   const totalRevenue = volume * price;
   const shipmentValue = shipment * totalRevenue;
-  const unitTotal = totalRevenue-shipmentValue;
+  const unitTotal = totalRevenue - shipmentValue;
   const taxes = tax * totalRevenue;
 
   const netRevenue = unitTotal - taxes;
-  const expensesVariables = expense*totalRevenue;
-  const lost = productionLost*totalRevenue;
+  const expensesVariables = expense * totalRevenue;
+  const lost = productionLost * totalRevenue;
 
-  const margin = Number((((netRevenue - expensesVariables - productCost - lost)/totalRevenue)*100).toPrecision(5));
+  const margin = Number((((netRevenue - expensesVariables - productCost - lost) / totalRevenue) * 100).toPrecision(5));
   const netSales = netRevenue;
   const grossRevenue = totalRevenue;
 
@@ -44,7 +45,33 @@ const setProductMargin = (row: IPricesTable.Product, index: number) => {
   props.form.setFieldValue(`prices.${index}.grossRevenue`, grossRevenue);
 }
 
-const setProductDataToPrice = (row: IPricesTable.Product, index: number) => {
+const setProductPriceByMargin = (row: IPricesTable.Price, index: number) => {
+  // Calculate total revenue with an estimated price (can be improved for accuracy)
+  const estimatedPrice = 1 // Use a placeholder value or previous price if available
+  const volume = row.volume;
+  const shipment = row.shipment / 100;
+  const tax = row.tax / 100;
+  const expense = row.expense / 100;
+  const productionLost = row.productionLost / 100;
+  const productCost = row.productCost * volume;
+
+  const totalRevenue = volume * estimatedPrice;
+
+  const desiredMargin = row.margin / 100
+
+  // Calculate other cost and revenue components
+  const expensesVariables = expense * totalRevenue
+  const lostValue = productionLost * totalRevenue
+
+  // Solve for the price that achieves the desired margin
+  const price = (productCost + lostValue + expensesVariables + (totalRevenue * desiredMargin / 100)) / (volume * (1 - shipment - tax - expense - productionLost))
+
+  // Set field values
+  props.form.setFieldValue(`prices.${index}.price`, price);
+  props.form.setFieldValue(`prices.${index}.margin`, desiredMargin * 100);
+}
+
+const setProductDataToPrice = (row: IPricesTable.Price, index: number) => {
   const product = row.product
 
   const productCost = product?.productionCost?.packCost || 0;
@@ -72,15 +99,22 @@ const setProductDataToPrice = (row: IPricesTable.Product, index: number) => {
   props.form.setFieldValue(`prices.${index}.tax`, tax);
 }
 
-const syncProduct = (price: IPricesTable.Product, index: number) => {
+const syncProduct = (price: IPricesTable.Price, index: number, shouldNotify: boolean) => {
   setProductDataToPrice(price, index);
   setProductMargin(price, index);
+
+  if(shouldNotify) {
+    displayMessage({
+      message: 'Produto sincronizado com a tabela de preço e família',
+      type: 'success'
+    })
+  }
 }
 
 const syncAllProducts = () => {
-  fields.value.prices.forEach((price: IPricesTable.Product, index: number) => syncProduct(price, index));
+  fields.value.prices.forEach((price: IPricesTable.Price, index: number) => syncProduct(price, index, false));
 
-  displayMessage({ 
+  displayMessage({
     message: 'Produtos sincronizados com a tabela de preço e família',
     type: 'success'
   })
@@ -93,9 +127,10 @@ const syncAllProducts = () => {
       <VTooltip open-on-click location="bottom">
         <template v-slot:activator="{ props }">
           <VBtn
-            @click="syncAllProducts"
-            prepend-icon="mdi-sync"
             v-bind="props"
+            prepend-icon="mdi-sync"
+            :disabled="disabled"
+            @click="syncAllProducts"
           >
             Sincronizar produtos
           </VBtn>
@@ -107,8 +142,9 @@ const syncAllProducts = () => {
       <VTooltip open-on-click location="bottom">
         <template v-slot:activator="{ props }">
           <VBtn
-            prepend-icon="mdi-tag"
             v-bind="props"
+            prepend-icon="mdi-tag"
+            :disabled="disabled"
           >
             Adicionar família
           </VBtn>
@@ -117,11 +153,15 @@ const syncAllProducts = () => {
         <span>Adicione todos os produtos de uma família a tabela de preço</span>
       </VTooltip>
 
-      <VTooltip open-on-click location="bottom">
+      <VTooltip
+        open-on-click
+        location="bottom"
+      >
         <template v-slot:activator="{ props }">
           <VBtn
-            prepend-icon="mdi-pencil-outline"
             v-bind="props"
+            prepend-icon="mdi-pencil-outline"
+            :disabled="disabled"
           >
             Alterações em massa
           </VBtn>
@@ -141,73 +181,78 @@ const syncAllProducts = () => {
       <template #default="{ removeItem, item, index }">
         <div class="col-span-full flex gap-sm">
           <ESelectProducts
+            label="Produto"
+            return-object
             :name="`prices.${index}.product`"
             :disabled="disabled"
             :rules="[required]"
-            label="Produto"
-            return-object
             @update:modelValue="setProductDataToPrice(item, index)"
           />
-  
-          <VBtn 
-            :disabled="disabled"
-            color="red"
-            @click="removeItem"
-            icon="mdi-trash-can"
-          />
-  
+
           <PricesTableCostsDetail
             eager
-            :disabled="disabled"
+            :disabled="disabled || !item.product"
             :shipment="`prices.${index}.shipment`"
             :tax="`prices.${index}.tax`"
             :expense="`prices.${index}.expense`"
             :productionLost="`prices.${index}.productionLost`"
             @updated="setProductMargin(item, index)"
           />
-  
+
           <VTooltip open-on-click>
             <template v-slot:activator="{ props }">
-              <VBtn @click="syncProduct(item, index)" v-bind="props" icon="mdi-sync" />
+              <VBtn
+                v-bind="props" 
+                icon="mdi-sync"
+                :disabled="disabled || !item.product"
+                @click="syncProduct(item, index, true)"
+              />
             </template>
+
             <span>Sincronizar custo do produto, tabela de custo e custos da família</span>
           </VTooltip>
+
+          <VBtn
+            color="red"
+            icon="mdi-trash-can"
+            :disabled="disabled"
+            @click="removeItem"
+          />
         </div>
-  
+
         <EInputPrice
           :name="`prices.${index}.price`"
           :rules="[required]"
-          :disabled="disabled"
+          :disabled="disabled || !item.product"
           label="Preço de venda"
           @update:model-value="setProductMargin(item, index)"
         />
-  
+
         <EInputText
           :name="`prices.${index}.volume`"
           :rules="[required]"
-          :disabled="disabled"
-          type="number"
-          label="Volume"
+          :disabled="disabled || !item.product"
+          type="number" label="Volume"
           @update:model-value="setProductMargin(item, index)"
         />
-  
+
         <EInputPrice
           :name="`prices.${index}.productCost`"
-          :rules="[required]"
-          :disabled="disabled"
+          :rules="[required]" :disabled="disabled || !item.product"
           label="Custo do produto"
           @update:model-value="setProductMargin(item, index)"
         />
-  
+
         <EInputPct
           :name="`prices.${index}.margin`"
           :rules="[required]"
-          :disabled="disabled"
+          :disabled="disabled || !item.product"
           label="Margem (%)"
+          @update:model-value="setProductPriceByMargin(item, index)"
         />
-  
+
         <div class="flex flex-col gap-x-sm">
-          <div>Família: {{ item.product?.family?.name }}</div>
+          <div>{{ formatFamilyLabel(item.product?.family) }}</div>
           <div>Fat. liquido: {{ formatPrice(item.netSales) }}</div>
           <div>Fat. bruto: {{ formatPrice(item.grossRevenue) }}</div>
         </div>

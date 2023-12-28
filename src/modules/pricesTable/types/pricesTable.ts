@@ -8,10 +8,10 @@ export namespace IPricesTable {
     costTable?: ICostsTable.Root;
     customer?: IPeople;
     name: string;
-    prices: Product[];
+    prices: Price[];
   }
 
-  export interface Product {
+  export interface Price {
     product: IProduct.Root;
     productCost: number;
     price: number;
