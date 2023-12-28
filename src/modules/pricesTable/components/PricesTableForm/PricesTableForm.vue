@@ -1,8 +1,8 @@
 <script lang="ts" setup>
-import type { IPricesTable } from '../types/pricesTable';
+import type { IPricesTable } from '../../types/pricesTable';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
-import PricesTableSummary from './PricesTableSummary.vue';
+import PricesTableSummary from '../PricesTableSummary.vue';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue';
 import useNotify from '@/src/core/composables/useNotify';

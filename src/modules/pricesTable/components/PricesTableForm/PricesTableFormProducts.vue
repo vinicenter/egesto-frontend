@@ -4,7 +4,7 @@
 import useNotify from '@/src/core/composables/useNotify';
 import { required } from '@/src/core/utils/form-validator';
 import { priceFormat } from '@/src/core/utils/format';
-import { IPricesTable } from '../types/pricesTable';
+import { IPricesTable } from '../../types/pricesTable';
 import { FormContext, useFormValues } from 'vee-validate';
 
 const props = defineProps<{
