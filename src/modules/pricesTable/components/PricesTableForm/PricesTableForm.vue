@@ -80,6 +80,14 @@ const tab = ref('informations')
 
 <template>
   <form @submit.prevent="submit">
+    <PricesTableSummary
+      :items="itemsTotal"
+      :volumeTotal="volumeTotal"
+      :grossRevenue="grossRevenue"
+      :totalNetRevenue="totalNetRevenue"
+      :mediumMargin="mediumMargin"
+    />
+
     <VTabs grow class="m-y-4" v-model="tab">
       <VTab value="informations">
         Informações básicas
@@ -98,15 +106,7 @@ const tab = ref('informations')
         <PricesTableFormInformations :disabled="disabled" />
       </VWindowItem>
 
-      <VWindowItem value="products" eager class="space-y-4">
-        <PricesTableSummary
-          :items="itemsTotal"
-          :volumeTotal="volumeTotal"
-          :grossRevenue="grossRevenue"
-          :totalNetRevenue="totalNetRevenue"
-          :mediumMargin="mediumMargin"
-        />
-
+      <VWindowItem value="products" eager>
         <PricesTableFormProducts :disabled="disabled" :form="form" />
       </VWindowItem>
     </VWindow>
