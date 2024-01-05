@@ -4,6 +4,7 @@ import { IPeople } from "../../people/types/people"
 
 export namespace IPricesTable {
   export interface Root {
+    _id: string;
     archived: boolean;
     costTable?: ICostsTable.Root;
     customer?: IPeople;

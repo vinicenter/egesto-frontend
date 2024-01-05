@@ -1,9 +1,13 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { getAllPricesTable } from '../../datasource/pricesTable';
+import { getAllPricesTable, generatePriceTableReportById } from '../../datasource/pricesTable';
 import { ref } from 'vue';
+import useNotify from '@/src/core/composables/useNotify';
+import { downloadBlob } from '@/src/core/utils/utils';
+import { IPricesTable } from '../../types/pricesTable';
 
 const router = useRouter();
+const notify = useNotify();
 
 const columns = [
   {
@@ -14,11 +18,24 @@ const columns = [
   },
 ]
 
-const viewId = ref(null)
+const reportId = ref<string>('');
+const reportLoading = ref(false);
 
-const closeView = (open = false) => {
-  if(!open) {
-    viewId.value = null
+const generateReport = async (item: IPricesTable.Root) => {
+  try {
+    reportLoading.value = true;
+    reportId.value = item._id;
+
+    const csvBlob = await generatePriceTableReportById(item._id)
+
+    downloadBlob(csvBlob, `Tabela ${item.name}`, 'csv');
+  } catch {
+    notify.displayMessage({
+      type: 'error',
+      message: 'Erro ao gerar relatório',
+    });
+  } finally {
+    reportLoading.value = false;
   }
 }
 </script>
@@ -41,23 +58,25 @@ export default {
     </template>
 
     <template #actions="{ item }">
-      <ETableActionButtons
-        :id="item._id"
-        delete
-        edit
-        clone
-        view
-        page="price-table"
-        @view="viewId = $event"
-      />
+      <div class="flex gap-x-sm justify-center items-center">
+        <VBtn
+          color="primary"
+          :loading="reportLoading && reportId === item._id"
+          @click="generateReport(item)"
+        >
+          Relatório
+        </VBtn>
+
+        <ETableActionButtons
+          :id="item._id"
+          delete
+          edit
+          clone
+          page="price-table"
+        />
+      </div>
     </template>
   </ETableGenericList>
-
-  <CostTableDetailsModel
-    :model-value="!!viewId"
-    :id="viewId"
-    @update:model-value="closeView"
-  />
 </template>
 
 <route lang="yaml">

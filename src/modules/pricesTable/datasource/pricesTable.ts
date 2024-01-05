@@ -9,7 +9,7 @@ export const getAllPricesTable = async (params: tableParams) => {
 }
 
 export const getPricesTable = async (id: string): Promise<IPricesTable.Root> => {
-  const { data } = await axios.get(`/prices-table/${id}`)
+  const { data } = await axios.get<IPricesTable.Root>(`/prices-table/${id}`)
 
   return data
 }
@@ -28,6 +28,12 @@ export const updatePricesTable = async (id: string, dataForm: any) => {
 
 export const deletePricesTable = async (id: string) => {
   const { data } = await axios.delete(`/prices-table/${id}`)
+
+  return data
+}
+
+export const generatePriceTableReportById = async (id: string) => {
+  const { data } = await axios.get<Blob>(`/prices-table/${id}/report`, { responseType: 'blob' })
 
   return data
 }
