@@ -94,6 +94,7 @@ const generateDescriptionWithAi = async () => {
                 <VBtn
                   v-bind="propsActivateMenu"
                   color="primary"
+                  :disabled="disabled"
                   icon="mdi-brain"
                 />
               </template>
