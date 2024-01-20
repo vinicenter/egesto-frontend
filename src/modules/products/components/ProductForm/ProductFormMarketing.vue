@@ -88,7 +88,7 @@ const generateDescriptionWithAi = async () => {
           <div v-bind="props">
             <VMenu
               :close-on-content-click="false"
-              location="top center"
+              location="center"
             >
               <template #activator="{ props: propsActivateMenu }">
                 <VBtn
