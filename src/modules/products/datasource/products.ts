@@ -1,6 +1,6 @@
 import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
-import { IProduct } from '../types/product'
+import { IProduct, ProductDescriptionPromptParams } from '../types/product'
 
 export const getProducts = async (params: tableParams & IProduct.Filters) => {
   const { data } = await axios.get('/products', { params })
@@ -28,6 +28,12 @@ export const updateProduct = async (id: string, dataForm: any) => {
 
 export const deleteProduct = async (id: string) => {
   const { data } = await axios.delete(`/products/${id}`)
+
+  return data
+}
+
+export const generateProductDescriptionAi = async (params: ProductDescriptionPromptParams) => {
+  const { data } = await axios.get<string>('/products/generate-description-ai', { params })
 
   return data
 }

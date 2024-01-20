@@ -179,7 +179,7 @@ const userInitials = computed(() => {
     </VNavigationDrawer>
 
     <VMain>
-      <VContainer class="h-100vh">
+      <VContainer class="mb-2">
         <h1>{{ route.meta.title }}</h1>
 
         <slot />

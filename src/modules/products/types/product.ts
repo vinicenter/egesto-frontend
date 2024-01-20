@@ -2,6 +2,14 @@ import { IFeedstock } from "../../feedstocks/types/feedstocks"
 import { IBrand } from "../../brands/types/brand"
 import { IFamily } from "../../families/types/family"
 
+export interface ProductDescriptionPromptParams {
+  oldProductDescription?: string;
+  productName?: string;
+  productFamily?: string;
+  brandName?: string;
+  brandDescription?: string;
+}
+
 export namespace IProduct {
   export interface Filters {
     familyId?: string

@@ -5,5 +5,5 @@ export const formatProductNameWithCode = (name?: string, code?: string) => {
 }
 
 export const formatFamilyLabel = (item?: IFamily) => {
-  return `${item?.linkedFamily?.name ? `${item?.linkedFamily?.name} > ` : ''}${item?.name}`
+  return `${item?.linkedFamily?.name ? `${item?.linkedFamily?.name} > ` : ''}${item?.name ? item?.name : '-'}`
 }
