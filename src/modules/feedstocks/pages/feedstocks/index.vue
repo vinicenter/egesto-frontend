@@ -1,12 +1,16 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { getFeedStocks, updateFeedStock } from '../../datasource/feedstocks';
+import { getFeedStocks, updateFeedStock, generateFeedstockReport } from '../../datasource/feedstocks';
 import { priceFormat } from '~utils/format';
 import { useQueryClient } from '@tanstack/vue-query';
 import { required } from '@/src/core/utils/form-validator';
+import { downloadBlob } from '@/src/core/utils/utils';
+import useNotify from '@/src/core/composables/useNotify';
+import { ref } from 'vue';
 
 const router = useRouter();
 const queryClient = useQueryClient();
+const notify = useNotify();
 
 const { formatPrice } = priceFormat();
 
@@ -50,6 +54,26 @@ const updateIcms = async (id: string, icms: Number) => {
   await updateFeedStock(id, { icms: Number(icms) });
 
   queryClient.invalidateQueries([ 'feedstocks' ]);
+}
+
+const reportLoading = ref(false);
+
+const generateReport = async () => {
+  try {
+    reportLoading.value = true;
+
+    const csvBlob = await generateFeedstockReport()
+
+    downloadBlob(csvBlob, `Relatório Materias Primas`, 'csv');
+  } catch (e) {
+    console.log(e)
+    notify.displayMessage({
+      type: 'error',
+      message: 'Erro ao gerar relatório',
+    });
+  } finally {
+    reportLoading.value = false;
+  }
 }
 </script>
 
@@ -96,6 +120,17 @@ const updateIcms = async (id: string, icms: Number) => {
       </td>
       <td>{{ formatPrice(item.priceWithoutIcms) || '-' }}</td>
       <td>{{ item.brand?.name || '-' }}</td>
+    </template>
+
+    <template #menu>
+      <VBtn
+        color="purple"
+        flat
+        :loading="reportLoading"
+        @click="generateReport"
+      >
+        Relatório
+      </VBtn>
     </template>
 
     <template #actions="{ item }">

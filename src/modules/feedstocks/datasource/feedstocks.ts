@@ -30,3 +30,9 @@ export const deleteFeedStock = async (id: string) => {
 
   return data
 }
+
+export const generateFeedstockReport = async () => {
+  const { data } = await axios.get<Blob>('/feedstocks/report', { responseType: 'blob' })
+
+  return data
+}

@@ -60,7 +60,7 @@ export default {
     <template #actions="{ item }">
       <div class="flex gap-x-sm justify-center items-center">
         <VBtn
-          color="primary"
+          color="purple"
           :loading="reportLoading && reportId === item._id"
           @click="generateReport(item)"
         >
