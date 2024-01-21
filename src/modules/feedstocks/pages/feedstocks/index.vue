@@ -66,7 +66,6 @@ const generateReport = async () => {
 
     downloadBlob(csvBlob, `Relatório Materias Primas`, 'csv');
   } catch (e) {
-    console.log(e)
     notify.displayMessage({
       type: 'error',
       message: 'Erro ao gerar relatório',

@@ -1,8 +1,12 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { getPeople } from '../../datasource/people';
+import { getPeople, generatePeopleReport } from '../../datasource/people';
+import { downloadBlob } from '@/src/core/utils/utils';
+import useNotify from '@/src/core/composables/useNotify';
+import { ref } from 'vue';
 
 const router = useRouter();
+const notify = useNotify();
 
 const columns = [
   {
@@ -15,6 +19,25 @@ const columns = [
   { label: 'Cidade', style: 'width: 100px' },
   { label: 'Estado', style: 'width: 100px' }
 ]
+
+const reportLoading = ref(false);
+
+const generateReport = async () => {
+  try {
+    reportLoading.value = true;
+
+    const csvBlob = await generatePeopleReport()
+
+    downloadBlob(csvBlob, `Relatório Pessoas`, 'csv');
+  } catch (e) {
+    notify.displayMessage({
+      type: 'error',
+      message: 'Erro ao gerar relatório',
+    });
+  } finally {
+    reportLoading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -29,6 +52,17 @@ const columns = [
       <td>{{ item.document || '-' }}</td>
       <td>{{ item.address?.city || '-' }}</td>
       <td>{{ item.address?.federativeUnit || '-' }}</td>
+    </template>
+
+    <template #menu>
+      <VBtn
+        color="purple"
+        flat
+        :loading="reportLoading"
+        @click="generateReport"
+      >
+        Relatório
+      </VBtn>
     </template>
 
     <template #actions="{ item }">

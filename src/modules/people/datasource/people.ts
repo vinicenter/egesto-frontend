@@ -30,3 +30,9 @@ export const deletePerson = async (id: string) => {
 
   return data
 }
+
+export const generatePeopleReport = async () => {
+  const { data } = await axios.get<Blob>('/people/report', { responseType: 'blob' })
+
+  return data
+}
