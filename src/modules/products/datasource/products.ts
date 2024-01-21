@@ -37,3 +37,9 @@ export const generateProductDescriptionAi = async (params: ProductDescriptionPro
 
   return data
 }
+
+export const generateProductReport = async () => {
+  const { data } = await axios.get<Blob>('/products/report', { responseType: 'blob' })
+
+  return data
+}

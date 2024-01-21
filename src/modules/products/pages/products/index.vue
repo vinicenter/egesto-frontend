@@ -1,12 +1,16 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { getProducts } from '../../datasource/products';
+import { getProducts, generateProductReport } from '../../datasource/products';
 import { ref } from 'vue';
 import { priceFormat } from '@/src/core/utils/format';
 import { formatFamilyLabel } from '../../utils/formatter';
+import { downloadBlob } from '@/src/core/utils/utils';
+import useNotify from '@/src/core/composables/useNotify';
 
 const router = useRouter();
 const { formatPrice } = priceFormat();
+
+const notify = useNotify();
 
 const columns = [
   { label: 'Código', style: 'width: 100px', orderByValue: 'code' },
@@ -30,6 +34,26 @@ defineOptions({
   name: 'ProductList',
   inheritAttrs: false,
 })
+
+const reportLoading = ref(false);
+
+const generateReport = async () => {
+  try {
+    reportLoading.value = true;
+
+    const csvBlob = await generateProductReport()
+
+    downloadBlob(csvBlob, `Relatório Produtos`, 'csv');
+  } catch (e) {
+    console.log(e)
+    notify.displayMessage({
+      type: 'error',
+      message: 'Erro ao gerar relatório',
+    });
+  } finally {
+    reportLoading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -91,6 +115,17 @@ defineOptions({
           </VTooltip>
         </span>
       </td>
+    </template>
+
+    <template #menu>
+      <VBtn
+        color="purple"
+        flat
+        :loading="reportLoading"
+        @click="generateReport"
+      >
+        Relatório
+      </VBtn>
     </template>
 
     <template #actions="{ item }">
