@@ -7,6 +7,7 @@ import { priceFormat } from '@/src/core/utils/format';
 import { IPricesTable } from '../../types/pricesTable';
 import { FormContext, useFormValues } from 'vee-validate';
 import { formatFamilyLabel } from '@/src/modules/products/utils/formatter';
+import { getProductMargin, getProductPriceByMargin } from '@/src/modules/pricesTable/utils/product-margin';
 
 const props = defineProps<{
   disabled: boolean;
@@ -19,26 +20,7 @@ const { formatPrice } = priceFormat();
 const fields = useFormValues<IPricesTable.Root>();
 
 const setProductMargin = (row: IPricesTable.Price, index: number) => {
-  const volume = row.volume;
-  const price = Number(row.price);
-  const shipment = row.shipment / 100;
-  const tax = row.tax / 100;
-  const expense = row.expense / 100;
-  const productionLost = row.productionLost / 100;
-  const productCost = row.productCost * volume;
-
-  const totalRevenue = volume * price;
-  const shipmentValue = shipment * totalRevenue;
-  const unitTotal = totalRevenue - shipmentValue;
-  const taxes = tax * totalRevenue;
-
-  const netRevenue = unitTotal - taxes;
-  const expensesVariables = expense * totalRevenue;
-  const lost = productionLost * totalRevenue;
-
-  const margin = Number((((netRevenue - expensesVariables - productCost - lost) / totalRevenue) * 100).toPrecision(5));
-  const netSales = netRevenue;
-  const grossRevenue = totalRevenue;
+  const { grossRevenue, margin, netSales } = getProductMargin(row)
 
   props.form.setFieldValue(`prices.${index}.margin`, margin);
   props.form.setFieldValue(`prices.${index}.netSales`, netSales);
@@ -46,29 +28,21 @@ const setProductMargin = (row: IPricesTable.Price, index: number) => {
 }
 
 const setProductPriceByMargin = (row: IPricesTable.Price, index: number) => {
-  // Calculate total revenue with an estimated price (can be improved for accuracy)
-  const estimatedPrice = 1 // Use a placeholder value or previous price if available
-  const volume = row.volume;
-  const shipment = row.shipment / 100;
-  const tax = row.tax / 100;
-  const expense = row.expense / 100;
-  const productionLost = row.productionLost / 100;
-  const productCost = row.productCost * volume;
-
-  const totalRevenue = volume * estimatedPrice;
-
-  const desiredMargin = row.margin / 100
-
-  // Calculate other cost and revenue components
-  const expensesVariables = expense * totalRevenue
-  const lostValue = productionLost * totalRevenue
-
-  // Solve for the price that achieves the desired margin
-  const price = (productCost + lostValue + expensesVariables + (totalRevenue * desiredMargin / 100)) / (volume * (1 - shipment - tax - expense - productionLost))
-
-  // Set field values
-  props.form.setFieldValue(`prices.${index}.price`, price);
-  props.form.setFieldValue(`prices.${index}.margin`, desiredMargin * 100);
+  try {
+    const result = getProductPriceByMargin(row)
+    
+    const price = Number(result.price.toFixed(2))
+    
+    props.form.setFieldValue(`prices.${index}.price`, price);
+    props.form.setFieldValue(`prices.${index}.margin`, result.margin);
+    props.form.setFieldValue(`prices.${index}.netSales`, result.netSales);
+    props.form.setFieldValue(`prices.${index}.grossRevenue`, result.grossRevenue);
+  } catch {
+    displayMessage({
+      message: 'Não foi possível calcular o preço do produto',
+      type: 'error'
+    })
+  }
 }
 
 const setProductDataToPrice = (row: IPricesTable.Price, index: number) => {
@@ -242,7 +216,7 @@ const syncAllProducts = () => {
           :rules="[required]"
           :disabled="disabled || !item.product"
           label="Margem (%)"
-          @update:model-value="setProductPriceByMargin(item, index)"
+          @blur="setProductPriceByMargin(item, index)"
         />
 
         <div class="flex flex-col gap-x-sm">
