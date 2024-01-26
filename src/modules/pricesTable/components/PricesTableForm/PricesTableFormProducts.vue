@@ -8,6 +8,9 @@ import { IPricesTable } from '../../types/pricesTable';
 import { FormContext, useFormValues } from 'vee-validate';
 import { formatFamilyLabel } from '@/src/modules/products/utils/formatter';
 import { getProductMargin, getProductPriceByMargin } from '@/src/modules/pricesTable/utils/product-margin';
+import { getFamiliesDefaultCost } from '@/src/modules/families/datasource/families';
+import { useQuery } from '@tanstack/vue-query';
+import { computed } from 'vue';
 
 const props = defineProps<{
   disabled: boolean;
@@ -18,6 +21,22 @@ const { displayMessage } = useNotify();
 const { formatPrice } = priceFormat();
 
 const fields = useFormValues<IPricesTable.Root>();
+
+const {
+  data: familiesDefaultCost,
+  isLoading: loadingFamiliesDefaultCost
+} = useQuery({
+  queryKey: [ 'families-default-costs' ],
+  queryFn: getFamiliesDefaultCost,
+  onError: () => {
+    displayMessage({
+      message: 'Erro ao buscar custos padrões das famílias',
+      type: 'error'
+    })
+  }
+})
+
+const disabled = computed(() => props.disabled || loadingFamiliesDefaultCost.value)
 
 const setProductMargin = (price: IPricesTable.Price, index: number) => {
   const { grossRevenue, margin, netSales } = getProductMargin(price)
@@ -51,7 +70,7 @@ const setProductDataToPrice = (row: IPricesTable.Price, index: number) => {
   const product = row.product
 
   const productCost = product?.productionCost?.packCost || 0;
-  const expense = product?.family?.totalCosts || 0;
+  const expense = product?.family?.totalCosts + familiesDefaultCost.value.totalCosts || 0;
   const productionLost = product?.production?.lost || 0;
   const volume = row.volume || 1;
   const price = row.price || 0;
