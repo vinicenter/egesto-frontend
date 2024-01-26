@@ -145,6 +145,14 @@ const submit = handleSubmit(async (values) => {
           <VCardActions class="justify-end">
             <VBtn
               variant="elevated"
+              color="red"
+              @click="isActive = false"
+            >
+              Fechar
+            </VBtn>
+
+            <VBtn
+              variant="elevated"
               color="primary"
               type="submit"
               form="families-default-cost-form"
@@ -152,14 +160,6 @@ const submit = handleSubmit(async (values) => {
               :loading="loadingSaveData"
             >
               Salvar
-            </VBtn>
-
-            <VBtn
-              variant="elevated"
-              color="red"
-              @click="isActive = false"
-            >
-              Fechar
             </VBtn>
           </VCardActions>
         </VCard>
