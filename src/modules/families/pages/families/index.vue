@@ -1,6 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router'
-import { getFamilies } from '../../datasource/families';
+import { getFamilies, getFamiliesDefaultCost } from '../../datasource/families';
+import { useQuery } from '@tanstack/vue-query';
 
 const router = useRouter();
 
@@ -18,9 +19,14 @@ const columns = [
   {
     label: 'Custo total',
     style: 'width: 100px',
-    tooltip: 'É a somatória de todos os custos da família',
+    tooltip: 'É a somatória de todos os custos da família mais os custo padrões',
   },
 ]
+
+const { data } = useQuery({
+  queryKey: [ 'families-default-costs' ],
+  queryFn: getFamiliesDefaultCost,
+})
 </script>
 
 <template>
@@ -33,7 +39,11 @@ const columns = [
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
       <td>{{ item.linkedFamily ? item.linkedFamily.name : 'Sem vinculo' }}</td>
-      <td>{{ item.totalCosts ? `${item.totalCosts}%` : '-' }}</td>
+      <td>{{ item.totalCosts ? `${item.totalCosts + data.totalCosts}%` : '-' }}</td>
+    </template>
+
+    <template #menu>
+      <FamiliesDefaultCostsModel />
     </template>
 
     <template #actions="{ item }">

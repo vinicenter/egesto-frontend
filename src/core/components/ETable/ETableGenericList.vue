@@ -106,7 +106,7 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
         @keyup.enter="search = $event.target.value"
       />
 
-      <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-6 gap-sm">
         <VBtn
           @click="emit('new')"
           class="p-sm"

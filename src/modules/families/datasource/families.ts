@@ -30,3 +30,15 @@ export const deleteFamily = async (id: string) => {
 
   return data
 }
+
+export const updateFamiliesDefaultCost = async (dataForm: any) => {
+  const { data } = await axios.patch('/families/default-costs', dataForm)
+
+  return data
+}
+
+export const getFamiliesDefaultCost = async () => {
+  const { data } = await axios.get('/families/default-costs')
+
+  return data
+}
