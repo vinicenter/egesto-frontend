@@ -81,9 +81,13 @@ const setProductDataToPrice = (row: IPricesTable.Price, index: number) => {
 
   const productsIdsShipments = props.form.values.costTable?.shipments.products.map((shipment) => shipment.product?._id) || [];
 
-  const shipment = productsIdsShipments.includes(product._id)
-    ? props.form.values.costTable?.shipments.products.find((shipment) => shipment.product._id === product._id)?.cost || 0
-    : props.form.values.costTable?.shipments.families.find((shipment) => shipment.family._id === product.family?._id)?.cost || 0;
+  const shipmentFromCostTableEntries = (productsIdsShipments.includes(product._id)
+    ? props.form.values.costTable?.shipments.products.find((shipment) => shipment.product._id === product._id)?.cost
+    : props.form.values.costTable?.shipments.families.find((shipment) => shipment.family._id === product.family?._id)?.cost)
+
+  const shipmentForNotDefinedRegisters = props.form.values.costTable?.defaultShipmentCost
+
+  const shipment = shipmentFromCostTableEntries || shipmentForNotDefinedRegisters || 0
 
   props.form.setFieldValue(`prices.${index}.shipment`, shipment);
   props.form.setFieldValue(`prices.${index}.productCost`, productCost);
