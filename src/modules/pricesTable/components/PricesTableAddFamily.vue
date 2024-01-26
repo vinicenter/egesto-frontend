@@ -8,7 +8,6 @@ import useNotify from '@/src/core/composables/useNotify';
 
 defineProps<{ disabled: boolean }>();
 
-const model = ref(false)
 const loading = ref(false)
 
 const {
@@ -95,7 +94,6 @@ const addPricesToForm = (newPrices: IPricesTable.Price[]) => {
 
 <template>
   <VMenu
-    v-model="model"
     :close-on-content-click="false"
     location="bottom"
   >
@@ -109,7 +107,6 @@ const addPricesToForm = (newPrices: IPricesTable.Price[]) => {
             v-bind="{ ...props, ...propsMenu }"
             prepend-icon="mdi-tag"
             :disabled="disabled"
-            @click="model = true"
           >
             Adicionar família
           </VBtn>

@@ -19,27 +19,29 @@ const { formatPrice } = priceFormat();
 
 const fields = useFormValues<IPricesTable.Root>();
 
-const setProductMargin = (row: IPricesTable.Price, index: number) => {
-  const { grossRevenue, margin, netSales } = getProductMargin(row)
+const setProductMargin = (price: IPricesTable.Price, index: number) => {
+  const { grossRevenue, margin, netSales } = getProductMargin(price)
 
   props.form.setFieldValue(`prices.${index}.margin`, margin);
   props.form.setFieldValue(`prices.${index}.netSales`, netSales);
   props.form.setFieldValue(`prices.${index}.grossRevenue`, grossRevenue);
 }
 
-const setProductPriceByMargin = (row: IPricesTable.Price, index: number) => {
+const setProductPriceByMargin = (price: IPricesTable.Price, index: number) => {
   try {
-    const result = getProductPriceByMargin(row)
+    const result = getProductPriceByMargin(price)
     
-    const price = Number(result.price.toFixed(2))
+    const priceFormatted = Number(result.price.toFixed(2))
     
-    props.form.setFieldValue(`prices.${index}.price`, price);
+    props.form.setFieldValue(`prices.${index}.price`, priceFormatted);
     props.form.setFieldValue(`prices.${index}.margin`, result.margin);
     props.form.setFieldValue(`prices.${index}.netSales`, result.netSales);
     props.form.setFieldValue(`prices.${index}.grossRevenue`, result.grossRevenue);
-  } catch {
+  } catch (e) {
+    const error = e as string;
+
     displayMessage({
-      message: 'Não foi possível calcular o preço do produto',
+      message: error,
       type: 'error'
     })
   }
@@ -121,22 +123,11 @@ const syncAllProducts = () => {
         @load-product-data="setProductDataToPrice"
       />
 
-      <VTooltip
-        open-on-click
-        location="top"
-      >
-        <template v-slot:activator="{ props }">
-          <VBtn
-            v-bind="props"
-            prepend-icon="mdi-pencil-outline"
-            :disabled="disabled"
-          >
-            Alterações em massa
-          </VBtn>
-        </template>
-
-        <span>Faça alterações em massa em uma família especifica ou em todos os produtos da tabela de preço</span>
-      </VTooltip>
+      <PricesTableBulkChanges
+        :disabled="disabled"
+        @set-product-margin="setProductMargin"
+        @set-product-price-by-margin="setProductPriceByMargin"
+      />
     </div>
 
     <VDivider />

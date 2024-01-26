@@ -48,6 +48,7 @@ declare module '@vue/runtime-core' {
     PersonForm: typeof import('./src/modules/people/components/PersonForm.vue')['default']
     PricesTabelaSummary: typeof import('./src/modules/pricesTable/components/PricesTabelaSummary.vue')['default']
     PricesTableAddFamily: typeof import('./src/modules/pricesTable/components/PricesTableAddFamily.vue')['default']
+    PricesTableBulkChanges: typeof import('./src/modules/pricesTable/components/PricesTableBulkChanges.vue')['default']
     PricesTableCostsDetail: typeof import('./src/modules/pricesTable/components/PricesTableCostsDetail.vue')['default']
     PricesTableForm: typeof import('./src/modules/pricesTable/components/PricesTableForm/PricesTableForm.vue')['default']
     PricesTableFormInformations: typeof import('./src/modules/pricesTable/components/PricesTableForm/PricesTableFormInformations.vue')['default']
