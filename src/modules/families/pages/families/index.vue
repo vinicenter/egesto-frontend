@@ -19,7 +19,7 @@ const columns = [
   {
     label: 'Custo total',
     style: 'width: 100px',
-    tooltip: 'É a somatória de todos os custos da família mais os custo padrões',
+    tooltip: 'É a somatória de todos os custos da família mais os custos padrões',
   },
 ]
 
