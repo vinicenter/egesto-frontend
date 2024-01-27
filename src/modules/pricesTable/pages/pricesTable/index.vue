@@ -5,6 +5,7 @@ import { ref } from 'vue';
 import useNotify from '@/src/core/composables/useNotify';
 import { downloadBlob } from '@/src/core/utils/utils';
 import { IPricesTable } from '../../types/pricesTable';
+import { reactive } from 'vue';
 
 const router = useRouter();
 const notify = useNotify();
@@ -38,6 +39,10 @@ const generateReport = async (item: IPricesTable.Root) => {
     reportLoading.value = false;
   }
 }
+
+const queryVariables = reactive({
+  archived: false,
+})
 </script>
 
 <script lang="ts">
@@ -50,6 +55,7 @@ export default {
   <ETableGenericList
     :columns="columns"
     :list-data-source="getAllPricesTable"
+    :query-variables="queryVariables"
     query-key="pricesTable"
     @new="router.push({ name: 'price-table', params: { id: 'novo', type: 'criar' } })"
   >
@@ -75,6 +81,10 @@ export default {
           page="price-table"
         />
       </div>
+    </template>
+
+    <template #menu>
+      <VCheckbox v-model="queryVariables.archived" label="Arquivados" />
     </template>
   </ETableGenericList>
 </template>

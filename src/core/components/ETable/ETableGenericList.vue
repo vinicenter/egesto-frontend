@@ -16,6 +16,7 @@ const props = withDefaults(
     defaultOrder?: 'DESC' | 'ASC';
     queryKey: string;
     listDataSource: Function;
+    queryVariables?: Record<string, unknown>;
   }>(),
   {
     defaultOrder: 'ASC',
@@ -23,7 +24,7 @@ const props = withDefaults(
 )
 
 import { useInfiniteQuery } from '@tanstack/vue-query';
-import { ref, unref } from 'vue';
+import { ref } from 'vue';
 import ETable from './ETable.vue';
 
 const emit = defineEmits([ 'new' ])
@@ -60,13 +61,14 @@ const {
   isFetchingNextPage,
   isFetching,
 } = useInfiniteQuery({
-  queryKey: [ props.queryKey, search, orderBy, order ],
-  queryFn: ({ pageParam, queryKey }) => {
+  queryKey: [ props.queryKey, search, orderBy, order, props.queryVariables ],
+  queryFn: ({ pageParam }) => {
     return props.listDataSource({
       page: pageParam,
-      search: unref(queryKey[1]),
-      orderBy: unref(queryKey[2]),
-      order: unref(queryKey[3])
+      search: search.value,
+      orderBy: orderBy.value,
+      order: order.value,
+      ...props.queryVariables,
     })
   },
   getNextPageParam: (lastPage) => lastPage?.nextPage,

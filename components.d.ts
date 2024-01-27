@@ -53,6 +53,7 @@ declare module '@vue/runtime-core' {
     PricesTableAddFamily: typeof import('./src/modules/pricesTable/components/PricesTableAddFamily.vue')['default']
     PricesTableBulkChanges: typeof import('./src/modules/pricesTable/components/PricesTableBulkChanges.vue')['default']
     PricesTableCostsDetail: typeof import('./src/modules/pricesTable/components/PricesTableCostsDetail.vue')['default']
+    PricesTableFilter: typeof import('./src/modules/pricesTable/components/PricesTableListing/PricesTableFilter.vue')['default']
     PricesTableForm: typeof import('./src/modules/pricesTable/components/PricesTableForm/PricesTableForm.vue')['default']
     PricesTableFormInformations: typeof import('./src/modules/pricesTable/components/PricesTableForm/PricesTableFormInformations.vue')['default']
     PricesTableFormProducts: typeof import('./src/modules/pricesTable/components/PricesTableForm/PricesTableFormProducts.vue')['default']
