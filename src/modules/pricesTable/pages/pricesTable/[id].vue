@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { createPricesTable, deletePricesTable, getPricesTable, updatePricesTable } from '../../datasource/pricesTable';
 import { IPricesTable } from '../../types/pricesTable'
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter()
 
@@ -36,6 +37,13 @@ const formatSubmit = (data: IPricesTable.Root) => {
     }))
   }
 }
+
+const queryClient = useQueryClient()
+
+const finish = () => {
+  queryClient.invalidateQueries(['pricesTable'])
+  router.push({ name: 'list-prices-table' })
+}
 </script>
 
 <template>
@@ -48,7 +56,7 @@ const formatSubmit = (data: IPricesTable.Root) => {
     :update-fn="updatePricesTable"
     :format-submit-fn="formatSubmit"
     :initial-values-create="initialValues"
-    @finish="router.push({ name: 'list-prices-table' })"
+    @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <PricesTableForm

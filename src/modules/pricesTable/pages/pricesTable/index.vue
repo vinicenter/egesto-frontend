@@ -48,12 +48,11 @@ const generateReport = async (item: IPricesTable.Root) => {
 const queryVariables = reactive({
   archived: false,
 })
-</script>
 
-<script lang="ts">
-export default {
+defineOptions({
+  name: 'PriceTableList',
   inheritAttrs: false,
-}
+})
 </script>
 
 <template>
