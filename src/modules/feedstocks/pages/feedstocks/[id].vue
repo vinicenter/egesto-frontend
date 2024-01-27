@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { createFeedStock, deleteFeedStock, getFeedStock, updateFeedStock } from '../../datasource/feedstocks'
 import { IFeedstock } from '../../types/feedstocks';
+import { useQueryClient } from '@tanstack/vue-query';
 
 const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
 
@@ -30,6 +31,14 @@ const initialValuesCreate = {
   ncm: '',
   brand: null,
 }
+
+
+const queryClient = useQueryClient()
+
+const finish = () => {
+  queryClient.invalidateQueries(['feedstocks'])
+  router.push({ name: 'list-feedstocks' })
+}
 </script>
 
 <template>
@@ -42,7 +51,7 @@ const initialValuesCreate = {
     :update-fn="updateFeedStock"
     :format-submit-fn="formatSubmitFeedStock"
     :initial-values-create="initialValuesCreate"
-    @finish="router.push({ name: 'list-feedstocks' })"
+    @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <FeedStockForm

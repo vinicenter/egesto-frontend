@@ -74,6 +74,10 @@ const generateReport = async () => {
     reportLoading.value = false;
   }
 }
+
+defineOptions({
+  name: 'FeedstocksList'
+})
 </script>
 
 <template>
