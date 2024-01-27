@@ -64,7 +64,7 @@ const items: Item[][] = [
     {
       title: 'Tabelas de Preços',
       onClick: () => router.push({ name: 'list-prices-table' }),
-      icon: 'mdi-cash',
+      icon: 'mdi-cash-lock',
     },
   ],
   [
