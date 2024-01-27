@@ -2,8 +2,10 @@
 import { required } from '@/src/core/utils/form-validator';
 import { useForm } from 'vee-validate';
 
-defineProps<{
+const props = defineProps<{
   loading: boolean
+  disableTenant?: boolean
+  initialValues?: Partial<LoginFormValues>
 }>()
 
 export interface LoginFormValues {
@@ -12,7 +14,9 @@ export interface LoginFormValues {
   password: string
 }
 
-const form = useForm<LoginFormValues>()
+const form = useForm<LoginFormValues>({
+  initialValues: props.initialValues
+})
 
 const emit = defineEmits<{
   (e: 'submit', values: LoginFormValues): void
@@ -24,6 +28,7 @@ const submit = form.handleSubmit(async(values) => emit('submit', values))
 <template>
   <form @submit.prevent="submit">
     <EInputText
+      v-if="!disableTenant"
       name="tenant"
       label="Empresa"
       :disabled="loading"

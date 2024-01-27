@@ -1,10 +1,14 @@
-import { useRouter } from 'vue-router'
+import { useRoute, useRouter } from 'vue-router'
 import axios from '@/src/core/utils/axios'
 import useNotify from '@/src/core/composables/useNotify'
 import useAuth from './useAuth';
+import { ref } from 'vue';
+
+const isUnauthorized = ref(false)
 
 export default () => {
   const router = useRouter()
+  const route = useRoute()
 
   const {
     tenantStorage,
@@ -24,9 +28,17 @@ export default () => {
     }
   }
 
-  axios.interceptors.response.use(undefined, function (error) {
+  const handleUnauthorized = () => {
+    if(route.name === 'login-user') {
+      return
+    }
 
-    if(error.response.status === 401) logout('Sessão expirada, faça login novamente')
+    displayMessage({ message: 'Sessão expirada, faça login novamente', type: 'error' })
+    isUnauthorized.value = true
+  }
+
+  axios.interceptors.response.use(undefined, function (error) {
+    if(error.response.status === 401) handleUnauthorized()
     if(error.response.data.message === 'x-tenant is not supplied') logout('Sessão expirada, faça login novamente')
 
     return Promise.reject(error);
@@ -43,6 +55,7 @@ export default () => {
   })
 
   return {
+    isUnauthorized,
     logout,
   }
 }

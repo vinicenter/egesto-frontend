@@ -4,7 +4,10 @@ import useNotify from '@/src/core/composables/useNotify'
 
 const { notifyState } = useNotify()
 
-useAxiosInterceptors()
+const {
+  isUnauthorized,
+  logout
+} = useAxiosInterceptors()
 </script>
 
 <template>
@@ -24,5 +27,10 @@ useAxiosInterceptors()
         </v-btn>
       </template>
     </VSnackbar>
+
+    <ELoginModel
+      v-model="isUnauthorized"
+      @logout="logout"
+    />
   </ELayout>
 </template>

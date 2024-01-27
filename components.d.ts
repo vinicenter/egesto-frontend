@@ -23,6 +23,7 @@ declare module '@vue/runtime-core' {
     EInputPrice: typeof import('./src/core/components/EInput/EInputPrice.vue')['default']
     EInputText: typeof import('./src/core/components/EInput/EInputText.vue')['default']
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']
+    ELoginModel: typeof import('./src/modules/users/components/ELoginModel.vue')['default']
     EOrderBy: typeof import('./src/core/components/EOrderBy.vue')['default']
     ESelect: typeof import('./src/core/components/ESelect/ESelect.vue')['default']
     ESelectBrands: typeof import('./src/core/components/ESelect/ESelectBrands.vue')['default']
