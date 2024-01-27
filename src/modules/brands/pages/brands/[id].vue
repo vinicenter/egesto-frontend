@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { createBrand, getBrand, deleteBrand, updateBrand } from '../../datasource/brands';
 import { IBrand } from '../../types/brand';
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter()
 
@@ -10,6 +11,13 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 const initialValuesCreate = {
   name: '',
   description: '',
+}
+
+const queryClient = useQueryClient()
+
+const finish = () => {
+  queryClient.invalidateQueries(['brands'])
+  router.push({ name: 'list-brands' })
 }
 </script>
 
@@ -23,7 +31,7 @@ const initialValuesCreate = {
     :update-fn="updateBrand"
     :initial-values-create="initialValuesCreate"
     :formatSubmitFn="(data: IBrand) => ({ ...data })"
-    @finish="router.push({ name: 'list-brands' })"
+    @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <BrandForm

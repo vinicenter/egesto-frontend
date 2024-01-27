@@ -21,12 +21,11 @@ const closeView = (open = false) => {
     viewId.value = null
   }
 }
-</script>
 
-<script lang="ts">
-export default {
-  inheritAttrs: false,
-}
+defineOptions({
+  name: 'CostTableList',
+  inheritAttrs: false
+})
 </script>
 
 <template>

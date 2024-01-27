@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { createFamily, deleteFamily, getFamily, updateFamily } from '../../datasource/families'
 import { IFamily } from '../../types/family'
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter();
 
@@ -31,6 +32,13 @@ const formatSubmit = async (data: IFamily) => {
     linkedFamily,
   }
 }
+
+const queryClient = useQueryClient()
+
+const finish = () => {
+  queryClient.invalidateQueries(['families'])
+  router.push({ name: 'list-families' })
+}
 </script>
 
 <template>
@@ -43,7 +51,7 @@ const formatSubmit = async (data: IFamily) => {
     :update-fn="updateFamily"
     :format-submit-fn="formatSubmit"
     :initial-values-create="initialValues"
-    @finish="router.push({ name: 'list-families' })"
+    @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <FamiliesForm

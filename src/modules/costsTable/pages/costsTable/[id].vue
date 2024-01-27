@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { createCostsTable, deleteCostsTable, getCostsTable, updateCostsTable } from '../../datasource/costsTable';
 import { ICostsTable } from '../../types/costsTable';
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter();
 
@@ -39,6 +40,13 @@ const formatSubmit = (data: ICostsTable.Root) => {
     }
   }
 }
+
+const queryClient = useQueryClient()
+
+const finish = () => {
+  queryClient.invalidateQueries(['costsTable'])
+  router.push({ name: 'list-costs-table' })
+}
 </script>
 
 <template>
@@ -51,7 +59,7 @@ const formatSubmit = (data: ICostsTable.Root) => {
     :update-fn="updateCostsTable"
     :format-submit-fn="formatSubmit"
     :initial-values-create="initialValues"
-    @finish="router.push({ name: 'list-costs-table' })"
+    @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <CostsTableForm

@@ -27,6 +27,10 @@ const { data } = useQuery({
   queryKey: [ 'families-default-costs' ],
   queryFn: getFamiliesDefaultCost,
 })
+
+defineOptions({
+  name: 'FamiliesList'
+})
 </script>
 
 <template>

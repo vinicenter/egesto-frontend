@@ -18,6 +18,10 @@ const columns = [
     orderByValue: 'description'
   },
 ]
+
+defineOptions({
+  name: 'BrandsList'
+})
 </script>
 
 <template>
