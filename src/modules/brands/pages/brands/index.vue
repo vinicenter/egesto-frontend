@@ -33,7 +33,12 @@ defineOptions({
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
-      <td>{{ item.description || '-' }}</td>
+      <td
+        class="truncate max-w-100px"
+        :title="item.description || '-'"
+      >
+        {{ item.description || '-' }}
+      </td>
     </template>
 
     <template #actions="{ item }">
