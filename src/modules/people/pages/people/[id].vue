@@ -2,6 +2,7 @@
 import { useRouter } from 'vue-router';
 import { createPerson, deletePerson, getPerson, updatePerson } from '../../datasource/people';
 import { IPeople } from '../../types/people';
+import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter();
 
@@ -11,6 +12,13 @@ const formatSubmit = (data: IPeople): IPeople => ({
   ...data,
   contractExpenses: Number(data.contractExpenses) || 0
 });
+
+const queryClient = useQueryClient()
+
+const finish = () => {
+  queryClient.invalidateQueries(['people'])
+  router.push({ name: 'list-people' })
+}
 </script>
 
 <template>
@@ -22,7 +30,7 @@ const formatSubmit = (data: IPeople): IPeople => ({
     :create-fn="createPerson"
     :update-fn="updatePerson"
     :format-submit-fn="formatSubmit"
-    @finish="router.push({ name: 'list-people' })"
+    @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
       <PersonForm

@@ -38,6 +38,10 @@ const generateReport = async () => {
     reportLoading.value = false;
   }
 }
+
+defineOptions({
+  name: 'PeopleList'
+})
 </script>
 
 <template>
