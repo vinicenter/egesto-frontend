@@ -17,6 +17,11 @@ const columns = [
     orderByValue: 'name',
     defaultOrderByValue: true
   },
+  {
+    label: 'Table de Custo',
+    style: 'width: 200px',
+    orderByValue: 'name',
+  },
 ]
 
 const reportId = ref<string>('');
@@ -61,6 +66,7 @@ export default {
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
+      <td>{{ item.costTable.name || '-' }}</td>
     </template>
 
     <template #actions="{ item }">
@@ -84,7 +90,7 @@ export default {
     </template>
 
     <template #menu>
-      <VCheckbox v-model="queryVariables.archived" label="Arquivados" />
+      <PricesTableFilters v-model="queryVariables" />
     </template>
   </ETableGenericList>
 </template>

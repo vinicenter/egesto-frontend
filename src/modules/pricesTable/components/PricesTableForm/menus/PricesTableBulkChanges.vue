@@ -2,7 +2,7 @@
 import { required } from '@/src/core/utils/form-validator';
 import { useForm, useFieldArray } from 'vee-validate';
 import { ref } from 'vue';
-import { IPricesTable } from '../types/pricesTable';
+import { IPricesTable } from '@/src/modules/pricesTable/types/pricesTable';
 import useNotify from '@/src/core/composables/useNotify';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
 import ESelectFamilies from '@/src/core/components/ESelect/ESelectFamilies.vue';

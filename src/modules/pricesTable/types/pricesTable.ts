@@ -26,3 +26,7 @@ export namespace IPricesTable {
     margin: number;
   }
 }
+
+export interface PricesTableFilters {
+  archived?: boolean;
+}

@@ -2,8 +2,8 @@
 import { required } from '@/src/core/utils/form-validator';
 import { useForm, useFieldArray, useFormValues } from 'vee-validate';
 import { ref, computed } from 'vue';
-import { getProducts } from '../../products/datasource/products';
-import { IPricesTable } from '../types/pricesTable';
+import { getProducts } from '@/src/modules/products/datasource/products';
+import { IPricesTable } from '@/src/modules/pricesTable/types/pricesTable';
 import useNotify from '@/src/core/composables/useNotify';
 
 defineProps<{ disabled: boolean }>();
