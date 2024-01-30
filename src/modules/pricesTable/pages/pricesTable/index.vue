@@ -18,9 +18,8 @@ const columns = [
     defaultOrderByValue: true
   },
   {
-    label: 'Table de Custo',
+    label: 'Tabela de Custo',
     style: 'width: 200px',
-    orderByValue: 'name',
   },
 ]
 
