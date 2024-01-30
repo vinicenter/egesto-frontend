@@ -1,4 +1,5 @@
-import { cnpj, cpf } from 'cpf-cnpj-validator'; 
+import { email as emailRule } from '@vee-validate/rules'
+import { cnpj, cpf } from 'cpf-cnpj-validator';
 
 export const required = (v: any) => {
   if(v === undefined || v === null || v === '') return 'Campo obrigatório'
@@ -7,9 +8,9 @@ export const required = (v: any) => {
 };
 
 export const emailValidation = (value: string) => {
-  if(!value) return true 
+  if(!value) return true
 
-  if (/^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(value)) return true
+  if (emailRule(value)) return true
 
   return 'Deve ser um email válido'
 }
