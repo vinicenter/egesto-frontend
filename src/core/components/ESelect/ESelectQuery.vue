@@ -5,6 +5,7 @@ import { ref, unref } from 'vue';
 const props = defineProps<{
   queryFn: Function
   queryKey: string
+  queryVariables: Record<string, unknown>
 }>()
 
 const search = ref()
@@ -16,8 +17,12 @@ const {
   fetchNextPage,
   hasNextPage,
 } = useInfiniteQuery({
-  queryKey: [ props.queryKey, search ],
-  queryFn: ({ pageParam, queryKey }) => props.queryFn({ page: pageParam, search: unref(queryKey[1]) }),
+  queryKey: [ props.queryKey, search, props.queryVariables ],
+  queryFn: ({ pageParam, queryKey }) => props.queryFn({
+    page: pageParam,
+    search: unref(queryKey[1]),
+    ...props.queryVariables
+  }),
   getNextPageParam: (lastPage) => lastPage?.nextPage,
   select: ({ pages, pageParams }) => {
     const dataSelect = pages?.reduce((acc, page) => {

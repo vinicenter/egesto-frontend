@@ -58,133 +58,126 @@ const tableColumn = [
 </script>
 
 <template>
-  <VDialog width="900" v-model="model">
-    <template v-slot:default="{ isActive }">
-      <VCard>
-        <VToolbar
-          color="primary"
-          title="Visualizar Tabela de Custo"
-        />
+  <EDialog width="900" v-model="model" title="Visualizar Tabela de Custo">
+    <template #default>
+      <CostTableDetailsSkeleton v-if="loading" />
 
-        <CostTableDetailsSkeleton v-if="loading" />
-
-        <template v-else>
-          <div class="p-sm grid grid-cols-1 sm:grid-cols-2">
-            <div>
-              <div>Nome</div>
-              {{ costsTableData?.name || '-' }}
-            </div>
-
-            <div>
-              <div>Frete para registros não definidos</div>
-              {{ `${format(costsTableData?.defaultShipmentCost)}%` }}
-            </div>
+      <template v-else>
+        <div class="p-sm grid grid-cols-1 sm:grid-cols-2">
+          <div>
+            <div>Nome</div>
+            {{ costsTableData?.name || '-' }}
           </div>
-
-          <VTabs grow v-model="tab" class="overflow-visible">
-            <VTab value="taxes">
-              Impostos
-            </VTab>
-            <VTab value="shipping-families">
-              Frete Familias
-            </VTab>
-            <VTab value="shipping-products">
-              Frete Produtos
-            </VTab>
-          </VTabs>
 
           <div>
-            <VWindow v-model="tab">
-              <VWindowItem value="taxes">
-                <ETable
-                  :loading="false"
-                  :hasNextPage="false"
-                  :columns="tableColumn"
-                  :data="costsTableData?.taxes || []"
-                  :nextPage="() => {}"
-                  noDataText="Nenhum imposto cadastrado"
-                >
-                  <template #default="{ item }">
-                    <td>{{ item?.name || '-' }}</td>
-                    <td>{{ item?.cost ? `${item?.cost}%` : '-' }}</td>
-                  </template>
-                </ETable>
-              </VWindowItem>
-
-              <VWindowItem value="shipping-families">
-                <ETable
-                  :loading="false"
-                  :hasNextPage="false"
-                  :columns="tableColumn"
-                  :data="costsTableData?.shipments?.families || []"
-                  :nextPage="() => {}"
-                  noDataText="Nenhum frete de família cadastrado"
-                >
-                  <template #default="{ item }">
-                    <td>
-                      <RouterLink
-                        v-if="item?.family?.name"
-                        :to="{ name: 'family', params: { id: item?.family?._id, type: 'edit' } }"
-                      >
-                        {{ item?.family?.name }}
-                      </RouterLink>
-                      
-                      <div v-else>
-                        -
-                      </div>
-                    </td>
-                    <td>{{ item?.cost ? `${item?.cost}%` : '-' }}</td>
-                  </template>
-                </ETable>
-              </VWindowItem>
-
-              <VWindowItem value="shipping-products">
-                <ETable
-                  :loading="false"
-                  :hasNextPage="false"
-                  :columns="tableColumn"
-                  :data="costsTableData?.shipments?.products || []"
-                  :nextPage="() => {}"
-                  noDataText="Nenhum frete de produto cadastrado"
-                >
-                  <template #default="{ item }">
-                    <td>
-                      <RouterLink
-                        v-if="item?.product?.name"
-                        :to="{ name: 'product', params: { id: item?.product?._id, type: 'editar' } }"
-                      >
-                        {{ item?.product?.name }}
-                      </RouterLink>
-                      
-                      <div v-else>
-                        -
-                      </div>
-                    </td>
-                    <td>{{ item?.cost ? `${item?.cost}%` : '-' }}</td>
-                  </template>
-                </ETable>
-              </VWindowItem>
-            </VWindow>
+            <div>Frete para registros não definidos</div>
+            {{ `${format(costsTableData?.defaultShipmentCost)}%` }}
           </div>
-        </template>
+        </div>
 
-        <VCardActions class="justify-end">
-          <VBtn
-            variant="text"
-            @click="isActive.value = false"
-          >
-            Fechar
-          </VBtn>
+        <VTabs grow v-model="tab" class="overflow-visible">
+          <VTab value="taxes">
+            Impostos
+          </VTab>
+          <VTab value="shipping-families">
+            Frete Familias
+          </VTab>
+          <VTab value="shipping-products">
+            Frete Produtos
+          </VTab>
+        </VTabs>
 
-          <VBtn
-            variant="flat"
-            color="primary"
-            @click="router.push({ name: 'cost-table', params: { id: costsTableData?._id, type: 'editar' } })"
-          >
-            Editar
-          </VBtn>
-        </VCardActions>
-      </VCard>
+        <div>
+          <VWindow v-model="tab">
+            <VWindowItem value="taxes">
+              <ETable
+                :loading="false"
+                :hasNextPage="false"
+                :columns="tableColumn"
+                :data="costsTableData?.taxes || []"
+                :nextPage="() => {}"
+                noDataText="Nenhum imposto cadastrado"
+              >
+                <template #default="{ item }">
+                  <td>{{ item?.name || '-' }}</td>
+                  <td>{{ item?.cost ? `${item?.cost}%` : '-' }}</td>
+                </template>
+              </ETable>
+            </VWindowItem>
+
+            <VWindowItem value="shipping-families">
+              <ETable
+                :loading="false"
+                :hasNextPage="false"
+                :columns="tableColumn"
+                :data="costsTableData?.shipments?.families || []"
+                :nextPage="() => {}"
+                noDataText="Nenhum frete de família cadastrado"
+              >
+                <template #default="{ item }">
+                  <td>
+                    <RouterLink
+                      v-if="item?.family?.name"
+                      :to="{ name: 'family', params: { id: item?.family?._id, type: 'edit' } }"
+                    >
+                      {{ item?.family?.name }}
+                    </RouterLink>
+                    
+                    <div v-else>
+                      -
+                    </div>
+                  </td>
+                  <td>{{ item?.cost ? `${item?.cost}%` : '-' }}</td>
+                </template>
+              </ETable>
+            </VWindowItem>
+
+            <VWindowItem value="shipping-products">
+              <ETable
+                :loading="false"
+                :hasNextPage="false"
+                :columns="tableColumn"
+                :data="costsTableData?.shipments?.products || []"
+                :nextPage="() => {}"
+                noDataText="Nenhum frete de produto cadastrado"
+              >
+                <template #default="{ item }">
+                  <td>
+                    <RouterLink
+                      v-if="item?.product?.name"
+                      :to="{ name: 'product', params: { id: item?.product?._id, type: 'editar' } }"
+                    >
+                      {{ item?.product?.name }}
+                    </RouterLink>
+                    
+                    <div v-else>
+                      -
+                    </div>
+                  </td>
+                  <td>{{ item?.cost ? `${item?.cost}%` : '-' }}</td>
+                </template>
+              </ETable>
+            </VWindowItem>
+          </VWindow>
+        </div>
+      </template>
     </template>
-  </VDialog>
+
+    <template #actions="{ isActive }">
+      <VBtn
+        variant="text"
+        @click="isActive.value = false"
+      >
+        Fechar
+      </VBtn>
+
+      <VBtn
+        variant="flat"
+        color="primary"
+        @click="router.push({ name: 'cost-table', params: { id: costsTableData?._id, type: 'editar' } })"
+      >
+        Editar
+      </VBtn>
+    </template>
+  </EDialog>
 </template>

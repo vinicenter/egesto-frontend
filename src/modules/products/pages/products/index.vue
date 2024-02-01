@@ -6,6 +6,7 @@ import { priceFormat } from '@/src/core/utils/format';
 import { formatFamilyLabel } from '../../utils/formatter';
 import { downloadBlob } from '@/src/core/utils/utils';
 import useNotify from '@/src/core/composables/useNotify';
+import { reactive } from 'vue';
 
 const router = useRouter();
 const { formatPrice } = priceFormat();
@@ -53,6 +54,10 @@ const generateReport = async () => {
     reportLoading.value = false;
   }
 }
+
+const queryVariables = reactive({
+  onlyFeedstockEnabled: undefined
+})
 </script>
 
 <template>
@@ -60,6 +65,7 @@ const generateReport = async () => {
     :columns="columns"
     :list-data-source="getProducts"
     query-key="products"
+    :query-variables="queryVariables"
     @new="router.push({ name: 'product', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
@@ -125,6 +131,8 @@ const generateReport = async () => {
       >
         Relatório
       </VBtn>
+
+      <ProductFilters v-model="queryVariables" />
     </template>
 
     <template #actions="{ item }">
@@ -138,6 +146,7 @@ const generateReport = async () => {
         @view="viewId = $event"
       />
     </template>
+
   </ETableGenericList>
 
   <ProductDetailsModel

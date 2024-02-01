@@ -26,7 +26,7 @@ type ProductData = IProduct.Root | undefined
 
 const productData = ref<ProductData>(undefined)
 const loading = ref(false)
-const tab = ref<'info' | 'production'>('info')
+const formulationTab = ref<'products' | 'feedstocks'>('feedstocks')
 
 watch(() => props.modelValue, async () => {
   if(!props.modelValue || !props.id) {
@@ -34,7 +34,7 @@ watch(() => props.modelValue, async () => {
   }
 
   try {
-    tab.value = 'info'
+    formulationTab.value = 'feedstocks'
 
     loading.value = true
     const data = await getProduct(props.id)
@@ -51,56 +51,64 @@ watch(() => props.modelValue, async () => {
 </script>
 
 <template>
-  <VDialog width="900" v-model="model">
-    <template v-slot:default="{ isActive }">
+  <EDialog width="900" v-model="model" title="Visualizar produto">
+    <template #default>
       <VCard>
-        <VToolbar
-          color="primary"
-          title="Visualizar produto"
-        />
-
         <ProductDetailsSkeleton v-if="loading" />
 
-        <template v-else>
-          <VTabs grow v-model="tab" class="overflow-visible">
-            <VTab value="info">
-              Informações básicas
+        <section class="min-h-300px overflow-visible" v-else>
+          <div class="p-sm">
+            <ProductDetailsInfo :productData="productData" />
+
+            <VDivider class="my-4" />
+
+            <ProductDetailsMarketing :productData="productData" />
+
+            <VDivider class="my-4" />
+
+            <ProductDetailsProduction :productData="productData" />
+
+          </div>
+
+          <VTabs grow v-model="formulationTab" class="overflow-visible">
+            <VTab value="feedstocks">
+              Matérias primas
             </VTab>
-            <VTab value="production">
-              Produção
+            <VTab value="products" :disabled="productData?.production.canBeFeedstock">
+              Produtos
             </VTab>
           </VTabs>
 
-          <div class="p-sm">
-            <VWindow v-model="tab">
-              <VWindowItem value="info">
-                <ProductDetailsInfo :productData="productData" />
+          <div>
+            <VWindow v-model="formulationTab">
+              <VWindowItem value="feedstocks">
+                <ProductDetailsProductionFeedstocks :productData="productData" />
               </VWindowItem>
 
-              <VWindowItem value="production">
-                <ProductDetailsProduction :productData="productData" />
+              <VWindowItem value="products">
+                <ProductDetailsProductionProducts :productData="productData" />
               </VWindowItem>
             </VWindow>
           </div>
-        </template>
-
-        <VCardActions class="justify-end">
-          <VBtn
-            variant="text"
-            @click="isActive.value = false"
-          >
-            Fechar
-          </VBtn>
-
-          <VBtn
-            variant="flat"
-            color="primary"
-            @click="router.push({ name: 'product', params: { id: productData?._id, type: 'editar' } })"
-          >
-            Editar
-          </VBtn>
-        </VCardActions>
+        </section>
       </VCard>
     </template>
-  </VDialog>
+
+    <template #actions="{ isActive }">
+      <VBtn
+        variant="text"
+        @click="isActive.value = false"
+      >
+        Fechar
+      </VBtn>
+
+      <VBtn
+        variant="flat"
+        color="primary"
+        @click="router.push({ name: 'product', params: { id: productData?._id, type: 'editar' } })"
+      >
+        Editar
+      </VBtn>
+    </template>
+  </EDialog>
 </template>

@@ -13,6 +13,7 @@ export interface ProductDescriptionPromptParams {
 export namespace IProduct {
   export interface Filters {
     familyId?: string
+    onlyFeedstockEnabled?: boolean
   }
 
   export interface Root {
@@ -57,13 +58,16 @@ export namespace IProduct {
   }
 
   export interface Production {
-    formulation: Formulation[]
+    formulation: {
+      products: (Formulation & { product: IProduct.Root })[]
+      feedstocks: (Formulation & { feedstock: IFeedstock })[]
+    }
     lost?: number
     useCustomPackCostMultiplier: number
+    canBeFeedstock: boolean
   }
 
   export interface Formulation {
-    feedstock?: IFeedstock
     value?: number
     considerInWeightCalculation: boolean
     considerInVolumeProduced: boolean

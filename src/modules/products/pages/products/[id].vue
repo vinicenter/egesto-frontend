@@ -24,7 +24,11 @@ const initialValuesCreate: IProduct.Root = {
     cest: '',
   },
   production: {
-    formulation: [],
+    formulation: {
+      products: [],
+      feedstocks: [],
+    },
+    canBeFeedstock: false,
     lost: 0,
     useCustomPackCostMultiplier: 0,
   },
@@ -59,14 +63,25 @@ const formatSubmit = (data: IProduct.Root) => {
     production: {
       lost: Number(data.production.lost),
       useCustomPackCostMultiplier: Number(data.production.useCustomPackCostMultiplier),
-      formulation: data.production.formulation.map((item) => {
-        return {
-          value: Number(item.value),
-          feedstock: item.feedstock?._id,
-          considerInWeightCalculation: item.considerInWeightCalculation,
-          considerInVolumeProduced: item.considerInVolumeProduced,
-        }
-      }),
+      canBeFeedstock: data.production.canBeFeedstock,
+      formulation: {
+        products: !data.production.canBeFeedstock ? data.production.formulation.products.map((item) => {
+          return {
+            value: Number(item.value),
+            product: item.product?._id,
+            considerInWeightCalculation: item.considerInWeightCalculation,
+            considerInVolumeProduced: item.considerInVolumeProduced,
+          }
+        }) : [],
+        feedstocks: data.production.formulation.feedstocks.map((item) => {
+          return {
+            value: Number(item.value),
+            feedstock: item.feedstock?._id,
+            considerInWeightCalculation: item.considerInWeightCalculation,
+            considerInVolumeProduced: item.considerInVolumeProduced,
+          }
+        }),
+      },
     },
     pack: {
       barcodeDun14: data.pack.barcodeDun14,

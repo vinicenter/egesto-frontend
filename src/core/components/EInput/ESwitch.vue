@@ -15,6 +15,7 @@ const { value, handleBlur } = useField<boolean | undefined>(toRef(props, "name")
 <template>
   <VSwitch
     v-model="value"
+    color="primary"
     :disabled="disabled"
     :label="label"
     inset

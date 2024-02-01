@@ -1,20 +1,12 @@
 <script setup lang="ts">
 import { numberFormat, priceFormat } from '@/src/core/utils/format';
-import { IProduct } from '../../../types/product';
+import { IProduct } from '@/src/modules/products/types/product';
 import { computed } from 'vue';
 
 const { format } = numberFormat();
 const { formatPrice } = priceFormat();
 
 const props = defineProps<{ productData: IProduct.Root | undefined }>()
-
-const productionFormulationColumns = [
-  { label: 'Matéria Prima', style: 'width: 150px' },
-  { label: 'Preço Sem Icms', style: 'width: 50px' },
-  { label: 'Volume usado', style: 'width: 50px' },
-  { label: 'Custo total', style: 'width: 50px' },
-  { label: 'Volume', style: 'width: 50px' },
-]
 
 const costPackMultiplier = computed(() => {
   return props.productData?.production.useCustomPackCostMultiplier
@@ -25,6 +17,7 @@ const costPackMultiplier = computed(() => {
 
 <template>
   <div class="space-y-sm">
+    <div class="text-lg">Produção</div>
     <div class="grid grid-cols-3 gap-sm">
       <div>
         <div>Volume por produção</div>
@@ -92,43 +85,5 @@ const costPackMultiplier = computed(() => {
         `Peso por pack e Volume por produção não conferem. Verifique a formulação. Diferença de: ${productData?.productionCost?.weightFormulationDifference}`
       "
     />
-
-    <div>
-      <ETable
-        :loading="false"
-        :hasNextPage="false"
-        :columns="productionFormulationColumns"
-        :data="productData?.production?.formulation"
-        :nextPage="() => {}"
-        noDataText="Nenhuma matéria prima adicionada"
-      >
-        <template #default="{ item }">
-          <td>
-            <RouterLink
-              v-if="item?.feedstock?.name"
-              :to="{ name: 'feedstock', params: { id: item?.feedstock?._id, type: 'editar' } }"
-            >
-              {{ item?.feedstock?.name }}
-            </RouterLink>
-
-            <a v-else>-</a>
-          </td>
-          <td>{{ formatPrice(item?.feedstock?.priceWithoutIcms) }}</td>
-          <td :class="item?.considerInWeightCalculation
-            ? 'text-green'
-            : 'text-red'
-          ">
-            {{ format(item?.value) }}
-          </td>
-          <td>{{ formatPrice(item?.value.toFixed(5) * item?.feedstock?.priceWithoutIcms.toFixed(5)) }}</td>
-          <td :class="item?.considerInVolumeProduced
-            ? 'text-green'
-            : 'text-red'
-          ">
-            {{ item?.considerInVolumeProduced ? 'Sim' : 'Não' }}
-          </td>
-        </template>
-      </ETable>
-    </div>
   </div>
 </template>

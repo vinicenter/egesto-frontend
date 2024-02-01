@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { numberFormat } from '@/src/core/utils/format';
-import { IProduct } from '../../../types/product';
+import { IProduct } from '@/src/modules/products/types/product';
 import { formatProductNameWithCode, formatFamilyLabel } from '../../../utils/formatter';
 
 const { format } = numberFormat();
@@ -10,6 +10,8 @@ defineProps<{ productData: IProduct.Root | undefined }>()
 
 <template>
   <div class="space-y-sm">
+    <div class="text-lg">Informações básicas</div>
+
     <div class="grid grid-cols-3 gap-sm">
       <div>
         <div>Nome</div>
@@ -78,29 +80,5 @@ defineProps<{ productData: IProduct.Root | undefined }>()
         {{ productData?.pack?.numberOfPacksInPallet || '-' }}
       </div>
     </div>
-
-    <VAlert
-      density="compact"
-      color="info"
-      title="Publicidade"
-    >
-      <div v-if="productData?.marketing?.isPublic">
-        Produto Público - Aparece no site
-        <VIcon icon="mdi-lock-open" />
-      </div>
-
-      <div v-else>
-        Produto Privado - Não aparece no site
-        <VIcon icon="mdi-lock" />
-      </div>
-
-      <div v-if="productData?.marketing?.color">
-        Cor: {{ productData?.marketing?.color }}
-      </div>
-
-      <div v-if="productData?.marketing?.description">
-        {{ productData?.marketing?.description }}
-      </div>
-    </VAlert>
   </div>
 </template>
