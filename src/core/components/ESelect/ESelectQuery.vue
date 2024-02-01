@@ -5,7 +5,7 @@ import { ref, unref } from 'vue';
 const props = defineProps<{
   queryFn: Function
   queryKey: string
-  queryVariables: Record<string, unknown>
+  queryVariables?: Record<string, unknown>
 }>()
 
 const search = ref()
