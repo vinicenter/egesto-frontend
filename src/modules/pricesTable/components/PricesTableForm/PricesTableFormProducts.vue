@@ -70,7 +70,7 @@ const setProductDataToPrice = (row: IPricesTable.Price, index: number) => {
   const product = row.product
 
   const productCost = product?.productionCost?.packCost || 0;
-  const expense = product?.family?.totalCosts + (familiesDefaultCost.value.totalCosts || 0) + (props.form.values.customer?.contractExpenses || 0);
+  const expense = (product?.family?.totalCosts + (familiesDefaultCost.value.totalCosts || 0) + (props.form.values.customer?.contractExpenses || 0)) || 0;
   const productionLost = product?.production?.lost || 0;
   const volume = row.volume || 1;
   const price = row.price || 0;
