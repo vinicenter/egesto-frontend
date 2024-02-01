@@ -33,7 +33,7 @@ const submit = handleSubmit(async (values) => {
     loading.value = true
     
     const products = await getProducts({
-      limit: 100,
+      limit: 1000,
       page: 1,
       familyId: values.family,
     })
