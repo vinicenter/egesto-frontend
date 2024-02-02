@@ -125,7 +125,6 @@ const queryVariables = reactive({
     <template #menu>
       <VBtn
         color="purple"
-        flat
         :loading="reportLoading"
         @click="generateReport"
       >

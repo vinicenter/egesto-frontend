@@ -43,7 +43,7 @@ defineOptions({
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
       <td>{{ item.linkedFamily ? item.linkedFamily.name : 'Sem vinculo' }}</td>
-      <td>{{ item.totalCosts ? `${item.totalCosts + data.totalCosts}%` : '-' }}</td>
+      <td>{{ `${Number(item.totalCosts) + Number(data.totalCosts)}%` }}</td>
     </template>
 
     <template #menu>
