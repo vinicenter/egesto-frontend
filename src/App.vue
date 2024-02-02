@@ -8,8 +8,6 @@ const {
   isUnauthorized,
   logout
 } = useAxiosInterceptors()
-
-myUndefinedFunction();
 </script>
 
 <template>
