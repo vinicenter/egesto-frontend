@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@sentry/vue": "^7.99.0",
     "@tanstack/vue-query": "^4.37.1",
     "@vee-validate/rules": "^4.12.5",
     "@vueuse/core": "^10.7.1",
