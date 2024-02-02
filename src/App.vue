@@ -8,6 +8,10 @@ const {
   isUnauthorized,
   logout
 } = useAxiosInterceptors()
+
+const testError = () => {
+  throw new Error('Test')
+}
 </script>
 
 <template>
@@ -32,5 +36,9 @@ const {
       v-model="isUnauthorized"
       @logout="logout"
     />
+
+    <MBtn @click="testError">
+      Testar erro
+    </MBtn>
   </ELayout>
 </template>
