@@ -36,6 +36,8 @@ const submit = handleSubmit(async (values) => {
       limit: 1000,
       page: 1,
       familyId: values.family,
+      orderBy: 'name',
+      order: 'ASC'
     })
 
     const newPrices = products.docs.map((product: any): IPricesTable.Price => ({
