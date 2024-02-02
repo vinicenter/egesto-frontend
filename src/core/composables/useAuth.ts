@@ -21,8 +21,10 @@ const authStorage = computed({
       return;
     }
 
-    Sentry.setTag("tenant", tenantStorage.value);
-    Sentry.setUser({ email: auth.email, username: auth.username });
+    if(import.meta.env.PROD) {
+      Sentry.setTag("tenant", tenantStorage.value);
+      Sentry.setUser({ email: auth.email, username: auth.username });
+    }
 
     authLocalStorage.value = JSON.stringify(auth);
   },
