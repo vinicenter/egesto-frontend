@@ -110,7 +110,7 @@ const fieldsOptions = [
       </VTooltip>
     </template>
 
-    <VCard title="Adicionar família" min-width="400">
+    <VCard title="Alterações em massa" min-width="400">
       <form class="mx-sm mb-sm space-y-1" @submit.prevent>
         <VTabs v-model="bulkType" class="mb-4">
           <VTab value="all">
