@@ -13,6 +13,7 @@ export interface ProductDescriptionPromptParams {
 export namespace IProduct {
   export interface Filters {
     familyId?: string
+    brandId?: string
     onlyFeedstockEnabled?: boolean
   }
 

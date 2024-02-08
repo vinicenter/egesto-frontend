@@ -7,6 +7,7 @@ import { formatFamilyLabel } from '../../utils/formatter';
 import { downloadBlob } from '@/src/core/utils/utils';
 import useNotify from '@/src/core/composables/useNotify';
 import { reactive } from 'vue';
+import { IProduct } from '../../types/product';
 
 const router = useRouter();
 const { formatPrice } = priceFormat();
@@ -55,8 +56,10 @@ const generateReport = async () => {
   }
 }
 
-const queryVariables = reactive({
-  onlyFeedstockEnabled: undefined
+const queryVariables = reactive<Partial<IProduct.Filters>>({
+  onlyFeedstockEnabled: undefined,
+  brandId: undefined,
+  familyId: undefined
 })
 </script>
 
