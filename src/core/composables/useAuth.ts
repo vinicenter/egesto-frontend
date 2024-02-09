@@ -11,6 +11,20 @@ const authLocalStorage = useLocalStorage<string | undefined>('auth', undefined, 
   listenToStorageChanges: true,
 });
 
+const setUserToSentry = () => {
+  if(!import.meta.env.PROD) {
+    return
+  }
+
+  if (tenantStorage.value) {
+    Sentry.setTag("tenant", tenantStorage.value);
+  }
+
+  if (authStorage.value) {
+    Sentry.setUser({ email: authStorage.value?.email, username: authStorage.value?.email });
+  }
+}
+
 const authStorage = computed({
   get: () => {
     return authLocalStorage.value ? JSON.parse(authLocalStorage.value) : undefined
@@ -21,16 +35,15 @@ const authStorage = computed({
       return;
     }
 
-    if(import.meta.env.PROD) {
-      Sentry.setTag("tenant", tenantStorage.value);
-      Sentry.setUser({ email: auth.email, username: auth.username });
-    }
+    setUserToSentry()
 
     authLocalStorage.value = JSON.stringify(auth);
   },
 })
 
 export default () => {
+  setUserToSentry()
+
   return {
     tenantStorage,
     authStorage,
