@@ -38,12 +38,13 @@ defineOptions({
     :columns="columns"
     :list-data-source="getFamilies"
     query-key="families"
+    :query-variables="{ familyType: 'all' }"
     @new="router.push({ name: 'family', params: { id: 'novo', type: 'criar' } })"
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
       <td>{{ item.linkedFamily ? item.linkedFamily.name : 'Sem vinculo' }}</td>
-      <td>{{ `${Number(item.totalCosts) + Number(data.totalCosts)}%` }}</td>
+      <td>{{ `${Number(item.totalCosts) + Number(data?.totalCosts)}%` }}</td>
     </template>
 
     <template #menu>
@@ -55,7 +56,7 @@ defineOptions({
         :id="item._id"
         delete
         edit
-        :clone="false"
+        clone
         page="family"
       />
     </template>
