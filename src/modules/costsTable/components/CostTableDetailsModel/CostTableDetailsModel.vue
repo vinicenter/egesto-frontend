@@ -5,6 +5,7 @@ import { computed, ref, watch } from 'vue';
 import { ICostsTable } from '../../types/costsTable'
 import { useRouter } from 'vue-router';
 import { numberFormat } from '@/src/core/utils/format';
+import { formatFamilyLabel } from '@/src/modules/products/utils/formatter';
 
 const router = useRouter()
 const { displayMessage } = useNotify()
@@ -120,7 +121,7 @@ const tableColumn = [
                       v-if="item?.family?.name"
                       :to="{ name: 'family', params: { id: item?.family?._id, type: 'edit' } }"
                     >
-                      {{ item?.family?.name }}
+                      {{ formatFamilyLabel(item?.family) }}
                     </RouterLink>
                     
                     <div v-else>

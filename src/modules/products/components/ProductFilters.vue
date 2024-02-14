@@ -16,7 +16,7 @@ const model = defineModel<Partial<IProduct.Filters>>({
 
     <VCard title="Filtros" min-width="400">
       <VCardText>
-        <ESelectFamilies v-model="model.familyId" label="Família" />
+        <ESelectFamilies v-model="model.familyId" label="Família" familyType="linked" />
         <ESelectBrands v-model="model.brandId" label="Marca" />
         <VCheckbox v-model="model.onlyFeedstockEnabled" label="Somente produtos que podem ser matéria prima" />
       </VCardText>

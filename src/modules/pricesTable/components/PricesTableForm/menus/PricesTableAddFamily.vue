@@ -129,6 +129,7 @@ const addPricesToForm = (newPrices: IPricesTable.Price[]) => {
         <ESelectFamilies
           name="family"
           :rules="required"
+          familyType="linked"
           :clearable="false"
         />
 

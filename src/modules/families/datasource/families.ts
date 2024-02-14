@@ -1,7 +1,12 @@
 import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
 
-export const getFamilies = async (params: tableParams) => {
+export interface FamilyListingParams {
+  familyType: 'main' | 'linked' | 'all'
+  mainFamily?: string
+}
+
+export const getFamilies = async (params: tableParams & FamilyListingParams) => {
   const { data } = await axios.get('/families', { params })
 
   return data

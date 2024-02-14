@@ -134,6 +134,7 @@ const fieldsOptions = [
         <ESelectFamilies
           v-if="bulkType === 'family'"
           name="family"
+          familyType="linked"
           :rules="required"
         />
 

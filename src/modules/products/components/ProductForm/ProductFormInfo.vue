@@ -25,6 +25,7 @@ defineProps<{
       <ESelectFamilies
         name="family"
         :disabled="disabled"
+        familyType="linked"
         return-object
       />
 

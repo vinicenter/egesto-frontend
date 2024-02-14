@@ -123,6 +123,7 @@ const tab = ref('taxes');
                 :name="`shipments.families.${index}.family`"
                 :disabled="disabled"
                 return-object
+                familyType="linked"
                 :rules="[required]"
               />
 
