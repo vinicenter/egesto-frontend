@@ -1,17 +1,21 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { createFamily, deleteFamily, getFamily, updateFamily } from '../../datasource/families'
 import { IFamily } from '../../types/family'
 import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter();
+const route = useRoute();
 
 const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
 
 const initialValues = {
   name: '',
   costs: [],
-  linkedFamily: undefined
+  linkedFamily: route.query.mainFamilyId && route.query.mainFamilyName && {
+    _id: route.query.mainFamilyId,
+    name: route.query.mainFamilyName,
+  },
 }
 
 const formatSubmit = async (data: IFamily) => {
@@ -35,9 +39,24 @@ const formatSubmit = async (data: IFamily) => {
 
 const queryClient = useQueryClient()
 
-const finish = () => {
+const finish = (values: any) => {
   queryClient.invalidateQueries(['families'])
-  router.push({ name: 'list-families' })
+
+  goToListing(!!values.linkedFamily, {
+    id: values.linkedFamily?._id,
+    name: values.linkedFamily?.name
+  })
+}
+
+const goToListing = (isSubFamily: boolean, mainFamily?: { id: number, name: string }) => {
+  router.push({
+    name: 'list-families',
+    query: (isSubFamily && mainFamily) ? {
+      subFamilyModal: 'true',
+      mainFamilyId: mainFamily.id,
+      mainFamilyName: mainFamily.name
+    } : {}
+  })
 }
 </script>
 
@@ -59,6 +78,7 @@ const finish = () => {
         :button-label="buttonLabel"
         :loading="loadingSubmit"
         :disabled="type === 'deletar'"
+        :id="id"
         @submit="submit"
       />
     </template>

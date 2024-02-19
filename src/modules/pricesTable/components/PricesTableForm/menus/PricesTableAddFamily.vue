@@ -56,8 +56,6 @@ const submit = handleSubmit(async (values) => {
 
     addPricesToForm(newPrices)
   } catch (e) {
-    console.log(e)
-
     displayMessage({
       message: 'Erro ao adicionar produtos da família!',
       type: 'error',

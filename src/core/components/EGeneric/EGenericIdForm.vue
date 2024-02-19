@@ -18,7 +18,7 @@ const errorGet = ref(false);
 const data = ref<unknown>(props.initialValuesCreate);
 
 const emit = defineEmits<{
-  (e: 'finish'): void
+  (e: 'finish', values: unknown): void
 }>()
 
 const fetchModel = async () => {
@@ -56,13 +56,13 @@ const submit = async (values: unknown) => {
     criar: () => saveModel('create', values),
     editar: () => saveModel('edit', values), 
     clonar: () => saveModel('create', values),
-    deletar: () => saveModel('delete'),
+    deletar: () => saveModel('delete', values),
   }
 
   options[props.type]()
 }
 
-const saveModel = async (mode: 'edit' | 'create' | 'delete', values?: unknown) => {
+const saveModel = async (mode: 'edit' | 'create' | 'delete', values: unknown) => {
   const modes: Record<string, Function> = {
     edit: async () => {
       const data = await props.formatSubmitFn(values)
@@ -81,7 +81,7 @@ const saveModel = async (mode: 'edit' | 'create' | 'delete', values?: unknown) =
     loadingSubmit.value = true
     await modes[mode]()
 
-    emit('finish')
+    emit('finish', values)
 
     displayMessage({
       message: 'Salvo com sucesso',

@@ -1,9 +1,11 @@
 <script lang="ts" setup>
-import { useRouter } from 'vue-router'
-import { getFamilies, getFamiliesDefaultCost } from '../../datasource/families';
-import { useQuery } from '@tanstack/vue-query';
+import { useRoute, useRouter } from 'vue-router'
+import { getFamilies } from '../../datasource/families';
+import { IFamily } from '../../types/family';
+import { computed } from 'vue';
 
 const router = useRouter();
+const route = useRoute();
 
 const columns = [
   {
@@ -13,24 +15,30 @@ const columns = [
     defaultOrderByValue: true
   },
   {
-    label: 'Família vinculada',
+    label: '',
     style: 'width: 100px',
-  },
-  {
-    label: 'Custo total',
-    style: 'width: 100px',
-    tooltip: 'É a somatória de todos os custos da família mais os custos padrões',
   },
 ]
-
-const { data } = useQuery({
-  queryKey: [ 'families-default-costs' ],
-  queryFn: getFamiliesDefaultCost,
-})
 
 defineOptions({
   name: 'FamiliesList'
 })
+
+const subFamilyModal = computed(() => route.query.subFamilyModal === 'true')
+const mainFamilyId = computed(() => route.query.mainFamilyId)
+const mainFamilyName = computed(() => route.query.mainFamilyName)
+
+const openSubfamilyModal = (item: IFamily) => {
+  router.push({
+    query: {
+      subFamilyModal: 'true',
+      mainFamilyId: item._id,
+      mainFamilyName: item.name
+    }
+  })
+}
+
+const closeSubfamilyModal = () => router.push({})
 </script>
 
 <template>
@@ -38,17 +46,20 @@ defineOptions({
     :columns="columns"
     :list-data-source="getFamilies"
     query-key="families"
-    :query-variables="{ familyType: 'all' }"
-    @new="router.push({ name: 'family', params: { id: 'novo', type: 'criar' } })"
+    :query-variables="{ familyType: 'main' }"
+    @new="router.push({ name: 'family', params: { id: 'novo', type: 'criar' }, query: { type: 'main' }})"
   >
     <template #default="{ item }">
       <td>{{ item.name || '-' }}</td>
-      <td>{{ item.linkedFamily ? item.linkedFamily.name : 'Sem vinculo' }}</td>
-      <td>{{ `${Number(item.totalCosts) + Number(data?.totalCosts)}%` }}</td>
+      <td>
+        <VBtn @click="openSubfamilyModal(item)">
+          Subfamílias
+        </VBtn>
+      </td>
     </template>
 
     <template #menu>
-      <FamiliesDefaultCostsModel />
+      <FamiliesDefaultCostsModal />
     </template>
 
     <template #actions="{ item }">
@@ -61,6 +72,13 @@ defineOptions({
       />
     </template>
   </ETableGenericList>
+
+  <FamiliesSubfamiliesModal
+    :model-value="subFamilyModal"
+    :mainFamilyId="mainFamilyId"
+    :mainFamilyName="mainFamilyName"
+    @update:model-value="closeSubfamilyModal"
+  />
 </template>
 
 <route lang="yaml">

@@ -1,18 +1,20 @@
 <script lang="ts" setup>
 import type { IFamily } from '../types/family';
 import { computed } from 'vue';
-import { useRouter } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 import { required } from '@/src/core/utils/form-validator';
 import { useForm } from 'vee-validate';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
 
 const router = useRouter();
+const route = useRoute();
 
 const props = defineProps<{
   disabled: boolean,
   buttonLabel: string | undefined,
   loading: boolean;
   initialValues?: IFamily;
+  id: string;
 }>();
 
 const form = useForm<IFamily>({
@@ -28,6 +30,14 @@ const submit = form.handleSubmit(async (values) => {
 })
 
 const disabled = computed(() => props.loading || props.disabled);
+
+const isMainFamily = computed(() => {
+  if (props.id === 'novo') {
+    return route.query.type === 'main';
+  }
+
+  return !props.initialValues?.linkedFamily
+});
 </script>
 
 <template>
@@ -40,47 +50,51 @@ const disabled = computed(() => props.loading || props.disabled);
         :rules="[required]"
       />
 
-      <ESelectFamilies
-        name="linkedFamily"
-        :disabled="disabled"
-        label="Família vinculada"
-        return-object
-      />
+      <template v-if="!isMainFamily">
+        <ESelectFamilies
+          name="linkedFamily"
+          :disabled="disabled"
+          :rules="[required]"
+          label="Família vinculada"
+          familyType="main"
+          return-object
+        />
 
-      <VDivider class="m-y-sm" />
+        <VDivider class="m-y-sm" />
 
-      <div class="font-bold">Custos</div>
+        <div class="font-bold">Custos</div>
 
-      <EEditableListItem
-        name="costs"
-        class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
-        :disabled="disabled"
-      >
-        <template #default="{ index, removeItem }">
-          <EInputText
-            :name="`costs.${index}.name`"
-            :disabled="disabled"
-            label="Nome"
-            :rules="[required]"
-          />
-
-          <div class="flex gap-x-sm">
-            <EInputPct
-              :name="`costs.${index}.value`"
+        <EEditableListItem
+          name="costs"
+          class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
+          :disabled="disabled"
+        >
+          <template #default="{ index, removeItem }">
+            <EInputText
+              :name="`costs.${index}.name`"
+              :disabled="disabled"
+              label="Nome"
               :rules="[required]"
-              :disabled="disabled"
-              label="Custo (%)"
             />
 
-            <VBtn 
-              :disabled="disabled"
-              color="red"
-              @click="removeItem"
-              icon="mdi-trash-can"
-            />
-          </div>
-        </template>
-      </EEditableListItem>
+            <div class="flex gap-x-sm">
+              <EInputPct
+                :name="`costs.${index}.value`"
+                :rules="[required]"
+                :disabled="disabled"
+                label="Custo (%)"
+              />
+
+              <VBtn 
+                :disabled="disabled"
+                color="red"
+                @click="removeItem"
+                icon="mdi-trash-can"
+              />
+            </div>
+          </template>
+        </EEditableListItem>
+      </template>
     </div>
 
     <VDivider class="m-y-sm" />
@@ -97,7 +111,7 @@ const disabled = computed(() => props.loading || props.disabled);
       </VBtn>
 
       <VBtn
-        @click="router.push({ name: 'list-families' })"
+        @click="router.go(-1)"
         :disabled="loading"
         color="secondary"
         class="w-20"

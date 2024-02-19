@@ -8,6 +8,7 @@ const props = withDefaults(defineProps<{
   clone?: boolean,
   delete?: boolean,
   view?: boolean,
+  queryParams?: Record<string, any>,
 }>(), {
   edit: false,
   clone: false,
@@ -17,6 +18,7 @@ const props = withDefaults(defineProps<{
 
 const emit = defineEmits<{
   (e: 'view', id: string): void
+  (e: 'navigate'): void
 }>()
 
 const router = useRouter()
@@ -31,10 +33,12 @@ const items = [
 const itemsFiltered = items.filter(item => item.visible)
 
 const goTo = (type: string) => {
+  emit('navigate')
+
   const paths: Record<string, Function> = {
-    edit: () => router.push({ name: props.page, params: { id: props.id, type: 'editar' } }),
-    clone: () => router.push({ name: props.page, params: { id: props.id, type: 'clonar' } }),
-    delete: () => router.push({ name: props.page, params: { id: props.id, type: 'deletar' } }),
+    edit: () => router.push({ name: props.page, params: { id: props.id, type: 'editar' }, query: props.queryParams }),
+    clone: () => router.push({ name: props.page, params: { id: props.id, type: 'clonar' }, query: props.queryParams }),
+    delete: () => router.push({ name: props.page, params: { id: props.id, type: 'deletar' }, query: props.queryParams }),
     view: () => emit('view', props.id),
   }
 
