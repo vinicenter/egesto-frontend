@@ -32,7 +32,10 @@ const { data } = useQuery({
   queryFn: getFamiliesDefaultCost,
 })
 
-const title = computed(() => `Subfamílias de ${props.mainFamilyName}`)
+const title = computed(() => props.mainFamilyName
+  ? `Subfamílias de ${props.mainFamilyName}`
+  : 'Subfamilias'
+)
 
 const newFamily = () => {
   modelValue.value = false
