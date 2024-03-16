@@ -26,7 +26,7 @@ const costs = computed(() => {
   return costsList
 })
 
-const costsHeader: VDataTable['headers'] = [
+const costsHeader = [
   {
     title: 'Nome',
     value: 'name'
