@@ -1,6 +1,4 @@
 <script setup lang="ts">
-import { required } from '@/src/core/utils/form-validator';
-
 defineProps<{
   disabled: boolean;
 }>();
@@ -8,34 +6,7 @@ defineProps<{
 
 <template>
   <section>
-    <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
-      <EInputText
-        name="code"
-        :disabled="disabled"
-        label="Código"
-      />
-
-      <EInputText
-        name="name"
-        :disabled="disabled"
-        label="Nome"
-        :rules="[required]"
-      />
-
-      <ESelectFamilies
-        name="family"
-        :disabled="disabled"
-        familyType="linked"
-        return-object
-      />
-
-      <ESelectBrands
-        name="brand"
-        :disabled="disabled"
-        return-object
-      />
-    </div>
-
+    <div class="font-bold">Informações do produto</div>
 
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-x-sm">
       <EInputText
@@ -65,7 +36,9 @@ defineProps<{
         label="Unidade de medida"
       />
     </div>
-    
+
+    <div class="font-bold">Informações de identificação</div>
+
     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
       <EInputText
         name="unit.barcodeEan13"

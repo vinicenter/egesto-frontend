@@ -1,5 +1,6 @@
 <script lang="ts" setup>
 import type { IProduct } from '../../types/product';
+import { required } from '@/src/core/utils/form-validator';
 import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
 import { useForm } from 'vee-validate';
@@ -42,31 +43,68 @@ const tab = ref('informations')
 
 <template>
   <form @submit.prevent="submit">
-    <VTabs grow class="m-y-4" v-model="tab">
-      <VTab value="informations">
-        Informações básicas
-      </VTab>
-      <VTab value="formulation">
-        Formulação
-      </VTab>
-      <VTab value="marketing">
-        Marketing
-      </VTab>
-    </VTabs>
+    <section>
+      <div class="font-bold">Identificação</div>
 
-    <VWindow v-model="tab">
-      <VWindowItem value="informations" eager>
-        <ProductFormInfo :disabled="disabled" />
-      </VWindowItem>
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
+        <EInputText
+          name="code"
+          :disabled="disabled"
+          label="Código"
+        />
 
-      <VWindowItem value="formulation" eager>
-        <ProductFormFormulation :disabled="disabled" />
-      </VWindowItem>
+        <EInputText
+          name="name"
+          :disabled="disabled"
+          label="Nome"
+          :rules="[required]"
+        />
 
-      <VWindowItem value="marketing" eager>
-        <ProductFormMarketing :disabled="disabled" />
-      </VWindowItem>
-    </VWindow>
+        <ESelectFamilies
+          name="family"
+          :disabled="disabled"
+          familyType="linked"
+          return-object
+        />
+
+        <ESelectBrands
+          name="brand"
+          :disabled="disabled"
+          return-object
+        />
+      </div>
+    </section>
+
+    <VDivider />
+
+    <section>
+      <VTabs grow class="m-y-4" v-model="tab">
+        <VTab value="informations">
+          Informações básicas
+        </VTab>
+        <VTab value="formulation">
+          Formulação
+        </VTab>
+        <VTab value="marketing">
+          Marketing
+        </VTab>
+      </VTabs>
+  
+      <VWindow v-model="tab">
+        <VWindowItem value="informations" eager>
+          <ProductFormInfo :disabled="disabled" />
+        </VWindowItem>
+  
+        <VWindowItem value="formulation" eager>
+          <ProductFormFormulation :disabled="disabled" />
+        </VWindowItem>
+  
+        <VWindowItem value="marketing" eager>
+          <ProductFormMarketing :disabled="disabled" />
+        </VWindowItem>
+      </VWindow>
+    </section>
+    
 
     <VDivider class="m-y-sm" />
 
