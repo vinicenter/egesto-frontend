@@ -4,6 +4,7 @@ import dayjs from '~utils/dayjs'
 
 interface Column {
   label: string;
+  orderLabel?: string;
   orderByValue?: string;
   defaultOrderByValue?: boolean;
   style?: string;
@@ -26,6 +27,7 @@ const props = withDefaults(
 import { useInfiniteQuery } from '@tanstack/vue-query';
 import { ref } from 'vue';
 import ETable from './ETable.vue';
+import { computed } from 'vue';
 
 const emit = defineEmits([ 'new' ])
 
@@ -53,6 +55,8 @@ const order = ref<'DESC' | 'ASC' | undefined>(props.defaultOrder)
 const orderBy = ref<string | undefined>(defaultOrderBy)
 const search = ref<string | undefined>(undefined)
 
+const queryKey = computed(() => [ props.queryKey, search, orderBy, order, props.queryVariables ])
+
 const {
   data,
   fetchNextPage,
@@ -61,7 +65,7 @@ const {
   isFetchingNextPage,
   isFetching,
 } = useInfiniteQuery({
-  queryKey: [ props.queryKey, search, orderBy, order, props.queryVariables ],
+  queryKey,
   queryFn: ({ pageParam }) => {
     return props.listDataSource({
       page: pageParam,
@@ -94,7 +98,12 @@ const humanizeDate = (date: string) => {
     : '-'
 }
 
-const columnsToOrder = columns.filter(column => column.orderByValue)
+const columnsToOrder = columns.filter(column => column.orderByValue).map(column => {
+  return {
+    label: column.orderLabel || column.label,
+    orderByValue: column.orderByValue
+  }
+})
 </script>
 
 <template>
@@ -108,7 +117,7 @@ const columnsToOrder = columns.filter(column => column.orderByValue)
         @keyup.enter="search = $event.target.value"
       />
 
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-sm">
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-sm justify-center">
         <VBtn
           @click="emit('new')"
           class="p-sm"

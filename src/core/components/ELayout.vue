@@ -66,6 +66,11 @@ const items: Item[][] = [
       onClick: () => router.push({ name: 'list-prices-table' }),
       icon: 'mdi-cash-lock',
     },
+    {
+      title: 'Contas',
+      onClick: () => router.push({ name: 'list-bills' }),
+      icon: 'mdi-currency-usd',
+    },
   ],
   [
     {

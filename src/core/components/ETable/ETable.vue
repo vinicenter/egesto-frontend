@@ -34,7 +34,7 @@ withDefaults(defineProps<{
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="tbody">
         <template v-for="(item) in data" :key="item">
           <tr>
             <slot :item="item" />
@@ -65,3 +65,14 @@ withDefaults(defineProps<{
     </div>
   </div>
 </template>
+
+<style lang="scss">
+.tbody {
+  tr {
+    td {
+      padding-top: 8px !important;
+      padding-bottom: 8px !important;
+    }
+  }
+}
+</style>

@@ -87,6 +87,14 @@ useQuery({
           subtitle="Gerencie as tabelas de preços"
           @click="router.push({ name: 'list-prices-table' })"
         />
+
+        <VCard
+          link
+          prepend-icon="mdi-currency-usd" 
+          title="Contas"
+          subtitle="Gerencie as contas da sua empresa"
+          @click="router.push({ name: 'list-bills' })"
+        />
       </div>
     </VContainer>
 

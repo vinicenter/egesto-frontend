@@ -4,14 +4,22 @@ import type { App } from 'vue'
 import 'vuetify/styles'
 import { createVuetify } from 'vuetify'
 import { aliases, mdi } from 'vuetify/iconsets/mdi'
+import DayJsAdapter from '@date-io/dayjs'
 
 const theme = localStorage.getItem('theme') || 'light'
 
 export const install = (app: App) => {
   app.use(createVuetify({
+    locale: {
+      locale: 'pt-br',
+      fallback: 'en',
+    },
     theme: {
       defaultTheme: theme
     },
+    date: {
+      adapter: DayJsAdapter,
+    },  
     icons: {
       defaultSet: 'mdi',
       aliases,

@@ -9,11 +9,16 @@ export {}
 
 declare module '@vue/runtime-core' {
   export interface GlobalComponents {
+    BillFilter: typeof import('./src/modules/bills/components/BillFilter.vue')['default']
+    BillForm: typeof import('./src/modules/bills/components/BillForm.vue')['default']
+    BillPayOrRevertPaid: typeof import('./src/modules/bills/components/BillPayOrRevertPaid.vue')['default']
+    BillPayOrRevertPaidPopup: typeof import('./src/modules/bills/components/BillPayOrRevertPaidPopup.vue')['default']
     BrandForm: typeof import('./src/modules/brands/components/BrandForm.vue')['default']
     CostsTableForm: typeof import('./src/modules/costsTable/components/CostsTableForm.vue')['default']
     CostTableDetailsModel: typeof import('./src/modules/costsTable/components/CostTableDetailsModel/CostTableDetailsModel.vue')['default']
     CostTableDetailsSkeleton: typeof import('./src/modules/costsTable/components/CostTableDetailsModel/CostTableDetailsSkeleton.vue')['default']
     EColorPicker: typeof import('./src/core/components/EInput/EColorPicker.vue')['default']
+    EDatePicker: typeof import('./src/core/components/EInput/EDatePicker.vue')['default']
     EDialog: typeof import('./src/core/components/EDialog.vue')['default']
     EEditableListItem: typeof import('./src/core/components/EInput/EEditableListItem.vue')['default']
     EError: typeof import('./src/core/components/EError.vue')['default']
@@ -24,6 +29,8 @@ declare module '@vue/runtime-core' {
     EInputText: typeof import('./src/core/components/EInput/EInputText.vue')['default']
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']
     ELoginModel: typeof import('./src/modules/users/components/ELoginModel.vue')['default']
+    EMonthPicker: typeof import('./src/core/components/EInput/EMonthPicker.vue')['default']
+    EMultpleDatePicker: typeof import('./src/core/components/EInput/EMultpleDatePicker.vue')['default']
     EOrderBy: typeof import('./src/core/components/EOrderBy.vue')['default']
     ESelect: typeof import('./src/core/components/ESelect/ESelect.vue')['default']
     ESelectBrands: typeof import('./src/core/components/ESelect/ESelectBrands.vue')['default']

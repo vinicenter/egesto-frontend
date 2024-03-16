@@ -49,10 +49,11 @@ export const numberFormat = (
   }
 }
 
-export const priceFormat = () => {
+export const priceFormat = (options?: Intl.NumberFormatOptions) => {
   const { format, formatToParts } = numberFormat('pt-BR', {
     style: 'currency',
     currency: 'BRL',
+    ...options,
   })
 
   return {
