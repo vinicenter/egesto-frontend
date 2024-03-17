@@ -28,7 +28,7 @@ export interface IBillFilters {
   endDueDate?: string,
   type?: 'BOLETO' | 'CHEQUE' | 'PIX' | 'TRANSFERENCIA_BANCARIA' | 'DINHEIRO',
   recipient?: string,
-  isPaid?: boolean
+  isPaid?: boolean | string
 }
 
 export interface IBillsSummary {

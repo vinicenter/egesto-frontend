@@ -44,7 +44,8 @@ defineOptions({
 })
 
 const queryVariables = ref<Partial<IBillFilters>>({
-  isPaid: false,
+  isPaid: 'undefined',
+  startDueDate: dayjs().toISOString(),
 })
 
 const formatStatus = (dueDate: string, isPaid: boolean) => {

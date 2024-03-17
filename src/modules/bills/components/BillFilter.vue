@@ -29,7 +29,7 @@ interface BillFiltersInternal {
 
 const buildInitialValues = (initialValues: Partial<IBillFilters>): BillFiltersInternal => {
   return {
-    dateFilterType: 'day',
+    dateFilterType: 'period',
     dueYear: dayjs().year(),
     dueMonth: dayjs().month(),
     ...initialValues
