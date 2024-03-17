@@ -11,6 +11,7 @@ const props = defineProps<{
   disabled?: boolean,
   label: string,
   hideDetails?: boolean
+  clearable?: boolean
 }>()
 
 const { value, handleBlur, errorMessage } = useField<number | undefined>(toRef(props, "name"), props.rules)
@@ -34,7 +35,7 @@ const valueFormatted = computed(() => {
         v-model="valueFormatted"
         :label="label"
         readonly
-        clearable
+        :clearable="clearable"
         :hide-details="hideDetails"
         append-inner-icon="mdi-calendar"
         :error-messages="errorMessage"

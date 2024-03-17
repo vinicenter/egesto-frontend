@@ -4,6 +4,8 @@ import { IBillFilters } from '../types/bill';
 import { useField, useForm } from 'vee-validate';
 import dayjs from 'dayjs';
 import { BILL_TYPES } from '@/src/modules/bills/constants/bills';
+import EInputText from '@/src/core/components/EInput/EInputText.vue';
+import { required } from '@/src/core/utils/form-validator';
 
 const props = defineProps<{
   initialValues: Partial<IBillFilters>
@@ -19,6 +21,7 @@ interface BillFiltersInternal {
   startDueDate?: string,
   dueDate?: string,
   dueMonth?: number,
+  dueYear?: number,
   recipient?: string,
   isPaid: boolean | undefined
   type?: "BOLETO" | "CHEQUE" | "PIX" | "TRANSFERENCIA_BANCARIA" | "DINHEIRO" | undefined
@@ -27,6 +30,8 @@ interface BillFiltersInternal {
 const buildInitialValues = (initialValues: Partial<IBillFilters>): BillFiltersInternal => {
   return {
     dateFilterType: 'day',
+    dueYear: dayjs().year(),
+    dueMonth: dayjs().month(),
     ...initialValues
   } as BillFiltersInternal
 }
@@ -38,8 +43,8 @@ const { handleSubmit, values } = useForm<BillFiltersInternal>({
 
 const submit = handleSubmit((values) => {
   const getEndDueDate = () => {
-    if(values.dateFilterType === 'month' && values.dueMonth !== undefined) {
-      return dayjs().set('month', values.dueMonth).endOf('month').toString()
+    if(values.dateFilterType === 'month' && values.dueMonth !== undefined && values.dueYear !== undefined) {
+      return dayjs().set('month', values.dueMonth).set('year', values.dueYear).endOf('month').toString()
     }
 
     return values.dateFilterType === 'day'
@@ -48,8 +53,8 @@ const submit = handleSubmit((values) => {
   }
 
   const getStartDueDate = () => {
-    if(values.dateFilterType === 'month' && values.dueMonth !== undefined) {
-      return dayjs().set('month', values.dueMonth).startOf('month').toString()
+    if(values.dateFilterType === 'month' && values.dueMonth !== undefined && values.dueYear !== undefined) {
+      return dayjs().set('month', values.dueMonth).set('year', values.dueYear).startOf('month').toString()
     }
 
     return values.dateFilterType === 'day'
@@ -80,7 +85,7 @@ const { value: dateFilterType } = useField('dateFilterType')
     <VCard title="Filtros" min-width="400" max-width="400">
       <VCardText>
         <form @submit.prevent="submit" class="space-y-sm">
-          <div class="b-1px b-black b-solid p-sm space-y-sm">
+          <div class="b-1px b-black b-solid p-sm p-b-xs space-y-sm">
             <div class="text-lg">
               Vencimento
             </div>
@@ -109,6 +114,14 @@ const { value: dateFilterType } = useField('dateFilterType')
                 label="Mês de vencimento"
                 name="dueMonth"
                 hide-details
+                :rules="required"
+              />
+
+              <EInputText
+                type="number"
+                label="Ano"
+                name="dueYear"
+                :rules="required"
               />
             </template>
 
@@ -116,7 +129,6 @@ const { value: dateFilterType } = useField('dateFilterType')
               <EDatePicker
                 label="Data de vencimento"
                 name="dueDate"
-                hide-details
               />
             </template>
 
@@ -131,7 +143,6 @@ const { value: dateFilterType } = useField('dateFilterType')
               <EDatePicker
                 label="Data de vencimento final"
                 name="endDueDate"
-                hide-details
                 :min-date="values.startDueDate"
               />
             </template>
