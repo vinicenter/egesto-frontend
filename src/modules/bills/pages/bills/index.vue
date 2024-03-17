@@ -89,49 +89,53 @@ const formatType = (type: IBill['type']) => {
 </script>
 
 <template>
-  <ETableGenericList
-    :columns="columns"
-    :list-data-source="getbills"
-    query-key="bills"
-    :queryVariables="queryVariables"
-    @new="router.push({ name: 'bill', params: { id: 'novo', type: 'criar' } })"
-  >
-    <template #default="{ item }">
-      <td>
-        <div>Vencimento: {{ dayjs(item.dueDate).format('DD/MM/YYYY') }}</div>
-        <div>{{ formatPrice(item.amount) }}</div>
-        <div>{{ formatType(item.type) }}</div>
-        <div>
-          <VIcon icon="mdi-square-rounded" :class="formatStatusColor(item.dueDate, item.isPaid)" />
-          {{ formatStatus(item.dueDate, item.isPaid) }}
-        </div>
-      </td>
-      <td>{{ item.recipient ? item.recipient.corporateName : '-' }}</td>
-      <td>{{ item.reference || '-' }}</td>
-      <td>{{ item.observations || '-' }}</td>
-    </template>
+  <div class="space-y-sm">
+    <BillsSummary :query-variables="queryVariables" />
 
-    <template #menu>
-      <BillFilter
-        :initial-values="queryVariables"
-        @update="queryVariables = $event"
-      />
-    </template>
-
-    <template #actions="{ item }">
-      <div class="flex gap-x-sm justify-center items-center">
-        <BillPayOrRevertPaid :item="item" />
-
-        <ETableActionButtons
-          :id="item._id"
-          delete
-          edit
-          :clone="false"
-          page="bill"
+    <ETableGenericList
+      :columns="columns"
+      :list-data-source="getbills"
+      query-key="bills"
+      :queryVariables="queryVariables"
+      @new="router.push({ name: 'bill', params: { id: 'novo', type: 'criar' } })"
+    >
+      <template #default="{ item }">
+        <td>
+          <div>Vencimento: {{ dayjs(item.dueDate).format('DD/MM/YYYY') }}</div>
+          <div>{{ formatPrice(item.amount) }}</div>
+          <div>{{ formatType(item.type) }}</div>
+          <div>
+            <VIcon icon="mdi-square-rounded" :class="formatStatusColor(item.dueDate, item.isPaid)" />
+            {{ formatStatus(item.dueDate, item.isPaid) }}
+          </div>
+        </td>
+        <td>{{ item.recipient ? item.recipient.corporateName : '-' }}</td>
+        <td>{{ item.reference || '-' }}</td>
+        <td>{{ item.observations || '-' }}</td>
+      </template>
+  
+      <template #menu>
+        <BillFilter
+          :initial-values="queryVariables"
+          @update="queryVariables = $event"
         />
-      </div>
-    </template>
-  </ETableGenericList>
+      </template>
+  
+      <template #actions="{ item }">
+        <div class="flex gap-x-sm justify-center items-center">
+          <BillPayOrRevertPaid :item="item" />
+  
+          <ETableActionButtons
+            :id="item._id"
+            delete
+            edit
+            :clone="false"
+            page="bill"
+          />
+        </div>
+      </template>
+    </ETableGenericList>
+  </div>
 </template>
 
 <route lang="yaml">

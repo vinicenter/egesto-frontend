@@ -30,3 +30,10 @@ export interface IBillFilters {
   recipient?: string,
   isPaid?: boolean
 }
+
+export interface IBillsSummary {
+  billsCount: number,
+  billsPaidAmount: number,
+  billsUnpaidAmount: number,
+  billsAmount: number,
+}
