@@ -110,7 +110,7 @@ const { formatPrice } = priceFormat({
       <VToolbar
         dark
         color="primary"
-        title="Relatório acumulativo de contas"
+        title="Relatório cumulativo de contas"
       >
         <VBtn
           icon
