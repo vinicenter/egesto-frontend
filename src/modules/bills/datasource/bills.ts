@@ -38,3 +38,9 @@ export const getSummaryBills = async (params: IBillFilters): Promise<IBillsSumma
 
   return data
 }
+
+export const exportBills = async () => {
+  const { data } = await axios.get<Blob>('/bills/export', { responseType: 'blob' })
+
+  return data
+}

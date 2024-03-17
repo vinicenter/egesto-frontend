@@ -3,13 +3,15 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-import { getbills } from '../../datasource/bills';
+import { getbills, exportBills } from '../../datasource/bills';
 import { priceFormat } from '@/src/core/utils/format';
 import dayjs from '~utils/dayjs'
 import BillFilter from '../../components/BillFilter.vue';
 import { ref } from 'vue';
 import { IBill, IBillFilters } from '../../types/bill';
 import BillPayOrRevertPaid from '../../components/BillPayOrRevertPaid.vue';
+import { downloadBlob } from '@/src/core/utils/utils';
+import useNotify from '@/src/core/composables/useNotify';
 
 const { formatPrice } = priceFormat({
   minimumFractionDigits: 2,
@@ -86,6 +88,26 @@ const formatType = (type: IBill['type']) => {
 
   return options[type]
 }
+
+const notify = useNotify();
+
+const exportLoading = ref(false);
+const generateExport = async () => {
+  try {
+    exportLoading.value = true;
+
+    const csvBlob = await exportBills()
+
+    downloadBlob(csvBlob, `Relatório Contas`, 'csv');
+  } catch (e) {
+    notify.displayMessage({
+      type: 'error',
+      message: 'Erro ao gerar relatório',
+    });
+  } finally {
+    exportLoading.value = false;
+  }
+}
 </script>
 
 <template>
@@ -115,6 +137,30 @@ const formatType = (type: IBill['type']) => {
       </template>
   
       <template #menu>
+
+        <VMenu>
+          <template v-slot:activator="{ props }">
+            <VBtn
+              v-bind="props"
+              color="purple"
+              :loading="exportLoading"
+            >
+              Relatórios
+            </VBtn>
+          </template>
+
+          <VList>
+            <VListItem>
+              <VListItemTitle>Relatório mensal</VListItemTitle>
+            </VListItem>
+
+            <VListItem @click="generateExport">
+              <VListItemTitle>Exportar CSV</VListItemTitle>
+            </VListItem>
+          </VList>
+        </VMenu>
+
+
         <BillFilter
           :initial-values="queryVariables"
           @update="queryVariables = $event"
