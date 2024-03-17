@@ -38,6 +38,7 @@ const valueFormatted = computed(() => {
         :label="label"
         readonly
         clearable
+        :disabled="disabled"
         :hide-details="hideDetails"
         append-inner-icon="mdi-calendar"
         :error-messages="errorMessage"

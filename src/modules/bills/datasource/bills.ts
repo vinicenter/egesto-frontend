@@ -1,5 +1,5 @@
 import { tableParams } from '@/src/core/types/pagination-types'
-import type { IBill, IBillFilters, IBillRoot, IBillsSummary } from '../types/bill'
+import type { IBill, IBillFilters, IBillRoot, IBillsCumulative, IBillsCumulativeParams, IBillsSummary } from '../types/bill'
 import type { paginationRoot } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
 
@@ -41,6 +41,12 @@ export const getSummaryBills = async (params: IBillFilters): Promise<IBillsSumma
 
 export const exportBills = async () => {
   const { data } = await axios.get<Blob>('/bills/export', { responseType: 'blob' })
+
+  return data
+}
+
+export const getCumulativeBills = async (params: IBillsCumulativeParams) => {
+  const { data } = await axios.get<IBillsCumulative>('/bills/cumulative', { params })
 
   return data
 }

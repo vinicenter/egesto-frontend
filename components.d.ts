@@ -13,6 +13,7 @@ declare module '@vue/runtime-core' {
     BillForm: typeof import('./src/modules/bills/components/BillForm.vue')['default']
     BillPayOrRevertPaid: typeof import('./src/modules/bills/components/BillPayOrRevertPaid.vue')['default']
     BillPayOrRevertPaidPopup: typeof import('./src/modules/bills/components/BillPayOrRevertPaidPopup.vue')['default']
+    BillsAccumulativeModal: typeof import('./src/modules/bills/components/BillsAccumulativeModal.vue')['default']
     BillsSummary: typeof import('./src/modules/bills/components/BillsSummary.vue')['default']
     BrandForm: typeof import('./src/modules/brands/components/BrandForm.vue')['default']
     CostsTableForm: typeof import('./src/modules/costsTable/components/CostsTableForm.vue')['default']

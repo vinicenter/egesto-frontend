@@ -37,3 +37,18 @@ export interface IBillsSummary {
   billsUnpaidAmount: number,
   billsAmount: number,
 }
+
+export interface IBillsCumulativeParams {
+  startDate: string
+  endDate: string
+}
+
+export interface IBillsCumulative {
+  [date: string]: {
+    totalBills: number;
+    paid: number;
+    unpaid: number;
+    accumulativePaid: number;
+    accumulativeUnpaid: number;
+  };
+}
