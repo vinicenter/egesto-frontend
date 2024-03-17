@@ -17,6 +17,7 @@ const queryClient = useQueryClient()
 
 const finish = () => {
   queryClient.invalidateQueries(['bills'])
+  queryClient.invalidateQueries(['bills-summary'])
   router.push({ name: 'list-bills' })
 }
 
