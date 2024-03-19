@@ -7,6 +7,7 @@ import { reactive } from 'vue';
 import { computed } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
 import { priceFormat } from '@/src/core/utils/format';
+import { useBillsFilterStore } from '../stores/use-bills-filter-store';
 
 const modelValue = defineModel<boolean>()
 
@@ -32,6 +33,23 @@ const queryVariables = reactive<
   endDate: '',
   isPaid: 'undefined',
 })
+
+const billsFilterStore = useBillsFilterStore()
+
+const setDayToFilter = (date: string) => {
+  const dueDate = dayjs(date).toISOString()
+
+  billsFilterStore.form?.setValues({
+    dateFilterType: 'day',
+    dueDate,
+  })
+
+  const submit = billsFilterStore.submit()
+
+  submit && submit()
+
+  modelValue.value = false
+}
 
 const isQueryEnabled = computed(() => !!queryVariables.startDate && !!queryVariables.endDate)
 
@@ -188,7 +206,14 @@ const { formatPrice } = priceFormat({
         >
           <template v-slot:item="{ item }">
             <tr>
-              <td>{{ dayjs(item.date).format('DD/MM/YYYY') }}</td>
+              <td>
+                <div
+                  class="cursor-pointer underline text-blue-800"
+                  @click="setDayToFilter(item.date)"
+                >
+                  {{ dayjs(item.date).format('DD/MM/YYYY') }}
+                </div>
+              </td>
               <td>{{ item.totalBills }}</td>
               <td v-if="isPaidEnabled">{{ formatPrice(item.paid) }}</td>
               <td v-if="isUnpaidEnabled">{{ formatPrice(item.unpaid) }}</td>

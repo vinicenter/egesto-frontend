@@ -18,6 +18,7 @@
     "cpf-cnpj-validator": "^1.0.3",
     "dayjs": "^1.11.10",
     "maska": "^2.1.10",
+    "pinia": "^2.1.7",
     "v-mask": "^2.3.0",
     "vee-validate": "^4.12.4",
     "vite-plugin-vuetify": "^1.0.2",

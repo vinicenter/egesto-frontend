@@ -8,10 +8,11 @@ import { priceFormat } from '@/src/core/utils/format';
 import dayjs from '~utils/dayjs'
 import BillFilter from '../../components/BillFilter.vue';
 import { ref } from 'vue';
-import { IBill, IBillFilters } from '../../types/bill';
+import { IBill } from '../../types/bill';
 import BillPayOrRevertPaid from '../../components/BillPayOrRevertPaid.vue';
 import { downloadBlob } from '@/src/core/utils/utils';
 import useNotify from '@/src/core/composables/useNotify';
+import { useBillsFilterStore } from '../../stores/use-bills-filter-store';
 
 const { formatPrice } = priceFormat({
   minimumFractionDigits: 2,
@@ -43,10 +44,7 @@ defineOptions({
   name: 'BillsList'
 })
 
-const queryVariables = ref<Partial<IBillFilters>>({
-  isPaid: 'undefined',
-  startDueDate: dayjs().toISOString(),
-})
+const billsFilterStore = useBillsFilterStore()
 
 const formatStatus = (dueDate: string, isPaid: boolean) => {
   if(isPaid) return 'Pago'
@@ -115,13 +113,13 @@ const openAccumulativeModal = ref(false);
 
 <template>
   <div class="space-y-sm">
-    <BillsSummary :query-variables="queryVariables" />
+    <BillsSummary />
 
     <ETableGenericList
       :columns="columns"
       :list-data-source="getbills"
       query-key="bills"
-      :queryVariables="queryVariables"
+      :queryVariables="billsFilterStore.queryVariables"
       @new="router.push({ name: 'bill', params: { id: 'novo', type: 'criar' } })"
     >
       <template #default="{ item }">
@@ -164,10 +162,7 @@ const openAccumulativeModal = ref(false);
         </VMenu>
 
 
-        <BillFilter
-          :initial-values="queryVariables"
-          @update="queryVariables = $event"
-        />
+        <BillFilter />
       </template>
   
       <template #actions="{ item }">

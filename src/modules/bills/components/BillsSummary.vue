@@ -1,13 +1,9 @@
 <script setup lang="ts">
 import { priceFormat, numberFormat } from '@/src/core/utils/format';
 import { computed } from 'vue';
-import { IBillFilters } from '../types/bill';
 import { useQuery } from '@tanstack/vue-query';
 import { getSummaryBills } from '@/src/modules/bills/datasource/bills'
-
-const props = defineProps<{
-  queryVariables: IBillFilters;
-}>()
+import { useBillsFilterStore } from '../stores/use-bills-filter-store';
 
 const { formatPrice } = priceFormat({
   minimumFractionDigits: 2,
@@ -17,14 +13,15 @@ const { format } = numberFormat(undefined, {
   minimumFractionDigits: 0,
 });
 
-const queryKey = computed(() => ['bills-summary', props.queryVariables])
+const billsFilterStore = useBillsFilterStore()
+const queryKey = computed(() => ['bills-summary', billsFilterStore.queryVariables])
 
 const {
   data,
   isLoading,
 } = useQuery({
   queryKey,
-  queryFn: () => getSummaryBills(props.queryVariables)
+  queryFn: () => getSummaryBills(billsFilterStore.queryVariables)
 })
 
 const summaries = computed(() => [
