@@ -13,13 +13,24 @@ const modelValue = defineModel<boolean>()
 const form = useForm<{
   startDate: Dayjs
   endDate: Dayjs
+  isPaid: boolean | string
 }>({
   keepValuesOnUnmount: true,
+  initialValues: {
+    isPaid: 'undefined',
+  }
 })
 
-const queryVariables = reactive({
+const queryVariables = reactive<
+  {
+    startDate: string
+    endDate: string
+    isPaid: boolean | string
+  }
+>({
   startDate: '',
   endDate: '',
+  isPaid: 'undefined',
 })
 
 const isQueryEnabled = computed(() => !!queryVariables.startDate && !!queryVariables.endDate)
@@ -36,9 +47,13 @@ const {
 const submit = form.handleSubmit(async (values) => {
   queryVariables.endDate = values.endDate.toISOString()
   queryVariables.startDate = values.startDate.toISOString()
+  queryVariables.isPaid = values.isPaid
 })
 
-const tableHeaders = [
+const isPaidEnabled = computed(() => queryVariables.isPaid === 'undefined' || queryVariables.isPaid === true)
+const isUnpaidEnabled = computed(() => queryVariables.isPaid === 'undefined' || queryVariables.isPaid === false)
+
+const tableHeaders = computed(() => [
   {
     title: 'Vencimento',
     value: 'date'
@@ -47,23 +62,23 @@ const tableHeaders = [
     title: 'Qtd de Contas',
     value: 'totalBills'
   },
-  {
+  isPaidEnabled.value ? {
     title: 'Pago',
     value: 'paid'
-  },
-  {
+  } : undefined,
+  isUnpaidEnabled.value ? {
     title: 'Não pago',
     value: 'unpaid'
-  },
-  {
+  } : undefined,
+  isPaidEnabled.value ? {
     title: 'Acumulado pago',
     value: 'accumulativePaid'
-  },
-  {
+  } : undefined,
+  isUnpaidEnabled.value ? {
     title: 'Acumulado não pago',
     value: 'accumulativeUnpaid'
-  },
-]
+  } : undefined,
+].filter((value) => !!value) as { title: string, value: string }[])
 
 const rows = computed(() => {
   if(!data.value) {
@@ -122,27 +137,38 @@ const { formatPrice } = priceFormat({
       </VToolbar>
 
       <div class="p-sm space-y-sm">
-        <form @submit.prevent="submit" class="space-y-4px">
+        <form @submit.prevent="submit" class="space-y-sm">
           <div>Selecione o período</div>
 
-          <div class="flex flex-col gap-sm sm:flex-row">
-            <div class="w-400px">
-              <EDatePicker
-                name="startDate"
-                label="Data inicial"
-                :rules="required"
-                :max-date="form.values.endDate"
-              />
-            </div>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-x-sm">
+            <EDatePicker
+              name="startDate"
+              label="Data inicial"
+              :rules="required"
+              :max-date="form.values.endDate"
+            />
 
-            <div class="w-400px">
-              <EDatePicker
-                name="endDate"
-                label="Data final"
-                :rules="required"
-                :min-date="form.values.startDate"
-              />
-            </div>
+            <EDatePicker
+              name="endDate"
+              label="Data final"
+              :rules="required"
+              :min-date="form.values.startDate"
+            />
+
+            <ESelect
+              label="Status"
+              item-title="label"
+              item-value="value"
+              name="isPaid"
+              :rules="required"
+              :clearable="false"
+              :items="[
+                { label: 'Pago', value: true },
+                { label: 'Não pago', value: false },
+                { label: 'Ambos', value: 'undefined' },
+              ]"
+              hide-details
+            />
           </div>
 
           <VBtn color="primary" type="submit">
@@ -164,10 +190,10 @@ const { formatPrice } = priceFormat({
             <tr>
               <td>{{ dayjs(item.date).format('DD/MM/YYYY') }}</td>
               <td>{{ item.totalBills }}</td>
-              <td>{{ formatPrice(item.paid) }}</td>
-              <td>{{ formatPrice(item.unpaid) }}</td>
-              <td>{{ formatPrice(item.accumulativePaid) }}</td>
-              <td>{{ formatPrice(item.accumulativeUnpaid) }}</td>
+              <td v-if="isPaidEnabled">{{ formatPrice(item.paid) }}</td>
+              <td v-if="isUnpaidEnabled">{{ formatPrice(item.unpaid) }}</td>
+              <td v-if="isPaidEnabled">{{ formatPrice(item.accumulativePaid) }}</td>
+              <td v-if="isUnpaidEnabled">{{ formatPrice(item.accumulativeUnpaid) }}</td>
             </tr>
           </template>
         </VDataTable>

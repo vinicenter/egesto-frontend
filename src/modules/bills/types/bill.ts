@@ -41,6 +41,7 @@ export interface IBillsSummary {
 export interface IBillsCumulativeParams {
   startDate: string
   endDate: string
+  isPaid?: boolean | string
 }
 
 export interface IBillsCumulative {
