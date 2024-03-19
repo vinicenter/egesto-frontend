@@ -42,6 +42,13 @@ const setDayToFilter = (date: string) => {
   billsFilterStore.form?.setValues({
     dateFilterType: 'day',
     dueDate,
+    dueMonth: undefined,
+    dueYear: undefined,
+    endDueDate: undefined,
+    isPaid: 'undefined',
+    recipient: undefined,
+    startDueDate: undefined,
+    type: undefined,
   })
 
   const submit = billsFilterStore.submit()
@@ -57,7 +64,7 @@ const {
   data,
   isLoading,
 } = useQuery({
-  queryKey: [ 'cumulative-bills', queryVariables ],
+  queryKey: [ 'bills-cumulative', queryVariables ],
   queryFn: () => getCumulativeBills(queryVariables),
   enabled: isQueryEnabled,
 })

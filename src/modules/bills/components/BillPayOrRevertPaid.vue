@@ -33,6 +33,7 @@ const execute = async () => {
 
     queryClient.invalidateQueries(['bills'])
     queryClient.invalidateQueries(['bills-summary'])
+    queryClient.invalidateQueries(['bills-cumulative'])
   } catch {
     displayMessage({
       message: 'Erro ao atualizar conta',

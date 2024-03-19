@@ -18,6 +18,7 @@ const queryClient = useQueryClient()
 const finish = () => {
   queryClient.invalidateQueries(['bills'])
   queryClient.invalidateQueries(['bills-summary'])
+  queryClient.invalidateQueries(['bills-cumulative'])
   router.push({ name: 'list-bills' })
 }
 

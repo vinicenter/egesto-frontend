@@ -27,4 +27,9 @@ export default defineConfig({
     Pages({ dirs: [ 'src/modules/**/pages' ] }),
     Components({ dts: true, dirs: ['src/core/components/**', 'src/modules/**/components/**'], }),
   ],
+  optimizeDeps: {
+    include: [
+      'pinia'
+    ]
+  }
 })

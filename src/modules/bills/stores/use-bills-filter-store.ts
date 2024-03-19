@@ -12,7 +12,7 @@ interface BillsFormFilter {
   dueMonth?: number,
   dueYear?: number,
   recipient?: string,
-  isPaid: boolean | undefined
+  isPaid: boolean | string
   type?: "BOLETO" | "CHEQUE" | "PIX" | "TRANSFERENCIA_BANCARIA" | "DINHEIRO" | undefined
 }
 
@@ -32,11 +32,16 @@ const buildInitialValues = (initialValues: Partial<IBillFilters>): BillsFormFilt
   } as BillsFormFilter
 }
 
+const makeInitialQueryVariables = (): Partial<IBillFilters> => ({
+  isPaid: 'undefined',
+  startDueDate: dayjs().toISOString(),
+})
+
 export const useBillsFilterStore = defineStore('bills-filter-store', {
   state: (): States => ({
     filter: {
       dateFilterType: 'month',
-      isPaid: undefined,
+      isPaid: 'undefined',
       dueDate: undefined,
       dueMonth: undefined,
       dueYear: undefined,
@@ -47,10 +52,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
     },
     form: undefined,
     formId: undefined,
-    queryVariables: {
-      isPaid: 'undefined',
-      startDueDate: dayjs().toISOString(),
-    }
+    queryVariables: makeInitialQueryVariables(),
   }),
   actions: {
     createForm() {
@@ -93,6 +95,9 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
           type: values.type,
         }
       })
+    },
+    resetQueryVariables() {
+      this.queryVariables = makeInitialQueryVariables()
     }
   },
 })
