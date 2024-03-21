@@ -34,7 +34,7 @@ const buildInitialValues = (initialValues: Partial<IBillFilters>): BillsFormFilt
 
 const makeInitialQueryVariables = (): Partial<IBillFilters> => ({
   isPaid: 'undefined',
-  startDueDate: dayjs().toISOString(),
+  startDueDate: dayjs(),
 })
 
 export const useBillsFilterStore = defineStore('bills-filter-store', {

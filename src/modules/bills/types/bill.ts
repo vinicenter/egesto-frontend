@@ -1,3 +1,4 @@
+import { Dayjs } from "dayjs";
 import { IPeople } from "../../people/types/people";
 
 export interface IBill {
@@ -24,8 +25,8 @@ export interface IBillRoot {
 }
 
 export interface IBillFilters {
-  startDueDate?: string,
-  endDueDate?: string,
+  startDueDate?: string | Dayjs,
+  endDueDate?: string | Dayjs,
   type?: 'BOLETO' | 'CHEQUE' | 'PIX' | 'TRANSFERENCIA_BANCARIA' | 'DINHEIRO',
   recipient?: string,
   isPaid?: boolean | string
