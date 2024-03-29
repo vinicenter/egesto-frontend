@@ -13,7 +13,7 @@ export const install = (app: App) => {
     dsn: sentryDsn,
     integrations: [
       new Sentry.BrowserTracing({
-        tracePropagationTargets: ["up.railway.app", "vini.center"],
+        tracePropagationTargets: ["app.egesto.net", "api.egesto.net"],
       }),
       Sentry.replayIntegration({
         maskAllText: false,
