@@ -13,7 +13,7 @@ interface BillsFormFilter {
   dueYear?: number,
   recipient?: string,
   isPaid: boolean | string
-  type?: "BOLETO" | "CHEQUE" | "PIX" | "TRANSFERENCIA_BANCARIA" | "DINHEIRO" | undefined
+  paymentMethod?: "BOLETO" | "CHEQUE" | "PIX" | "TRANSFERENCIA_BANCARIA" | "DINHEIRO" | undefined
 }
 
 interface States {
@@ -48,7 +48,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
       endDueDate: undefined,
       recipient: undefined,
       startDueDate: undefined,
-      type: undefined
+      paymentMethod: undefined
     },
     form: undefined,
     formId: undefined,
@@ -92,7 +92,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
           startDueDate: getStartDueDate(),
           isPaid: values.isPaid,
           recipient: values.recipient,
-          type: values.type,
+          paymentMethod: values.paymentMethod,
         }
       })
     },

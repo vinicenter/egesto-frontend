@@ -7,7 +7,7 @@ import { useForm } from 'vee-validate';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
 import ESelectPeople from '@/src/core/components/ESelect/ESelectPeople.vue';
 import ESwitch from '@/src/core/components/EInput/ESwitch.vue';
-import { BILL_TYPES } from '@/src/modules/bills/constants/bills';
+import { BILL_PAYMENT_METHOD } from '@/src/modules/bills/constants/bills';
 
 const router = useRouter();
 
@@ -50,12 +50,12 @@ const submit = form.handleSubmit(async (values) => {
         />
 
         <ESelect
-          :items="BILL_TYPES"
+          :items="BILL_PAYMENT_METHOD"
           :return-object="false"
           item-title="label"
           item-value="value"
-          label="Tipo"
-          name="type"
+          label="Forma de pagamento"
+          name="paymentMethod"
           :rules="[required]"
           :disabled="disabled"
           clearable

@@ -1,4 +1,4 @@
-export const BILL_TYPES = [
+export const BILL_PAYMENT_METHOD = [
   {
     label: 'Boleto',
     value: 'BOLETO',

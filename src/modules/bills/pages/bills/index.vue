@@ -77,8 +77,8 @@ const formatStatusColor = (dueDate: string, isPaid: boolean) => {
     : 'text-blue-500'
 }
 
-const formatType = (type: IBill['type']) => {
-  const options: Record<IBill['type'], string> = {
+const formatPaymentMethod = (paymentMethod: IBill['paymentMethod']) => {
+  const options: Record<IBill['paymentMethod'], string> = {
     BOLETO: 'Boleto',
     CHEQUE: 'Cheque',
     DINHEIRO: 'Dinheiro',
@@ -86,7 +86,7 @@ const formatType = (type: IBill['type']) => {
     TRANSFERENCIA_BANCARIA: 'Transferência bancária',
   }
 
-  return options[type]
+  return options[paymentMethod]
 }
 
 const notify = useNotify();
@@ -127,7 +127,7 @@ const openAccumulativeModal = ref(false);
         <td>
           <div>Vencimento: {{ dayjs(item.dueDate).format('DD/MM/YYYY') }}</div>
           <div>{{ formatPrice(item.amount) }}</div>
-          <div>{{ formatType(item.type) }}</div>
+          <div>{{ formatPaymentMethod(item.paymentMethod) }}</div>
           <div>
             <VIcon icon="mdi-square-rounded" :class="formatStatusColor(item.dueDate, item.isPaid)" />
             {{ formatStatus(item.dueDate, item.isPaid) }}

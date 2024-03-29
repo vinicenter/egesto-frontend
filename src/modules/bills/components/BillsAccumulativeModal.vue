@@ -45,10 +45,10 @@ const setDayToFilter = (date: string) => {
     dueMonth: undefined,
     dueYear: undefined,
     endDueDate: undefined,
-    isPaid: 'undefined',
+    isPaid: queryVariables.isPaid,
     recipient: undefined,
     startDueDate: undefined,
-    type: undefined,
+    paymentMethod: undefined,
   })
 
   const submit = billsFilterStore.submit()

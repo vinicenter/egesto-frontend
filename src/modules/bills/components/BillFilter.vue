@@ -2,7 +2,7 @@
 import ESelectPeople from '@/src/core/components/ESelect/ESelectPeople.vue';
 import { IBillFilters } from '../types/bill';
 import { useField } from 'vee-validate';
-import { BILL_TYPES } from '@/src/modules/bills/constants/bills';
+import { BILL_PAYMENT_METHOD } from '@/src/modules/bills/constants/bills';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
 import { required } from '@/src/core/utils/form-validator';
 import { useBillsFilterStore } from '@/src/modules/bills/stores/use-bills-filter-store';
@@ -102,12 +102,12 @@ const { value: dateFilterType } = useField('dateFilterType')
           />
 
           <ESelect
-            :items="BILL_TYPES"
+            :items="BILL_PAYMENT_METHOD"
             :return-object="false"
             item-title="label"
             item-value="value"
-            label="Tipo"
-            name="type"
+            label="Forma de pagamento"
+            name="paymentMethod"
             clearable
             hide-details
           />
