@@ -25,12 +25,8 @@ const submit = async () => {
       throw new Error('Props billTagData is required')
     }
 
-    const promisses = [
-      deleteBillTag(props.billTagData._id),
-      queryClient.invalidateQueries(['bills-tag'])
-    ]
-
-    await Promise.all(promisses)
+    await deleteBillTag(props.billTagData._id)
+    await queryClient.invalidateQueries(['bills-tag'])
 
     emit('removeTag', props.billTagData)
 
