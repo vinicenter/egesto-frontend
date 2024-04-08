@@ -67,13 +67,20 @@ const submit = form.handleSubmit(async (values) => {
           label="Valor da conta"
           :rules="[required]"
         />
-      </div>
 
-      <EInputText
-        name="reference"
-        :disabled="disabled"
-        label="Referência"
-      />
+        <BillTagsSelect
+          name="tags"
+          return-object
+          editable
+          :disabled="disabled"
+        />
+
+        <EInputText
+          name="reference"
+          :disabled="disabled"
+          label="Referência"
+        />
+      </div>
 
       <ETextarea
         :disabled="disabled"

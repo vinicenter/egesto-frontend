@@ -6,6 +6,7 @@ import vuetify from 'vite-plugin-vuetify'
 import UnoCSS from 'unocss/vite'
 import Pages from 'vite-plugin-pages'
 import Components from 'unplugin-vue-components/vite'
+import VueDevTools from 'vite-plugin-vue-devtools'
 
 // https://vitejs.dev/config/
 export default defineConfig({
@@ -26,6 +27,9 @@ export default defineConfig({
     UnoCSS(),
     Pages({ dirs: [ 'src/modules/**/pages' ] }),
     Components({ dts: true, dirs: ['src/core/components/**', 'src/modules/**/components/**'], }),
+    VueDevTools({
+      clientHost: 'http://localhost:5173',
+    })
   ],
   optimizeDeps: {
     include: [

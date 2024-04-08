@@ -33,7 +33,7 @@ export const getbills = async (params: tableParams & IBillFilters): Promise<pagi
   return data
 }
 
-export const getSummaryBills = async (params: IBillFilters): Promise<IBillsSummary> => {
+export const getSummaryBills = async (params: Partial<IBillFilters>): Promise<IBillsSummary> => {
   const { data } = await axios.get('/bills/summary', { params })
 
   return data

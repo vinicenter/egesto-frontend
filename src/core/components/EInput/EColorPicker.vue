@@ -5,7 +5,7 @@ import { MaybeRef } from 'vue';
 
 const props = defineProps<{
   name: string
-  disabled: boolean
+  disabled?: boolean
   title: string
   rules?: MaybeRef<RuleExpression<string>>,
 }>()

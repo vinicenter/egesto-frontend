@@ -10,6 +10,10 @@ const props = defineProps<{
 
 const search = ref()
 
+const emit = defineEmits<{
+  (e: 'create'): void
+}>()
+
 const {
   data,
   isLoading,
@@ -44,6 +48,7 @@ const {
     item-value="_id"
     searchable
     clearable
+    @create="emit('create')"
   >
     <template v-slot:no-data />
 
@@ -72,6 +77,16 @@ const {
         <VSkeletonLoader type="list-item" />
         <VSkeletonLoader type="list-item" />
       </template>
+    </template>
+
+    <template
+      v-for="(_, name) in ($slots as {})"
+      #[name]="slotProps = {}"
+    >
+      <slot
+        v-bind="slotProps"
+        :name="name"
+      />
     </template>
   </ESelect>
 </template>

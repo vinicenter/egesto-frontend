@@ -132,6 +132,10 @@ const openAccumulativeModal = ref(false);
             <VIcon icon="mdi-square-rounded" :class="formatStatusColor(item.dueDate, item.isPaid)" />
             {{ formatStatus(item.dueDate, item.isPaid) }}
           </div>
+          <BillTableTags
+            v-if="item.tags && item.tags.length"
+            :tags="item.tags"
+          />
         </td>
         <td>{{ item.recipient ? item.recipient.corporateName : '-' }}</td>
         <td>{{ item.reference || '-' }}</td>

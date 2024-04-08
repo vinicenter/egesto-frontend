@@ -6,6 +6,7 @@ import { BILL_PAYMENT_METHOD } from '@/src/modules/bills/constants/bills';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
 import { required } from '@/src/core/utils/form-validator';
 import { useBillsFilterStore } from '@/src/modules/bills/stores/use-bills-filter-store';
+import BillTagsSelect from './BillTagsSelect/BillTagsSelect.vue';
 
 const emit = defineEmits<{
   (e: 'update', value: Partial<IBillFilters>): void
@@ -95,6 +96,11 @@ const { value: dateFilterType } = useField('dateFilterType')
             </template>
           </div>
 
+          <BillTagsSelect
+            name="tags" 
+            hide-details
+          />
+
           <ESelectPeople
             label="Recebedor"
             name="recipient"
@@ -110,6 +116,7 @@ const { value: dateFilterType } = useField('dateFilterType')
             name="paymentMethod"
             clearable
             hide-details
+            multiple
           />
 
           <ESelect

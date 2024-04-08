@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { FormContext, useForm } from "vee-validate";
 import { Ref } from "vue";
-import { IBillFilters } from "../types/bill";
+import { BillPaymentMethods, IBillFilters } from "../types/bill";
 import dayjs from "~utils/dayjs";
 
 interface BillsFormFilter {
@@ -10,10 +10,11 @@ interface BillsFormFilter {
   startDueDate?: string,
   dueDate?: string,
   dueMonth?: number,
+  tags: string[],
   dueYear?: number,
   recipient?: string,
   isPaid: boolean | string
-  paymentMethod?: "BOLETO" | "CHEQUE" | "PIX" | "TRANSFERENCIA_BANCARIA" | "DINHEIRO" | undefined
+  paymentMethod?: BillPaymentMethods[]
 }
 
 interface States {
@@ -48,7 +49,8 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
       endDueDate: undefined,
       recipient: undefined,
       startDueDate: undefined,
-      paymentMethod: undefined
+      paymentMethod: undefined,
+      tags: [],
     },
     form: undefined,
     formId: undefined,
@@ -93,6 +95,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
           isPaid: values.isPaid,
           recipient: values.recipient,
           paymentMethod: values.paymentMethod,
+          tags: values.tags,
         }
       })
     },

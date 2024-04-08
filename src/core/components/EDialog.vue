@@ -14,9 +14,10 @@ const modelValue = defineModel<boolean>()
     <VToolbar
       color="primary"
       :title="title"
+      class="rounded-t"
     />
 
-    <VCard>
+    <VCard rounded="0" class="rounded-b">
       <section class="max-h-90vh overflow-y-auto">
         <slot />
       </section>

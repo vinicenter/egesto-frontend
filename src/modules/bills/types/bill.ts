@@ -1,12 +1,16 @@
 import { IPeople } from "../../people/types/people";
+import { IBillTagRoot } from "./bill-tags";
+
+export type BillPaymentMethods = 'BOLETO' | 'CHEQUE' | 'PIX' | 'TRANSFERENCIA_BANCARIA' | 'DINHEIRO'
 
 export interface IBill {
   _id?: string,
   dueDate: string,
   recipient?: IPeople | null,
-  paymentMethod: 'BOLETO' | 'CHEQUE' | 'PIX' | 'TRANSFERENCIA_BANCARIA' | 'DINHEIRO',
+  paymentMethod: BillPaymentMethods,
   reference?: string,
   amount: number,
+  tags: IBillTagRoot[],
   observations?: string,
   isPaid?: boolean
 }
@@ -15,7 +19,7 @@ export interface IBillRoot {
   createdAt: string,
   dueDate: string,
   recipient?: IPeople,
-  paymentMethod: 'BOLETO' | 'CHEQUE' | 'PIX' | 'TRANSFERENCIA_BANCARIA' | 'DINHEIRO',
+  paymentMethod: BillPaymentMethods,
   reference?: string,
   amount: number,
   observations?: string,
@@ -26,9 +30,10 @@ export interface IBillRoot {
 export interface IBillFilters {
   startDueDate?: string,
   endDueDate?: string,
-  paymentMethod?: 'BOLETO' | 'CHEQUE' | 'PIX' | 'TRANSFERENCIA_BANCARIA' | 'DINHEIRO',
+  paymentMethod?: BillPaymentMethods[],
   recipient?: string,
   isPaid?: boolean | string
+  tags: string[]
 }
 
 export interface IBillsSummary {

@@ -7,9 +7,14 @@ const props = defineProps<{
   name: string
   rules?: MaybeRef<RuleExpression<unknown>>
   searchable?: boolean
+  showCreate?: boolean
 }>()
 
 const search = defineModel<string>('search')
+
+const emit = defineEmits<{
+  (e: 'create'): void
+}>()
 
 const { value, errorMessage, handleBlur } = useField<unknown>(toRef(props, "name"), props.rules)
 </script>
@@ -31,8 +36,16 @@ const { value, errorMessage, handleBlur } = useField<unknown>(toRef(props, "name
       #prepend-item
     >
       <div class="h-60px w-full">
-        <div class="bg-white h-60px fixed w-full z-100">
+        <div class="bg-white fixed w-full z-100 flex justify-center items-center gap-4px p-x-xs">
           <VTextField hide-details label="Pesquisar" v-model="search" clearable />
+
+          <VBtn
+            v-if="showCreate"
+            color="primary"
+            icon="mdi-plus"
+            variant="flat"
+            @click="emit('create')"
+          />
         </div>
       </div>
 
