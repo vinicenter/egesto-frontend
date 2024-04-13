@@ -107,7 +107,7 @@ const submit = form.handleSubmit(async (values) => {
 
       <ETextarea
         name="observation"
-        class="grid-col-span-2"
+        class="grid-col-span-1 sm:grid-col-span-2"
         :disabled="disabled"
         label="Observação"
       />
