@@ -1,5 +1,6 @@
 import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
+import { ConsultCnpjData } from '../types/consult-cnpj-data'
 
 export const getPeople = async (params: tableParams) => {
   const { data } = await axios.get('/people', { params })
@@ -33,6 +34,12 @@ export const deletePerson = async (id: string) => {
 
 export const generatePeopleReport = async () => {
   const { data } = await axios.get<Blob>('/people/report', { responseType: 'blob' })
+
+  return data
+}
+
+export const consultCnpjData = async (cnpj: string) => {
+  const { data } = await axios.get<ConsultCnpjData.Root>(`/people/consult-cnpj/${cnpj}`)
 
   return data
 }

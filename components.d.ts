@@ -58,6 +58,7 @@ declare module '@vue/runtime-core' {
     FamiliesSubfamiliesModal: typeof import('./src/modules/families/components/modals/FamiliesSubfamiliesModal/FamiliesSubfamiliesModal.vue')['default']
     FeedStockForm: typeof import('./src/modules/feedstocks/components/feedStockForm.vue')['default']
     LoginForm: typeof import('./src/modules/users/components/LoginForm.vue')['default']
+    PersonDocumentField: typeof import('./src/modules/people/components/PersonDocumentField.vue')['default']
     PersonForm: typeof import('./src/modules/people/components/PersonForm.vue')['default']
     PricesTableAddFamily: typeof import('./src/modules/pricesTable/components/PricesTableForm/menus/PricesTableAddFamily.vue')['default']
     PricesTableBulkChanges: typeof import('./src/modules/pricesTable/components/PricesTableForm/menus/PricesTableBulkChanges.vue')['default']

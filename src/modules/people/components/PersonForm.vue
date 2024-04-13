@@ -1,9 +1,10 @@
 <script lang="ts" setup>
 import type { IPeople } from '../types/people';
-import { emailValidation, required, cpfCnpjValidator } from '@/src/core/utils/form-validator';
+import { emailValidation, required } from '@/src/core/utils/form-validator';
 import { useForm } from 'vee-validate';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
+import PersonDocumentField from './PersonDocumentField.vue';
 
 const router = useRouter();
 
@@ -31,99 +32,95 @@ const submit = form.handleSubmit(async (values) => {
 
 <template>
   <form @submit.prevent="submit">
+    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
+      <PersonDocumentField :disabled="disabled" />
 
-    <section>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
-        <EInputText
-          name="corporateName"
-          :disabled="disabled"
-          label="Razão Social"
-          :rules="[required]"
-        />
+      <EInputText
+        name="corporateName"
+        :disabled="disabled"
+        label="Razão Social"
+        :rules="[required]"
+      />
 
-        <EInputText
-          name="fantasyName"
-          :disabled="disabled"
-          label="Nome Fantasia"
-          :rules="[required]"
-        />
+      <EInputText
+        name="fantasyName"
+        :disabled="disabled"
+        label="Nome Fantasia"
+        :rules="[required]"
+      />
 
-        <EInputText
-          name="document"
-          :disabled="disabled"
-          label="CNPJ / CPF"
-          :rules="[required, cpfCnpjValidator]"
-        />
+      <EInputText
+        name="stateRegistration"
+        :disabled="disabled"
+        label="Inscrição Estadual"
+      />
 
-        <EInputText
-          name="stateRegistration"
-          :disabled="disabled"
-          label="Inscrição Estadual"
-        />
+      <EInputText
+        name="phone"
+        :disabled="disabled"
+        label="Celular"
+      />
 
-        <EInputText
-          name="phone"
-          :disabled="disabled"
-          label="Celular"
-        />
+      <EInputText
+        name="email"
+        :disabled="disabled"
+        label="E-mail"
+        :rules="[emailValidation]"
+      />
 
-        <EInputText
-          name="email"
-          :disabled="disabled"
-          label="E-mail"
-          :rules="[emailValidation]"
-        />
+      <EInputText
+        name="address.zipCode"
+        :disabled="disabled"
+        label="CEP"
+      />
 
-        <EInputText
-          name="address.zipCode"
-          :disabled="disabled"
-          label="CEP"
-        />
+      <ESelectStates
+        name="address.federativeUnit"
+        :disabled="disabled"
+        label="UF"
+        :rules="[required]"
+      />
 
-        <ESelectStates
-          name="address.federativeUnit"
-          :disabled="disabled"
-          label="UF"
-          :rules="[required]"
-        />
+      <EInputText
+        name="address.city"
+        :disabled="disabled"
+        label="Cidade"
+      />
 
-        <EInputText
-          name="address.city"
-          :disabled="disabled"
-          label="Cidade"
-        />
+      <EInputText
+        name="address.neighborhood"
+        :disabled="disabled"
+        label="Bairro"
+      />
 
-        <EInputText
-          name="address.neighborhood"
-          :disabled="disabled"
-          label="Bairro"
-        />
+      <EInputText
+        name="address.street"
+        :disabled="disabled"
+        label="Rua"
+      />
 
-        <EInputText
-          name="address.street"
-          :disabled="disabled"
-          label="Rua"
-        />
+      <EInputText
+        name="address.number"
+        :disabled="disabled"
+        label="Número"
+      />
 
-        <EInputText
-          name="address.number"
-          :disabled="disabled"
-          label="Número"
-        />
+      <ETextarea
+        name="observation"
+        class="grid-col-span-2"
+        :disabled="disabled"
+        label="Observação"
+      />
+
+      <div>
+      <EInputPct
+        name="contractExpenses"
+        :disabled="disabled"
+        label="Despesas de contrato"
+      />
       </div>
     </section>
 
-    <ETextarea
-      name="observation"
-      :disabled="disabled"
-      label="Observação"
-    />
-
-    <EInputPct
-      name="contractExpenses"
-      :disabled="disabled"
-      label="Despesas de contrato"
-    />
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-sm">
       <VBtn

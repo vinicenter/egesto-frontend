@@ -17,4 +17,5 @@ export interface IPeople {
     federativeUnit?: string
     zipCode?: string
   }
+  [key: string]: any
 }

@@ -19,6 +19,8 @@ const finish = () => {
   queryClient.invalidateQueries(['people'])
   router.push({ name: 'list-people' })
 }
+
+const initialValuesCreate = {}
 </script>
 
 <template>
@@ -30,6 +32,7 @@ const finish = () => {
     :create-fn="createPerson"
     :update-fn="updatePerson"
     :format-submit-fn="formatSubmit"
+    :initial-values-create="initialValuesCreate"
     @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">

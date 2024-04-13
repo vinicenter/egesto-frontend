@@ -61,3 +61,5 @@ export const priceFormat = (options?: Intl.NumberFormatOptions) => {
     formatPriceToParts: formatToParts,
   }
 }
+
+export const removeCnpjFormat = (cnpj: string) => cnpj.replace(/\D/g, '')
