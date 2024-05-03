@@ -1,61 +1,72 @@
 <script lang="ts" setup>
 import { required } from '@/src/core/utils/form-validator';
-import { useForm, useFieldArray } from 'vee-validate';
-import { ref } from 'vue';
-import { IPricesTable } from '@/src/modules/pricesTable/types/pricesTable';
+import { useForm, FormContext } from 'vee-validate';
+import { IPricesTable, PricesTableFormType } from '@/src/modules/pricesTable/types/pricesTable';
 import useNotify from '@/src/core/composables/useNotify';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
-import ESelectFamilies from '@/src/core/components/ESelect/ESelectFamilies.vue';
 
-defineProps<{ disabled: boolean }>();
-
-const bulkType = ref<'all' | 'family'>('all')
-
-const emit = defineEmits<{
-  (e: 'setProductMargin', price: IPricesTable.Price, index: number): void
-  (e: 'setProductPriceByMargin', price: IPricesTable.Price, index: number): void
-}>()
+const props = withDefaults(defineProps<{
+  disabled: boolean,
+  bulkType: 'all' | 'family'
+  indexFamily?: number
+  form: FormContext<PricesTableFormType.Root, PricesTableFormType.Root>;
+}>(), {
+  indexFamily: 0,
+});
 
 interface MenuValues {
   field: string;
-  family?: string;
   value: string;
 }
-const { displayMessage } = useNotify()
-const { fields, update } = useFieldArray<IPricesTable.Price>('prices')
 
+const { displayMessage } = useNotify()
 const { handleSubmit } = useForm<MenuValues>()
+
+const emit = defineEmits<{
+  (e: 'setProductPriceByMargin', price: IPricesTable.Price, indexPrice: number, indexFamily: number): void
+  (e: 'setProductMargin', row: IPricesTable.Price, indexPrice: number, indexFamily: number): void
+}>()
 
 const submit = handleSubmit(async (values) => {
   let count = 0
 
-  const setProducts = (price: IPricesTable.Price, index: number) => {
-    if (
-      bulkType.value === 'family' &&
-      price.product.family?._id !== values.family
-    ) {
-      return
-    }
+  if(props.bulkType === 'family') {
+    props.form.values.pricesByFamilies[props.indexFamily].prices.forEach((price, indexPrice) => {
+      const updated = {
+        ...price,
+        [values.field]: values.value,
+      }
 
-    const updated = {
-      ...price,
-      [values.field]: values.value,
-    }
+      props.form.setFieldValue(`pricesByFamilies.${props.indexFamily}.prices.${indexPrice}`, updated)
 
-    update(index, updated)
+      if(values.field === 'margin') {
+        emit('setProductPriceByMargin', updated, indexPrice, props.indexFamily)
+      } else {
+        emit('setProductMargin', updated, indexPrice, props.indexFamily)
+      }
 
-    if (values.field === 'margin') {
-      emit('setProductPriceByMargin', updated, index)
-    } else {
-      emit('setProductMargin', updated, index)
-    }
+      count++
+    })
+  } else {
+    props.form.values.pricesByFamilies.forEach((pricesByFamily, indexFamily) => {
+      pricesByFamily.prices.forEach((price, indexPrice) => {
+        const updated = {
+          ...price,
+          [values.field]: values.value,
+        }
 
-    count++
+        props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}`, updated)
+
+        if(values.field === 'margin') {
+          emit('setProductPriceByMargin', updated, indexPrice, indexFamily)
+        } else {
+          emit('setProductMargin', updated, indexPrice, indexFamily)
+        }
+
+        count++
+      })
+    })
   }
-
-  fields.value.forEach((price, index) => {
-    setProducts(price.value, index)
-  })
 
   const addPluralText = count > 1 ? 's' : ''
   displayMessage({
@@ -101,27 +112,23 @@ const fieldsOptions = [
     <template v-slot:activator="{ props: propsMenu }">
       <VTooltip open-on-click location="top">
         <template v-slot:activator="{ props }">
-          <VBtn v-bind="{ ...props, ...propsMenu }" prepend-icon="mdi-pencil-outline" :disabled="disabled">
+          <VBtn
+            v-bind="{ ...props, ...propsMenu }"
+            prepend-icon="mdi-pencil-outline"
+            color="success"
+            :disabled="disabled"
+          >
             Alterações em massa
           </VBtn>
         </template>
 
-        <span>Faça alterações em massa em uma família especifica ou em todos os produtos da tabela de preço</span>
+        <span v-if="bulkType === 'all'">Faça alterações em massa em todos os produtos da tabela de preço</span>
+        <span v-else>Faça alterações em massa nos produtos da família</span>
       </VTooltip>
     </template>
 
     <VCard title="Alterações em massa" min-width="400">
       <form class="mx-sm mb-sm space-y-1" @submit.prevent>
-        <VTabs v-model="bulkType" class="mb-4">
-          <VTab value="all">
-            Para todos
-          </VTab>
-
-          <VTab value="family">
-            Por família
-          </VTab>
-        </VTabs>
-
         <ESelect
           item-title="label"
           item-value="field"
@@ -129,13 +136,6 @@ const fieldsOptions = [
           :rules="required"
           label="Campo"
           :items="fieldsOptions"
-        />
-
-        <ESelectFamilies
-          v-if="bulkType === 'family'"
-          name="family"
-          familyType="linked"
-          :rules="required"
         />
 
         <EInputText

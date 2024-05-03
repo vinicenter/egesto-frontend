@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { IPricesTable } from '../../types/pricesTable';
+import type { IPricesTable, PricesTableFormType } from '../../types/pricesTable';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import PricesTableSummary from '../PricesTableSummary.vue';
@@ -14,15 +14,15 @@ const props = defineProps<{
   disabled: boolean;
   buttonLabel: string | undefined,
   loading: boolean;
-  initialValues: IPricesTable.Root;
+  initialValues: PricesTableFormType.Root;
 }>();
 
-const form = useForm<IPricesTable.Root>({
+const form = useForm<PricesTableFormType.Root>({
   initialValues: props.initialValues,
 })
 
 const emit = defineEmits<{
-  (e: 'submit', value: IPricesTable.Root): void;
+  (e: 'submit', value: PricesTableFormType.Root): void;
 }>();
 
 const submit = form.handleSubmit((values) => {
@@ -37,14 +37,16 @@ const submit = form.handleSubmit((values) => {
   });
 });
 
+const prices = computed(() => form.values.pricesByFamilies.flatMap((family) => family.prices));
+
 const disabled = computed(() => props.loading || props.disabled);
 
 const itemsTotal = computed(() => {
-  return form.values.prices.length;
+  return prices.value.length;
 })
 
 const volumeTotal = computed(() => {
-  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
+  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
     return price.volume
       ? acc + Number(price.volume)
       : acc;
@@ -52,7 +54,7 @@ const volumeTotal = computed(() => {
 })
 
 const grossRevenue = computed(() => {
-  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
+  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
     return price.grossRevenue
       ? acc + Number(price.grossRevenue)
       : acc;
@@ -60,7 +62,7 @@ const grossRevenue = computed(() => {
 })
 
 const totalNetRevenue = computed(() => {
-  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
+  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
     return price.netSales
       ? acc + Number(price.netSales)
       : acc;
@@ -68,11 +70,11 @@ const totalNetRevenue = computed(() => {
 })
 
 const mediumMargin = computed(() => {
-  return form.values.prices.reduce((acc: number, price: IPricesTable.Price) => {
+  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
     return price.margin ?
       acc + Number(price.margin)
       : acc;
-  }, 0)/(form.values.prices.length) || 0;
+  }, 0)/(prices.value.length) || 0;
 })
 
 const tab = ref('informations')

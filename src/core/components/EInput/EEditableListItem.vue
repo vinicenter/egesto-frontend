@@ -2,10 +2,13 @@
 import { useAttrs, computed } from 'vue';
 import { useFieldArray, useFormValues } from 'vee-validate'
 import { resolve } from '@/src/core/utils/utils'
+import { toRef } from 'vue';
 
 const props = defineProps<{
   name: string;
   disabled: boolean;
+  disableAdd: boolean;
+  disableSpacer?: boolean;
 }>()
 
 const attrs = useAttrs()
@@ -15,7 +18,7 @@ const arrayValues = computed(() => {
   return resolve(props.name, values.value)
 })
 
-const { fields, push, remove } = useFieldArray(props.name)
+const { fields, push, remove } = useFieldArray(toRef(props, 'name'))
 
 const emit = defineEmits(['update:model-value'])
 
@@ -42,14 +45,18 @@ defineOptions({
       />
     </div>
 
-    <div class="flex justify-center grid-col-span-3">
+    <div
+      v-if="!(disableAdd && ((idx + 1) === fields.length))"
+      class="flex justify-center grid-col-span-3"
+    >
       <div class="w-98%">
-        <VDivider class="m-b-sm grid-col-span-3" />
+        <VDivider v-if="!disableSpacer" class="m-b-sm grid-col-span-3" />
       </div>
     </div>
   </div>
   
   <VBtn
+    v-if="!disableAdd"
     class="m-l-sm m-b-sm"
     @click="push({})"
     color="green"

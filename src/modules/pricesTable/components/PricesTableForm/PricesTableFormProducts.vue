@@ -1,26 +1,23 @@
-
-
 <script setup lang="ts">
 import useNotify from '@/src/core/composables/useNotify';
 import { required } from '@/src/core/utils/form-validator';
-import { priceFormat } from '@/src/core/utils/format';
-import { IPricesTable } from '../../types/pricesTable';
+import { IPricesTable, PricesTableFormType } from '../../types/pricesTable';
 import { FormContext, useFormValues } from 'vee-validate';
 import { formatFamilyLabel } from '@/src/modules/products/utils/formatter';
 import { getProductMargin, getProductPriceByMargin } from '@/src/modules/pricesTable/utils/product-margin';
 import { getFamiliesDefaultCost } from '@/src/modules/families/datasource/families';
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
+import PricesTableRemoveFamily from './menus/PricesTableRemoveFamily.vue';
 
 const props = defineProps<{
   disabled: boolean;
-  form: FormContext<IPricesTable.Root, IPricesTable.Root>;
+  form: FormContext<PricesTableFormType.Root, PricesTableFormType.Root>;
 }>();
 
 const { displayMessage } = useNotify();
-const { formatPrice } = priceFormat();
 
-const fields = useFormValues<IPricesTable.Root>();
+const fields = useFormValues<PricesTableFormType.Root>();
 
 const {
   data: familiesDefaultCost,
@@ -38,24 +35,24 @@ const {
 
 const disabled = computed(() => props.disabled || loadingFamiliesDefaultCost.value)
 
-const setProductMargin = (price: IPricesTable.Price, index: number) => {
+const setProductMargin = (price: IPricesTable.Price, indexPrice: number, indexFamily: number) => {
   const { grossRevenue, margin, netSales } = getProductMargin(price)
 
-  props.form.setFieldValue(`prices.${index}.margin`, margin);
-  props.form.setFieldValue(`prices.${index}.netSales`, netSales);
-  props.form.setFieldValue(`prices.${index}.grossRevenue`, grossRevenue);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.margin`, margin);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.netSales`, netSales);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.grossRevenue`, grossRevenue);
 }
 
-const setProductPriceByMargin = (price: IPricesTable.Price, index: number) => {
+const setProductPriceByMargin = (price: IPricesTable.Price, indexPrice: number, indexFamily: number) => {
   try {
     const result = getProductPriceByMargin(price)
     
     const priceFormatted = Number(result.price.toFixed(2))
     
-    props.form.setFieldValue(`prices.${index}.price`, priceFormatted);
-    props.form.setFieldValue(`prices.${index}.margin`, result.margin);
-    props.form.setFieldValue(`prices.${index}.netSales`, result.netSales);
-    props.form.setFieldValue(`prices.${index}.grossRevenue`, result.grossRevenue);
+    props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.price`, priceFormatted);
+    props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.margin`, result.margin);
+    props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.netSales`, result.netSales);
+    props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.grossRevenue`, result.grossRevenue);
   } catch (e) {
     const error = e as string;
 
@@ -66,7 +63,7 @@ const setProductPriceByMargin = (price: IPricesTable.Price, index: number) => {
   }
 }
 
-const setProductDataToPrice = (row: IPricesTable.Price, index: number) => {
+const setProductDataToPrice = (row: IPricesTable.Price, indexPrice: number, indexFamily: number) => {
   const product = row.product
 
   const productCost = product?.productionCost?.packCost || 0;
@@ -89,18 +86,18 @@ const setProductDataToPrice = (row: IPricesTable.Price, index: number) => {
 
   const shipment = shipmentFromCostTableEntries || shipmentForNotDefinedRegisters || 0
 
-  props.form.setFieldValue(`prices.${index}.shipment`, shipment);
-  props.form.setFieldValue(`prices.${index}.productCost`, productCost);
-  props.form.setFieldValue(`prices.${index}.expense`, expense);
-  props.form.setFieldValue(`prices.${index}.productionLost`, productionLost);
-  props.form.setFieldValue(`prices.${index}.volume`, volume);
-  props.form.setFieldValue(`prices.${index}.price`, price);
-  props.form.setFieldValue(`prices.${index}.tax`, tax);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.shipment`, shipment);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.productCost`, productCost);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.expense`, expense);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.productionLost`, productionLost);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.volume`, volume);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.price`, price);
+  props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}.tax`, tax);
 }
 
-const syncProduct = (price: IPricesTable.Price, index: number, shouldNotify: boolean) => {
-  setProductDataToPrice(price, index);
-  setProductMargin(price, index);
+const syncProduct = (price: IPricesTable.Price, indexPrice: number, indexFamily: number, shouldNotify: boolean) => {
+  setProductDataToPrice(price, indexPrice, indexFamily);
+  setProductMargin(price, indexPrice, indexFamily);
 
   if(shouldNotify) {
     displayMessage({
@@ -111,18 +108,52 @@ const syncProduct = (price: IPricesTable.Price, index: number, shouldNotify: boo
 }
 
 const syncAllProducts = () => {
-  fields.value.prices?.forEach((price: IPricesTable.Price, index: number) => syncProduct(price, index, false));
+  fields.value.pricesByFamilies?.forEach((family, indexFamily) => {
+    family.prices.forEach((price, indexPrice) => {
+      syncProduct(price, indexPrice, indexFamily, false)
+    })
+  })
 
   displayMessage({
     message: 'Produtos sincronizados com a tabela de preço e família',
     type: 'success'
   })
 }
+
+const families = computed(() => fields.value.pricesByFamilies?.map(({ family }) => {
+  return {
+    title: formatFamilyLabel(family),
+    value: family._id
+  }
+}))
+
+const shouldEnableFamily = (indexFamily: number) => {
+  if(!props.form.values?.familyExibition?.length) {
+    return true
+  }
+
+  const familyId = props.form.values.pricesByFamilies?.[indexFamily]?.family._id!
+
+  return props.form.values.familyExibition.includes(familyId)
+}
 </script>
 
 <template>
   <section class="space-y-4">
-    <div class="space-x-4">
+    <div class="flex flex-wrap gap-sm items-center">
+      <PricesTableAddFamily
+        :disabled="disabled"
+        @set-product-data-to-price="setProductDataToPrice"
+      />
+
+      <PricesTableBulkChanges
+        :form="form"
+        :disabled="disabled"
+        bulkType="all"
+        @set-product-price-by-margin="setProductPriceByMargin"
+        @set-product-margin="setProductMargin"
+      />
+
       <VTooltip
         open-on-click
         location="top"
@@ -132,6 +163,7 @@ const syncAllProducts = () => {
             v-bind="props"
             prepend-icon="mdi-sync"
             :disabled="disabled"
+            color="warning"
             @click="syncAllProducts"
           >
             Sincronizar produtos
@@ -141,102 +173,189 @@ const syncAllProducts = () => {
         <span>Sincronizar custo do produto, tabela de custo e custos da família de todos os produtos</span>
       </VTooltip>
 
-      <PricesTableAddFamily
-        :disabled="disabled"
-        @load-product-data="setProductDataToPrice"
-      />
-
-      <PricesTableBulkChanges
-        :disabled="disabled"
-        @set-product-margin="setProductMargin"
-        @set-product-price-by-margin="setProductPriceByMargin"
-      />
+      <div class="w-300px">
+        <ESelect
+          multiple
+          hide-details
+          name="familyExibition"
+          label="Filtrar família"
+          :disabled="disabled"
+          :items="families"
+        />
+      </div>
     </div>
 
-    <VDivider />
-
     <EEditableListItem
-      name="prices"
-      class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-sm"
+      name="pricesByFamilies"
       :disabled="disabled"
+      disable-spacer
+      disable-add
     >
-      <template #default="{ removeItem, item, index }">
-        <div class="col-span-full flex gap-sm">
-          <ESelectProducts
-            label="Produto"
-            return-object
-            :name="`prices.${index}.product`"
-            :disabled="disabled"
-            :rules="[required]"
-            @update:modelValue="setProductDataToPrice(item, index)"
-          />
+      <template #default="{ index: indexFamily, item, removeItem }">
+        <div v-show="shouldEnableFamily(indexFamily)">
+          <VCard class="flex flex-col">
+            <VCardTitle>
+              {{ formatFamilyLabel(item.family) }}
+            </VCardTitle>
 
-          <PricesTableCostsDetail
-            eager
-            :disabled="disabled || !item.product"
-            :shipment="`prices.${index}.shipment`"
-            :tax="`prices.${index}.tax`"
-            :expense="`prices.${index}.expense`"
-            :productionLost="`prices.${index}.productionLost`"
-            @updated="setProductMargin(item, index)"
-          />
+            <VContainer>
+              <div class="flex flex-wrap gap-sm items-center gap-x-sm">
+                <PricesTableUpdateFamilyProducts
+                  :disabled="disabled"
+                  :family-index="indexFamily"
+                  @set-product-data-to-price="setProductDataToPrice"
+                />
 
-          <VTooltip open-on-click>
-            <template v-slot:activator="{ props }">
-              <VBtn
-                v-bind="props" 
-                icon="mdi-sync"
-                :disabled="disabled || !item.product"
-                @click="syncProduct(item, index, true)"
-              />
-            </template>
+                <PricesTableBulkChanges
+                  :form="form"
+                  :disabled="disabled"
+                  :index-family="indexFamily"
+                  bulk-type="family"
+                  @set-product-price-by-margin="setProductPriceByMargin"
+                  @set-product-margin="setProductMargin"
+                />
 
-            <span>Sincronizar custo do produto, tabela de custo e custos da família</span>
-          </VTooltip>
+                <PricesTableRemoveFamily
+                  :disabled="disabled"
+                  @remove-family="removeItem"
+                />
+              </div>
+  
+              <VDivider class="mt-sm" />
+  
+              <EEditableListItem
+                :name="`pricesByFamilies.${indexFamily}.prices`"
+                class="flex flex-col lg:flex-row space-y-4"
+                :disabled="disabled"
+                disable-add
+              >
+                <template #default="{ index: indexPrice, item }">
+                  <div class="w-300px m-xs space-y-xs">
+                    <div>
+                      {{ fields.pricesByFamilies?.[indexFamily].prices[indexPrice].product.name }}
+                    </div>
+  
+                    <div class="flex gap-x-xs">
+                      <VTooltip open-on-click>
+                        <template v-slot:activator="{ props }">
+                          <VBtn
+                            v-bind="props" 
+                            icon="mdi-sync"
+                            color="warning"
+                            size="small"
+                            :disabled="disabled || !item.product"
+                            @click="syncProduct(item, indexPrice, indexFamily, true)"
+                          />
+                        </template>
+    
+                        <span>Sincronizar custo do produto, tabela de custo e custos da família</span>
+                      </VTooltip>
+    
+                      <VTooltip
+                        v-if="fields.pricesByFamilies?.[indexFamily].prices[indexPrice].product.code"
+                        open-on-click
+                      >
+                        <template v-slot:activator="{ props }">
+                          <VChip
+                            v-bind="props"
+                            :disabled="disabled"
+                          >
+                            {{ fields.pricesByFamilies?.[indexFamily].prices[indexPrice].product.code }}
+                          </VChip>
+                        </template>
+    
+                        <span>Código do produto</span>
+                      </VTooltip>
+                    </div>
+                  </div>
+  
+                  <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-5 gap-x-xs">
+                    <EInputPrice
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.price`"
+                      :rules="[required]"
+                      :disabled="disabled || !item.product"
+                      label="Preço de venda"
+                      @update:model-value="setProductMargin(item, indexPrice, indexFamily)"
+                    />
+  
+                    <EInputText
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.volume`"
+                      :rules="[required]"
+                      :disabled="disabled || !item.product"
+                      type="number"
+                      label="Volume"
+                      @update:model-value="setProductMargin(item, indexPrice, indexFamily)"
+                    />
+  
+                    <EInputPct
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.shipment`"
+                      :rules="[required]"
+                      :disabled="disabled"
+                      label="Frete"
+                      @update:model-value="setProductMargin(item, indexPrice, indexFamily)"
+                    />
+  
+                    <EInputPct
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.expense`"
+                      :rules="[required]"
+                      :disabled="disabled"
+                      label="Despesas"
+                      @update:model-value="setProductMargin(item, indexPrice, indexFamily)"
+                    />
+  
+                    <EInputPrice
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.productCost`"
+                      :rules="[required]" :disabled="disabled || !item.product"
+                      label="Custo item"
+                      @update:model-value="setProductMargin(item, indexPrice, indexFamily)"
+                    />
+  
+                    <EInputPrice
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.grossRevenue`"
+                      :rules="[required]"
+                      :disabled="disabled || !item.product"
+                      label="Fat. bruto"
+                      readonly
+                    />
+  
+                    <EInputPrice
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.netSales`"
+                      :rules="[required]"
+                      :disabled="disabled || !item.product"
+                      label="Fat. liquido"
+                      readonly
+                    />
+  
+                    <EInputPct
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.tax`"
+                      :rules="[required]"
+                      :disabled="disabled"
+                      label="Impostos"
+                      @update:model-value="setProductMargin(item, indexPrice, indexFamily)"
+                    />
+  
+                    <EInputPct
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.productionLost`"
+                      :rules="[required]"
+                      :disabled="disabled"
+                      label="Perda"
+                      @update:model-value="setProductMargin(item, indexPrice, indexFamily)"
+                    />
+  
+                    <EInputPct
+                      :name="`pricesByFamilies.${indexFamily}.prices.${indexPrice}.margin`"
+                      :rules="[required]"
+                      :disabled="disabled || !item.product"
+                      label="Margem"
+                      @blur="setProductPriceByMargin(item, indexPrice, indexFamily)"
+                    />
+                  </div>
+                </template>
+              </EEditableListItem>
+            </VContainer>
+          </VCard>
 
-          <VBtn
-            color="red"
-            icon="mdi-trash-can"
-            :disabled="disabled"
-            @click="removeItem"
-          />
-        </div>
-
-        <EInputPrice
-          :name="`prices.${index}.price`"
-          :rules="[required]"
-          :disabled="disabled || !item.product"
-          label="Preço de venda"
-          @update:model-value="setProductMargin(item, index)"
-        />
-
-        <EInputText
-          :name="`prices.${index}.volume`"
-          :rules="[required]"
-          :disabled="disabled || !item.product"
-          type="number" label="Volume"
-          @update:model-value="setProductMargin(item, index)"
-        />
-
-        <EInputPrice
-          :name="`prices.${index}.productCost`"
-          :rules="[required]" :disabled="disabled || !item.product"
-          label="Custo do produto"
-          @update:model-value="setProductMargin(item, index)"
-        />
-
-        <EInputPct
-          :name="`prices.${index}.margin`"
-          :rules="[required]"
-          :disabled="disabled || !item.product"
-          label="Margem (%)"
-          @blur="setProductPriceByMargin(item, index)"
-        />
-
-        <div class="flex flex-col gap-x-sm">
-          <div>{{ formatFamilyLabel(item.product?.family) }}</div>
-          <div>Fat. liquido: {{ formatPrice(item.netSales) }}</div>
-          <div>Fat. bruto: {{ formatPrice(item.grossRevenue) }}</div>
+          <VDivider />
         </div>
       </template>
     </EEditableListItem>

@@ -32,7 +32,7 @@ export const getProductMargin = (row: IPricesTable.Price) => {
 export const getProductPriceByMargin = (row: IPricesTable.Price) => {
   const desireMargin = row.margin
 
-  if(desireMargin > 50) {
+  if(desireMargin >= 50) {
     throw new Error('Para calcular o preço de venda, a margem deve ser menor ou igual a 50%')
   }
 

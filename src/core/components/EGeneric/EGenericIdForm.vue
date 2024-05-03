@@ -11,6 +11,7 @@ const props = defineProps<{
   updateFn: Function
   formatSubmitFn: Function
   initialValuesCreate: unknown
+  formatInitialValues?: Function
 }>()
 
 const loadingGet = ref(false);
@@ -27,8 +28,10 @@ const fetchModel = async () => {
     errorGet.value = false
 
     const result = await props.getFn(props.id);
-
-    data.value = result
+    
+    props.formatInitialValues
+      ? data.value = props.formatInitialValues(result)
+      : data.value = result
   } catch {
     errorGet.value = true
   } finally {

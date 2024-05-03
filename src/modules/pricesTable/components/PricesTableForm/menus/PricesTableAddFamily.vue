@@ -1,37 +1,51 @@
 <script lang="ts" setup>
-import { required } from '@/src/core/utils/form-validator';
-import { useForm, useFieldArray, useFormValues } from 'vee-validate';
-import { ref, computed } from 'vue';
-import { getProducts } from '@/src/modules/products/datasource/products';
-import { IPricesTable } from '@/src/modules/pricesTable/types/pricesTable';
 import useNotify from '@/src/core/composables/useNotify';
+import { required } from '@/src/core/utils/form-validator';
+import { getProducts } from '@/src/modules/products/datasource/products';
+import { useFieldArray, useForm } from 'vee-validate';
+import { ref } from 'vue';
+import { IPricesTable, PricesTableFormType } from '../../../types/pricesTable';
 
-defineProps<{ disabled: boolean }>();
-
-const loading = ref(false)
-
-const {
-  displayMessage
-} = useNotify()
-
-const { fields, insert } = useFieldArray('prices')
-const values = useFormValues()
-const arrayValues = computed(() => values.value.prices)
-
-const emit = defineEmits<{
-  (e: 'loadProductData', price: IPricesTable.Price, index: number): void;
-}>();
-
+const { fields, insert } = useFieldArray<PricesTableFormType.PricesByFamilies>('pricesByFamilies')
 const { handleSubmit } = useForm()
 
-const isProductAlreadyAdded = (productId?: string) => {
-  return arrayValues.value.some((price: IPricesTable.Price) => price.product?._id === productId)
+const loading = ref()
+
+const { displayMessage } = useNotify()
+
+defineProps<{
+  disabled?: boolean
+}>()
+
+const emit = defineEmits<{
+  (e: 'setProductDataToPrice', row: IPricesTable.Price, indexPrice: number, indexFamily: number): void
+}>()
+
+const addFamily = (newPricesByFamily: PricesTableFormType.PricesByFamilies) => {
+  if(fields.value.find(({ value }) => value.family._id === newPricesByFamily.family._id)) {
+    displayMessage({
+      message: 'Família já adicionada!',
+      type: 'error',
+    })
+    return
+  }
+
+  insert(fields.value.length, newPricesByFamily)
+
+  newPricesByFamily.prices.forEach((price, indexPrice) => {
+    emit('setProductDataToPrice', price, indexPrice, fields.value.length - 1)
+  })
+
+  displayMessage({
+    message: 'Produtos adicionados com sucesso!',
+    type: 'success',
+  })
 }
 
 const submit = handleSubmit(async (values) => {
   try {
     loading.value = true
-    
+
     const products = await getProducts({
       limit: 1000,
       page: 1,
@@ -54,7 +68,12 @@ const submit = handleSubmit(async (values) => {
       volume: 1,
     }))
 
-    addPricesToForm(newPrices)
+    const family: PricesTableFormType.PricesByFamilies = {
+      family: products.docs[0].family,
+      prices: newPrices,
+    }
+
+    addFamily(family)
   } catch (e) {
     displayMessage({
       message: 'Erro ao adicionar produtos da família!',
@@ -64,32 +83,6 @@ const submit = handleSubmit(async (values) => {
     loading.value = false
   }
 })
-
-const addPricesToForm = (newPrices: IPricesTable.Price[]) => {
-  newPrices.forEach((newPrice: IPricesTable.Price) => {
-    if (isProductAlreadyAdded(newPrice.product._id)) {
-      return
-    }
-
-    const index = fields.value.length || 0
-    insert(index, newPrice)
-
-    emit('loadProductData', newPrice, index)
-  })
-
-  if(!newPrices.length) {
-    displayMessage({
-      message: 'Nenhum produto encontrado na família!',
-      type: 'error',
-    })
-  }
-  else {
-    displayMessage({
-      message: 'Produtos adicionados com sucesso!',
-      type: 'success',
-    })
-  }
-}
 </script>
 
 <template>
@@ -105,14 +98,15 @@ const addPricesToForm = (newPrices: IPricesTable.Price[]) => {
         <template v-slot:activator="{ props }">
           <VBtn
             v-bind="{ ...props, ...propsMenu }"
-            prepend-icon="mdi-tag"
+            prepend-icon="mdi-plus"
+            color="primary"
             :disabled="disabled"
           >
             Adicionar família
           </VBtn>
         </template>
 
-        <span>Adicione todos os produtos de uma família a tabela de preço</span>
+        <span>Adicione uma família a tabela de preço</span>
       </VTooltip>
     </template>
 

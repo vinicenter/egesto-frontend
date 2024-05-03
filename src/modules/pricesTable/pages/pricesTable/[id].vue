@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import { useRouter } from 'vue-router';
 import { createPricesTable, deletePricesTable, getPricesTable, updatePricesTable } from '../../datasource/pricesTable';
-import { IPricesTable } from '../../types/pricesTable'
+import { IPricesTable, PricesTableFormType } from '../../types/pricesTable'
 import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter()
@@ -13,16 +13,18 @@ const initialValues = {
   archived: false,
   costTable: undefined,
   customer: undefined,
-  prices: []
+  pricesByFamilies: []
 }
 
-const formatSubmit = (data: IPricesTable.Root) => {
+const formatSubmit = (data: PricesTableFormType.Root) => {
+  const prices = data.pricesByFamilies.flatMap((family) => family.prices)
+
   return {
     name: data.name,
     archived: data.archived,
     costTable: data.costTable?._id,
     customer: data.customer?._id,
-    prices: data.prices.map((price) => ({
+    prices: prices.map((price) => ({
       product: price.product._id,
       tax: Number(price.tax),
       shipment: Number(price.shipment),
@@ -35,6 +37,37 @@ const formatSubmit = (data: IPricesTable.Root) => {
       productionLost: Number(price.productionLost),
       margin: Number(price.margin),
     }))
+  }
+}
+
+const formatInitialValues = (data: IPricesTable.Root): PricesTableFormType.Root => {
+  const pricesByFamilies: PricesTableFormType.PricesByFamilies[] = []
+
+  data.prices.forEach((price) => {
+    const family = price.product.family
+
+    if(!family) return
+
+    const familyIndex = pricesByFamilies.findIndex((familyPrices) => familyPrices.family._id === family._id)
+
+    if (familyIndex === -1) {
+      pricesByFamilies.push({
+        family,
+        prices: [price]
+      })
+    } else {
+      pricesByFamilies[familyIndex].prices.push(price)
+    }
+  })
+
+  return {
+    archived: data.archived,
+    name: data.name,
+    _id: data._id,
+    costTable: data.costTable,
+    customer: data.customer,
+    pricesByFamilies: pricesByFamilies,
+    familyExibition: [],
   }
 }
 
@@ -56,6 +89,7 @@ const finish = () => {
     :update-fn="updatePricesTable"
     :format-submit-fn="formatSubmit"
     :initial-values-create="initialValues"
+    :format-initial-values="formatInitialValues"
     @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">
