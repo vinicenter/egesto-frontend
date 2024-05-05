@@ -235,9 +235,9 @@ const shouldEnableFamily = (indexFamily: number) => {
                   @remove-family="removeItem"
                 />
               </div>
-  
+
               <VDivider class="mt-sm" />
-  
+
               <EEditableListItem
                 :name="`pricesByFamilies.${indexFamily}.prices`"
                 class="flex flex-col lg:flex-row space-y-4"
@@ -249,7 +249,7 @@ const shouldEnableFamily = (indexFamily: number) => {
                     <div>
                       {{ fields.pricesByFamilies?.[indexFamily].prices[indexPrice].product.name }}
                     </div>
-  
+
                     <div class="flex gap-x-xs">
                       <VTooltip open-on-click>
                         <template v-slot:activator="{ props }">
@@ -262,15 +262,15 @@ const shouldEnableFamily = (indexFamily: number) => {
                             @click="syncProduct(item, indexPrice, indexFamily, true)"
                           />
                         </template>
-    
+
                         <span>Sincronizar custo do produto, tabela de custo e custos da família</span>
                       </VTooltip>
 
                       <PricesTableRemoveProduct
                         @confirm="removeProduct"
-                        :disabled="disabled"
+                        :disabled="disabled || fields.pricesByFamilies?.[indexFamily].prices.length === 1"
                       />
-    
+
                       <VTooltip
                         v-if="fields.pricesByFamilies?.[indexFamily].prices[indexPrice].product.code"
                         open-on-click
