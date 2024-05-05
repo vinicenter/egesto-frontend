@@ -39,8 +39,8 @@ export const getSummaryBills = async (params: Partial<IBillPaginationFilters>): 
   return data
 }
 
-export const exportBills = async () => {
-  const { data } = await axios.get<Blob>('/bills/export', { responseType: 'blob' })
+export const exportBills = async (params: IBillPaginationFilters) => {
+  const { data } = await axios.get<Blob>('/bills/export', { params, responseType: 'blob' })
 
   return data
 }

@@ -92,17 +92,21 @@ const formatPaymentMethod = (paymentMethod: IBill['paymentMethod']) => {
 const notify = useNotify();
 
 const exportLoading = ref(false);
-const generateExport = async () => {
+const generateExport = async (shouldUseFilter: boolean) => {
   try {
     exportLoading.value = true;
 
-    const csvBlob = await exportBills()
+    const params = shouldUseFilter
+      ? billsFilterStore.queryVariables
+      : { isPaid: 'undefined' }
+
+    const csvBlob = await exportBills(params)
 
     downloadBlob(csvBlob, `Relatório Contas`, 'csv');
   } catch (e) {
     notify.displayMessage({
       type: 'error',
-      message: 'Erro ao gerar relatório',
+      message: 'Erro ao exportar',
     });
   } finally {
     exportLoading.value = false;
@@ -160,8 +164,12 @@ const openAccumulativeModal = ref(false);
               <VListItemTitle>Relatório acumulativo</VListItemTitle>
             </VListItem>
 
-            <VListItem @click="generateExport">
-              <VListItemTitle>Exportar CSV</VListItemTitle>
+            <VListItem @click="generateExport(false)">
+              <VListItemTitle>Exportar todos em CSV</VListItemTitle>
+            </VListItem>
+
+            <VListItem @click="generateExport(true)">
+              <VListItemTitle>Exportar filtro atual em CSV</VListItemTitle>
             </VListItem>
           </VList>
         </VMenu>

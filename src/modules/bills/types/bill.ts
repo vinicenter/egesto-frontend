@@ -31,7 +31,7 @@ export interface IBillFilters {
   paymentMethod?: BillPaymentMethods[],
   recipient?: string,
   isPaid?: boolean | string
-  tags: string[]
+  tags?: string[]
 }
 
 export interface IBillPaginationFilters extends IBillFilters {

@@ -68,7 +68,7 @@ const generateReport = async () => {
   } catch (e) {
     notify.displayMessage({
       type: 'error',
-      message: 'Erro ao gerar relatório',
+      message: 'Erro ao exportar',
     });
   } finally {
     reportLoading.value = false;
@@ -131,7 +131,7 @@ defineOptions({
         :loading="reportLoading"
         @click="generateReport"
       >
-        Relatório
+        Exportar todos em CSV
       </VBtn>
     </template>
 

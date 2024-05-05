@@ -49,7 +49,7 @@ const generateReport = async () => {
   } catch (e) {
     notify.displayMessage({
       type: 'error',
-      message: 'Erro ao gerar relatório',
+      message: 'Erro ao exportar',
     });
   } finally {
     reportLoading.value = false;
@@ -131,7 +131,7 @@ const queryVariables = reactive<Partial<IProduct.Filters>>({
         :loading="reportLoading"
         @click="generateReport"
       >
-        Relatório
+        Exportar todos em CSV
       </VBtn>
 
       <ProductFilters v-model="queryVariables" />

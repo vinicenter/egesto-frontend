@@ -37,7 +37,7 @@ const generateReport = async (item: IPricesTable.Root) => {
   } catch {
     notify.displayMessage({
       type: 'error',
-      message: 'Erro ao gerar relatório',
+      message: 'Erro ao exportar',
     });
   } finally {
     reportLoading.value = false;
@@ -74,7 +74,7 @@ defineOptions({
           :loading="reportLoading && reportId === item._id"
           @click="generateReport(item)"
         >
-          Relatório
+          Exportar em CSV
         </VBtn>
 
         <ETableActionButtons
