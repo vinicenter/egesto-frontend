@@ -11,36 +11,35 @@ const fields = useFormValues<IPricesTable.Root>()
 </script>
 
 <template>
-  <section>
-    <EInputText
-      name="name"
-      :disabled="disabled"
-      label="Nome"
-      :rules="[required]"
-    />
-
-    <ESelectCostsTable
-      name="costTable"
-      :disabled="disabled"
-      return-object
-      :clearable="false"
-      :rules="[required]"
-    />
-
-    <ESelectPeople
-      name="customer"
-      return-object
-      label="Cliente"
-      :disabled="disabled || !fields.costTable"
-    />
-
-    <div class="flex items-left">
-      <ESwitch
-        name="archived"
+  <section class="flex flex-col">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-x-sm">
+      <EInputText
+        name="name"
         :disabled="disabled"
-        label="Arquivar"
-        class="w-100px"
+        label="Nome"
+        :rules="[required]"
+      />
+
+      <ESelectCostsTable
+        name="costTable"
+        :disabled="disabled"
+        return-object
+        :clearable="false"
+        :rules="[required]"
+      />
+
+      <ESelectPeople
+        name="customer"
+        return-object
+        label="Cliente"
+        :disabled="disabled || !fields.costTable"
       />
     </div>
+
+    <ESwitch
+      name="archived"
+      :disabled="disabled"
+      label="Arquivar"
+    />
   </section>
 </template>

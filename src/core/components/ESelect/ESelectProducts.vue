@@ -1,6 +1,8 @@
 <script lang="ts" setup>
 const props = defineProps<{
   onlyFeedstockEnabled?: boolean
+  withFamily?: boolean
+  familyId?: string
 }>()
 
 import { getProducts } from '@/src/modules/products/datasource/products'
@@ -8,7 +10,9 @@ import { computed } from 'vue';
 
 const queryVariables = computed(() => {
   return {
-    onlyFeedstockEnabled: props.onlyFeedstockEnabled
+    onlyFeedstockEnabled: props.onlyFeedstockEnabled,
+    withFamily: props.withFamily,
+    familyId: props.familyId,
   }
 })
 </script>

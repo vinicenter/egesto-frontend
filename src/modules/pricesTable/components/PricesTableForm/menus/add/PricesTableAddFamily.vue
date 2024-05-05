@@ -4,7 +4,7 @@ import { required } from '@/src/core/utils/form-validator';
 import { getProducts } from '@/src/modules/products/datasource/products';
 import { useFieldArray, useForm } from 'vee-validate';
 import { ref } from 'vue';
-import { IPricesTable, PricesTableFormType } from '../../../types/pricesTable';
+import { IPricesTable, PricesTableFormType } from '../../../../types/pricesTable';
 
 const { fields, insert } = useFieldArray<PricesTableFormType.PricesByFamilies>('pricesByFamilies')
 const { handleSubmit } = useForm()
@@ -27,6 +27,7 @@ const addFamily = (newPricesByFamily: PricesTableFormType.PricesByFamilies) => {
       message: 'Família já adicionada!',
       type: 'error',
     })
+
     return
   }
 
@@ -83,12 +84,17 @@ const submit = handleSubmit(async (values) => {
     loading.value = false
   }
 })
+
+const validateFamily = (familyId: string) => {
+  return !fields.value.find(({ value }) => value.family._id === familyId) || 'Família já adicionada!'
+}
 </script>
 
 <template>
   <VMenu
     :close-on-content-click="false"
     location="bottom"
+    class="max-w-300px"
   >
     <template v-slot:activator="{ props: propsMenu }">
       <VTooltip
@@ -120,7 +126,7 @@ const submit = handleSubmit(async (values) => {
       >
         <ESelectFamilies
           name="family"
-          :rules="required"
+          :rules="[required, validateFamily]"
           familyType="linked"
           :clearable="false"
         />

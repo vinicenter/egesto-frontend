@@ -15,6 +15,7 @@ export namespace IProduct {
     familyId?: string
     brandId?: string
     onlyFeedstockEnabled?: boolean
+    withFamily?: boolean
   }
 
   export interface Root {

@@ -2,7 +2,7 @@
 import { useFieldArray, useFormValues } from 'vee-validate';
 import { computed } from 'vue';
 import { ref } from 'vue';
-import { IPricesTable, PricesTableFormType } from '../../../types/pricesTable';
+import { IPricesTable, PricesTableFormType } from '../../../../types/pricesTable';
 import { getProducts } from '@/src/modules/products/datasource/products';
 import { IProduct } from '@/src/modules/products/types/product';
 import useNotify from '@/src/core/composables/useNotify';
@@ -12,12 +12,9 @@ const props = defineProps<{
   disabled?: boolean
 }>()
 
-const dialog = ref(false)
-
 const loading = ref(false)
 
 const { displayMessage } = useNotify()
-
 const { fields, push } = useFieldArray<IPricesTable.Price>(computed(() => `pricesByFamilies.${props.familyIndex}.prices`))
 const formValues = useFormValues<PricesTableFormType.Root>()
 
@@ -25,7 +22,7 @@ const emit = defineEmits<{
   (e: 'setProductDataToPrice', row: IPricesTable.Price, indexPrice: number, indexFamily: number): void
 }>()
 
-const updateFamilyProducts = async () => {
+const updateFamilyProducts = async (close: () => void) => {
   const family = formValues.value.pricesByFamilies?.[props.familyIndex]?.family
 
   if(!family) {
@@ -78,7 +75,7 @@ const updateFamilyProducts = async () => {
 
     displayMessage({ message, type: 'success' })
 
-    dialog.value = false
+    close()
   } catch {
     displayMessage({
       message: 'Erro ao procurar produtos da família!',
@@ -93,48 +90,42 @@ const updateFamilyProducts = async () => {
 </script>
 
 <template>
-	<VDialog
-		v-model="dialog"
-		max-width="400"
-		persistent
-	>
-		<template v-slot:activator="{ props }">
+  <EDialogConfirm
+		max-width="500"
+    title="Deseja adicionar todos os produtos da família?"
+    text="Adicione todos os produtos da família para dentro da tabela de preço"
+    dont-close-on-confirm
+    @confirm="updateFamilyProducts"
+  >
+    <template v-slot:activator="{ props }">
       <VTooltip open-on-click location="top">
         <template v-slot:activator="{ props: propsTooltip }">
           <VBtn
             v-bind="{ ...propsTooltip, ...props }"
-            prepend-icon="mdi-sync"
+            prepend-icon="mdi-plus"
             color="primary"
             :disabled="disabled"
           >
-            Atualizar produtos da família
+            Adicionar todos os produtos
           </VBtn>
         </template>
 
-        <span>Adicione os últimos produtos criados na família para dentro da tabela de preço</span>
+        <span>Adicione todos os produtos da família para dentro da tabela de preço</span>
       </VTooltip>
 		</template>
 
-		<VCard
-			prepend-icon="mdi-trash-can-outline"
-			text="Ao atualizar a lista de produtos da família, os produtos da família que não estão na tabela de preço serão adicionados."
-			title="Atualizar a lista de produtos?"
-		>
-			<template v-slot:actions>
-				<v-spacer></v-spacer>
+    <template #actions="{ confirm, close }">
+      <VBtn @click="close">
+        Cancelar
+      </VBtn>
 
-				<VBtn @click="dialog = false">
-					Cancelar
-				</VBtn>
-
-				<VBtn
-          color="primary"
-          :loading="loading"
-          @click="updateFamilyProducts"
-        >
-					Atualizar
-				</VBtn>
-			</template>
-		</VCard>
-	</VDialog>
+      <VBtn
+        color="primary"
+        :loading="loading"
+        @click="confirm"
+      >
+        Adicionar
+      </VBtn>
+    </template>
+  </EDialogConfirm>
 </template>

@@ -42,6 +42,7 @@ export namespace PricesTableFormType {
     name: string;
     familyExibition: string[];
     pricesByFamilies: PricesByFamilies[];
+    [key: string]: any;
   }
 
   export interface PricesByFamilies {

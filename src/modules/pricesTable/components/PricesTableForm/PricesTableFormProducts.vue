@@ -8,7 +8,7 @@ import { getProductMargin, getProductPriceByMargin } from '@/src/modules/pricesT
 import { getFamiliesDefaultCost } from '@/src/modules/families/datasource/families';
 import { useQuery } from '@tanstack/vue-query';
 import { computed } from 'vue';
-import PricesTableRemoveFamily from './menus/PricesTableRemoveFamily.vue';
+import PricesTableRemoveFamily from './menus/remove/PricesTableRemoveFamily.vue';
 
 const props = defineProps<{
   disabled: boolean;
@@ -64,6 +64,8 @@ const setProductPriceByMargin = (price: IPricesTable.Price, indexPrice: number, 
 }
 
 const setProductDataToPrice = (row: IPricesTable.Price, indexPrice: number, indexFamily: number) => {
+  console.log('setProductDataToPrice', row, indexPrice, indexFamily)
+
   const product = row.product
 
   const productCost = product?.productionCost?.packCost || 0;
@@ -146,6 +148,12 @@ const shouldEnableFamily = (indexFamily: number) => {
         @set-product-data-to-price="setProductDataToPrice"
       />
 
+      <PricesTableAddProduct
+        :disabled="disabled"
+        :form="form"
+        @set-product-data-to-price="setProductDataToPrice"
+      />
+
       <PricesTableBulkChanges
         :form="form"
         :disabled="disabled"
@@ -200,9 +208,16 @@ const shouldEnableFamily = (indexFamily: number) => {
 
             <VContainer>
               <div class="flex flex-wrap gap-sm items-center gap-x-sm">
-                <PricesTableUpdateFamilyProducts
+                <PricesTableAddAllProductsToFamily
                   :disabled="disabled"
                   :family-index="indexFamily"
+                  @set-product-data-to-price="setProductDataToPrice"
+                />
+
+                <PricesTableAddProduct
+                  :disabled="disabled"
+                  :form="form"
+                  :family-id="item.family._id"
                   @set-product-data-to-price="setProductDataToPrice"
                 />
 
@@ -229,7 +244,7 @@ const shouldEnableFamily = (indexFamily: number) => {
                 :disabled="disabled"
                 disable-add
               >
-                <template #default="{ index: indexPrice, item }">
+                <template #default="{ index: indexPrice, item, removeItem: removeProduct }">
                   <div class="w-300px m-xs space-y-xs">
                     <div>
                       {{ fields.pricesByFamilies?.[indexFamily].prices[indexPrice].product.name }}
@@ -250,6 +265,11 @@ const shouldEnableFamily = (indexFamily: number) => {
     
                         <span>Sincronizar custo do produto, tabela de custo e custos da família</span>
                       </VTooltip>
+
+                      <PricesTableRemoveProduct
+                        @confirm="removeProduct"
+                        :disabled="disabled"
+                      />
     
                       <VTooltip
                         v-if="fields.pricesByFamilies?.[indexFamily].prices[indexPrice].product.code"
