@@ -8,30 +8,39 @@ import { computed } from 'vue';
 import dayjs, { Dayjs } from 'dayjs';
 import { priceFormat } from '@/src/core/utils/format';
 import { useBillsFilterStore } from '../stores/use-bills-filter-store';
+import { BillPaymentMethods, IBillFilters } from '../types/bill';
+import { BILL_PAYMENT_METHOD } from '../constants/bills';
 
 const modelValue = defineModel<boolean>()
 
-const form = useForm<{
+interface FormValues {
   startDate: Dayjs
   endDate: Dayjs
   isPaid: boolean | string
-}>({
+  tags: []
+  paymentMethod: BillPaymentMethods[] | undefined
+  recipient: string | undefined
+}
+
+const form = useForm<FormValues>({
   keepValuesOnUnmount: true,
   initialValues: {
     isPaid: 'undefined',
   }
 })
 
-const queryVariables = reactive<
-  {
-    startDate: string
-    endDate: string
-    isPaid: boolean | string
-  }
->({
+interface CumulativeFilters extends IBillFilters {
+  startDate: string
+  endDate: string
+}
+
+const queryVariables = reactive<CumulativeFilters>({
   startDate: '',
   endDate: '',
   isPaid: 'undefined',
+  tags: [],
+  paymentMethod: undefined,
+  recipient: undefined,
 })
 
 const billsFilterStore = useBillsFilterStore()
@@ -46,9 +55,10 @@ const setDayToFilter = (date: string) => {
     dueYear: undefined,
     endDueDate: undefined,
     isPaid: queryVariables.isPaid,
-    recipient: undefined,
+    recipient: queryVariables.recipient,
     startDueDate: undefined,
-    paymentMethod: undefined,
+    paymentMethod: queryVariables.paymentMethod,
+    tags: queryVariables.tags,
   })
 
   const submit = billsFilterStore.submit()
@@ -73,6 +83,9 @@ const submit = form.handleSubmit(async (values) => {
   queryVariables.endDate = values.endDate.toISOString()
   queryVariables.startDate = values.startDate.toISOString()
   queryVariables.isPaid = values.isPaid
+  queryVariables.tags = values.tags
+  queryVariables.paymentMethod = values.paymentMethod
+  queryVariables.recipient = values.recipient
 })
 
 const isPaidEnabled = computed(() => queryVariables.isPaid === 'undefined' || queryVariables.isPaid === true)
@@ -192,7 +205,26 @@ const { formatPrice } = priceFormat({
                 { label: 'Não pago', value: false },
                 { label: 'Ambos', value: 'undefined' },
               ]"
-              hide-details
+            />
+
+            <BillTagsSelect
+              name="tags" 
+            />
+
+            <ESelectPeople
+              label="Recebedor"
+              name="recipient"
+            />
+
+            <ESelect
+              :items="BILL_PAYMENT_METHOD"
+              :return-object="false"
+              item-title="label"
+              item-value="value"
+              label="Forma de pagamento"
+              name="paymentMethod"
+              clearable
+              multiple
             />
           </div>
 

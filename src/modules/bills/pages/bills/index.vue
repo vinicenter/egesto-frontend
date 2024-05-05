@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router';
 
 const router = useRouter();
 
-import { getbills, exportBills } from '../../datasource/bills';
+import { getBills, exportBills } from '../../datasource/bills';
 import { priceFormat } from '@/src/core/utils/format';
 import dayjs from '~utils/dayjs'
 import BillFilter from '../../components/BillFilter.vue';
@@ -118,7 +118,7 @@ const openAccumulativeModal = ref(false);
 
     <ETableGenericList
       :columns="columns"
-      :list-data-source="getbills"
+      :list-data-source="getBills"
       query-key="bills"
       :queryVariables="billsFilterStore.queryVariables"
       @new="router.push({ name: 'bill', params: { id: 'novo', type: 'criar' } })"

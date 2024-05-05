@@ -28,12 +28,15 @@ export interface IBillRoot {
 }
 
 export interface IBillFilters {
-  startDueDate?: string,
-  endDueDate?: string,
   paymentMethod?: BillPaymentMethods[],
   recipient?: string,
   isPaid?: boolean | string
   tags: string[]
+}
+
+export interface IBillPaginationFilters extends IBillFilters {
+  startDueDate?: string,
+  endDueDate?: string,
 }
 
 export interface IBillsSummary {

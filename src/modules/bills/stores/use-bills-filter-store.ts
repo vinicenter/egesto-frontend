@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { FormContext, useForm } from "vee-validate";
 import { Ref } from "vue";
-import { BillPaymentMethods, IBillFilters } from "../types/bill";
+import { BillPaymentMethods, IBillPaginationFilters } from "../types/bill";
 import dayjs from "~utils/dayjs";
 
 interface BillsFormFilter {
@@ -20,11 +20,11 @@ interface BillsFormFilter {
 interface States {
   form?: Ref<FormContext<BillsFormFilter, BillsFormFilter>>
   formId?: string
-  queryVariables: Partial<IBillFilters>
+  queryVariables: Partial<IBillPaginationFilters>
   filter: BillsFormFilter
 }
 
-const buildInitialValues = (initialValues: Partial<IBillFilters>): BillsFormFilter => {
+const buildInitialValues = (initialValues: Partial<IBillPaginationFilters>): BillsFormFilter => {
   return {
     dateFilterType: 'period',
     dueYear: dayjs().year(),
@@ -33,7 +33,7 @@ const buildInitialValues = (initialValues: Partial<IBillFilters>): BillsFormFilt
   } as BillsFormFilter
 }
 
-const makeInitialQueryVariables = (): Partial<IBillFilters> => ({
+const makeInitialQueryVariables = (): Partial<IBillPaginationFilters> => ({
   isPaid: 'undefined',
   startDueDate: dayjs().startOf('day').toISOString(),
 })
