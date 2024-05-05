@@ -64,8 +64,6 @@ const setProductPriceByMargin = (price: IPricesTable.Price, indexPrice: number, 
 }
 
 const setProductDataToPrice = (row: IPricesTable.Price, indexPrice: number, indexFamily: number) => {
-  console.log('setProductDataToPrice', row, indexPrice, indexFamily)
-
   const product = row.product
 
   const productCost = product?.productionCost?.packCost || 0;
