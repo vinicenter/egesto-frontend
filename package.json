@@ -21,7 +21,7 @@
     "maska": "^2.1.10",
     "pinia": "^2.1.7",
     "v-mask": "^2.3.0",
-    "vee-validate": "^4.12.4",
+    "vee-validate": "^4.12.7",
     "vite-plugin-vue-devtools": "^7.0.25",
     "vite-plugin-vuetify": "^1.0.2",
     "vue": "^3.3.13",
