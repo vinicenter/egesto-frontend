@@ -33,7 +33,9 @@ const formatSubmit = (data: IBill) => {
     ...data,
     amount: Number(data.amount),
     recipient: recipient,
-    tags: data.tags.map((tag) => tag._id),
+    tags: data.tags?.length
+      ? data.tags.map((tag) => tag._id)
+      : [],
   }
 }
 </script>
