@@ -119,7 +119,7 @@ const tableColumn = [
                   <td>
                     <RouterLink
                       v-if="item?.family?.name"
-                      :to="{ name: 'family', params: { id: item?.family?._id, type: 'edit' } }"
+                      :to="{ name: 'family', params: { id: item?.family?._id, type: 'editar' } }"
                     >
                       {{ formatFamilyLabel(item?.family) }}
                     </RouterLink>

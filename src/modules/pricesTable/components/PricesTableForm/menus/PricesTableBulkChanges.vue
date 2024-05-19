@@ -1,18 +1,15 @@
 <script lang="ts" setup>
 import { required } from '@/src/core/utils/form-validator';
-import { useForm, FormContext } from 'vee-validate';
-import { IPricesTable, PricesTableFormType } from '@/src/modules/pricesTable/types/pricesTable';
+import { useForm, FieldEntry, useFieldArray } from 'vee-validate';
+import { PricesTableFormType } from '@/src/modules/pricesTable/types/pricesTable';
 import useNotify from '@/src/core/composables/useNotify';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
+import { nextTick } from 'vue';
 
-const props = withDefaults(defineProps<{
-  disabled: boolean,
-  bulkType: 'all' | 'family'
-  indexFamily?: number
-  form: FormContext<PricesTableFormType.Root, PricesTableFormType.Root>;
-}>(), {
-  indexFamily: 0,
-});
+const props = defineProps<{
+  disabled?: boolean,
+  itemsFiltered: FieldEntry<PricesTableFormType.Price>[]
+}>();
 
 interface MenuValues {
   field: string;
@@ -20,57 +17,42 @@ interface MenuValues {
 }
 
 const { displayMessage } = useNotify()
+
+const { fields: prices, update } = useFieldArray<PricesTableFormType.Price>('prices')
+
+const getPriceIndexByProductId = (productId?: string) => {
+  return prices.value.findIndex(item => item.value.product._id! === productId)
+}
+
 const { handleSubmit } = useForm<MenuValues>()
 
 const emit = defineEmits<{
-  (e: 'setProductPriceByMargin', price: IPricesTable.Price, indexPrice: number, indexFamily: number): void
-  (e: 'setProductMargin', row: IPricesTable.Price, indexPrice: number, indexFamily: number): void
+  (e: 'setProductMargin', index: number): void
+  (e: 'setProductPrice', index: number): void
 }>()
 
 const submit = handleSubmit(async (values) => {
-  let count = 0
+  props.itemsFiltered.forEach(async (price) => {
+    const priceIndex = getPriceIndexByProductId(price.value.product._id)
 
-  if(props.bulkType === 'family') {
-    props.form.values.pricesByFamilies[props.indexFamily].prices.forEach((price, indexPrice) => {
-      const updated = {
-        ...price,
-        [values.field]: values.value,
-      }
+    const updated = {
+      ...price.value,
+      [values.field]: values.value,
+    }
 
-      props.form.setFieldValue(`pricesByFamilies.${props.indexFamily}.prices.${indexPrice}`, updated)
+    update(priceIndex, updated)
 
-      if(values.field === 'margin') {
-        emit('setProductPriceByMargin', updated, indexPrice, props.indexFamily)
-      } else {
-        emit('setProductMargin', updated, indexPrice, props.indexFamily)
-      }
+    await nextTick()
 
-      count++
-    })
-  } else {
-    props.form.values.pricesByFamilies.forEach((pricesByFamily, indexFamily) => {
-      pricesByFamily.prices.forEach((price, indexPrice) => {
-        const updated = {
-          ...price,
-          [values.field]: values.value,
-        }
+    if(values.field === 'margin') {
+      emit('setProductPrice', priceIndex)
+    } else {
+      emit('setProductMargin', priceIndex)
+    }
+  })
 
-        props.form.setFieldValue(`pricesByFamilies.${indexFamily}.prices.${indexPrice}`, updated)
-
-        if(values.field === 'margin') {
-          emit('setProductPriceByMargin', updated, indexPrice, indexFamily)
-        } else {
-          emit('setProductMargin', updated, indexPrice, indexFamily)
-        }
-
-        count++
-      })
-    })
-  }
-
-  const addPluralText = count > 1 ? 's' : ''
   displayMessage({
-    message: `${count} produto${addPluralText} atualizado${addPluralText}`,
+    message: `produtos atualizados`,
     type: 'success'
   })
 })
@@ -122,8 +104,7 @@ const fieldsOptions = [
           </VBtn>
         </template>
 
-        <span v-if="bulkType === 'all'">Faça alterações em massa em todos os produtos da tabela de preço</span>
-        <span v-else>Faça alterações em massa nos produtos da família</span>
+        <span>Faça alterações em massa nos itens filtrados</span>
       </VTooltip>
     </template>
 

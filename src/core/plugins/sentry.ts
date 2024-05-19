@@ -12,14 +12,13 @@ export const install = (app: App) => {
     app,
     dsn: sentryDsn,
     integrations: [
-      new Sentry.BrowserTracing({
-        tracePropagationTargets: ["app.egesto.net", "api.egesto.net"],
-      }),
+      Sentry.browserTracingIntegration(),
       Sentry.replayIntegration({
         maskAllText: false,
         blockAllMedia: false,
       }),
     ],
+    tracePropagationTargets: ["app.egesto.net", "api.egesto.net"],
     tracesSampleRate: 1.0,
     replaysSessionSampleRate: 0.1,
     replaysOnErrorSampleRate: 1.0,

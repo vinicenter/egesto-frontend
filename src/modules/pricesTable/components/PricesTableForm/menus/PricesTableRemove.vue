@@ -1,22 +1,18 @@
 <script setup lang="ts">
 defineProps<{
 	disabled?: boolean
-}>()
-
-const emit = defineEmits<{
-	(e: 'removeProduct'): void
+  tooltipText?: string
 }>()
 </script>
 
 <template>
 	<EDialogConfirm
 		icon="mdi-trash-can-outline"
-		text="Ao remover o produto, todos os dados inseridos nele serão perdidos."
-		title="Deseja remover este produto?"
-		@confirm="emit('removeProduct')"
+		text="Essa operação é ireversível."
+		title="Deseja remover?"
 	>
 		<template #activator="{ props }">
-      <VTooltip open-on-click>
+      <VTooltip open-on-click location="top">
         <template v-slot:activator="{ props: propsTooltip }">
           <VBtn
             v-bind="{ ...propsTooltip, ...props }"
@@ -27,7 +23,7 @@ const emit = defineEmits<{
           />
         </template>
 
-        <span>Remover produto</span>
+        <span>{{ tooltipText }}</span>
       </VTooltip>
 		</template>
 

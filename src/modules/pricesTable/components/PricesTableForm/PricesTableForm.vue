@@ -37,7 +37,7 @@ const submit = form.handleSubmit((values) => {
   });
 });
 
-const prices = computed(() => form.values.pricesByFamilies.flatMap((family) => family.prices));
+const prices = computed(() => form.values.prices);
 
 const disabled = computed(() => props.loading || props.disabled);
 

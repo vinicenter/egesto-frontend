@@ -22,9 +22,19 @@ const emit = defineEmits<{
 
     <template #default>
       <Form :initial-values="initialValues" @submit="emit('submit', $event)">
-        <VCard>
-          <slot name="content" />
-        </VCard>
+        <template #default="{ submitForm }">
+          <VCard>
+            <div>
+              <slot name="content" :submit-form="submitForm" />
+            </div>
+            
+            <VCardActions class="justify-center">
+              <VBtn type="submit">
+                Salvar
+              </VBtn>
+            </VCardActions>
+          </VCard>
+        </template>
       </Form>
     </template>
   </VMenu>

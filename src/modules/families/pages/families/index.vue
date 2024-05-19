@@ -42,43 +42,45 @@ const closeSubfamilyModal = () => router.push({})
 </script>
 
 <template>
-  <ETableGenericList
-    :columns="columns"
-    :list-data-source="getFamilies"
-    query-key="families"
-    :query-variables="{ familyType: 'main' }"
-    @new="router.push({ name: 'family', params: { id: 'novo', type: 'criar' }, query: { type: 'main' }})"
-  >
-    <template #default="{ item }">
-      <td>{{ item.name || '-' }}</td>
-      <td>
-        <VBtn @click="openSubfamilyModal(item)">
-          Subfamílias
-        </VBtn>
-      </td>
-    </template>
-
-    <template #menu>
-      <FamiliesDefaultCostsModal />
-    </template>
-
-    <template #actions="{ item }">
-      <ETableActionButtons
-        :id="item._id"
-        delete
-        edit
-        clone
-        page="family"
-      />
-    </template>
-  </ETableGenericList>
-
-  <FamiliesSubfamiliesModal
-    :model-value="subFamilyModal"
-    :mainFamilyId="mainFamilyId"
-    :mainFamilyName="mainFamilyName"
-    @update:model-value="closeSubfamilyModal"
-  />
+  <div>
+    <ETableGenericList
+      :columns="columns"
+      :list-data-source="getFamilies"
+      query-key="families"
+      :query-variables="{ familyType: 'main' }"
+      @new="router.push({ name: 'family', params: { id: 'novo', type: 'criar' }, query: { type: 'main' }})"
+    >
+      <template #default="{ item }">
+        <td>{{ item.name || '-' }}</td>
+        <td>
+          <VBtn @click="openSubfamilyModal(item)">
+            Subfamílias
+          </VBtn>
+        </td>
+      </template>
+  
+      <template #menu>
+        <FamiliesDefaultCostsModal />
+      </template>
+  
+      <template #actions="{ item }">
+        <ETableActionButtons
+          :id="item._id"
+          delete
+          edit
+          clone
+          page="family"
+        />
+      </template>
+    </ETableGenericList>
+  
+    <FamiliesSubfamiliesModal
+      :model-value="subFamilyModal"
+      :mainFamilyId="mainFamilyId"
+      :mainFamilyName="mainFamilyName"
+      @update:model-value="closeSubfamilyModal"
+    />
+  </div>
 </template>
 
 <route lang="yaml">

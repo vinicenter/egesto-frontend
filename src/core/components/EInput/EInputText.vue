@@ -8,9 +8,12 @@ const props = defineProps<{
   disabled?: boolean,
   type?: string,
   label: string,
+  keepValuesOnUnmount?: boolean,
 }>()
 
-const { value, handleBlur, errorMessage } = useField<string>(toRef(props, "name"), props.rules)
+const { value, handleBlur, errorMessage } = useField<string>(toRef(props, "name"), props.rules, {
+  keepValueOnUnmount: props.keepValuesOnUnmount,
+})
 </script>
 
 <template>

@@ -97,6 +97,7 @@ defineOptions({
         >
           <template #content>
             <EInputPrice
+              label="Preço"
               name="price"
               hide-details
               class="w-60"
@@ -113,6 +114,7 @@ defineOptions({
         >
           <template #content>
             <EInputPct
+              label="ICMS"
               name="icms"
               hide-details
               class="w-40"

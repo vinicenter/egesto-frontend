@@ -7,7 +7,7 @@ import { toRef } from 'vue';
 const props = defineProps<{
   name: string;
   disabled: boolean;
-  disableAdd: boolean;
+  disableAdd?: boolean;
   disableSpacer?: boolean;
 }>()
 

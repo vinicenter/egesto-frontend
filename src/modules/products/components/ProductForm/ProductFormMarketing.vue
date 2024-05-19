@@ -136,6 +136,7 @@ const generateDescriptionWithAi = async () => {
           <template v-slot:activator="{ props }">
             <div v-bind="props">
               <EColorPicker
+                title="Cor"
                 name="marketing.color"
                 :disabled="disabled"
                 :modes="['hex']"

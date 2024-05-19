@@ -237,11 +237,7 @@ const { formatPrice } = priceFormat({
           :headers="tableHeaders"
           :items="rows"
           :loading="isLoading && isQueryEnabled"
-          loading-text="Carregando relatório"
-          :hide-default-footer="true"
           density="compact"
-          no-data-text="Preencha um período para ver resultados."
-          itemsPerPageText="Itens por página"
         >
           <template v-slot:item="{ item }">
             <tr>

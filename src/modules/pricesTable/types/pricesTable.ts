@@ -1,7 +1,6 @@
 import { ICostsTable } from "../../costsTable/types/costsTable"
 import { IProduct } from "../../products/types/product"
 import { IPeople } from "../../people/types/people"
-import { IFamily } from "../../families/types/family";
 
 export namespace IPricesTable {
   export interface Root {
@@ -40,14 +39,8 @@ export namespace PricesTableFormType {
     costTable?: ICostsTable.Root;
     customer?: IPeople;
     name: string;
-    familyExibition: string[];
-    pricesByFamilies: PricesByFamilies[];
-    [key: string]: any;
-  }
-
-  export interface PricesByFamilies {
-    family: IFamily;
     prices: Price[];
+    [key: string]: any;
   }
 
   export interface Price {
