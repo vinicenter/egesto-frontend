@@ -91,8 +91,10 @@ const saveModel = async (mode: 'edit' | 'create' | 'delete', values: unknown) =>
       type: 'success'
     })
   } catch(e) {
+    const error = e as Error
+
     displayMessage({
-      message: 'Erro ao salvar',
+      message: 'Erro ao salvar: ' + error.stack,
       type: 'error'
     })
   } finally {
