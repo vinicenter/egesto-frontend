@@ -6,6 +6,8 @@ import PricesTableSummary from '../PricesTableSummary.vue';
 import { useForm } from 'vee-validate';
 import { ref } from 'vue';
 import useNotify from '@/src/core/composables/useNotify';
+import { useMagicKeys } from '@vueuse/core';
+import { watch } from 'vue';
 
 const router = useRouter();
 const { displayMessage } = useNotify();
@@ -75,6 +77,37 @@ const mediumMargin = computed(() => {
       acc + Number(price.margin)
       : acc;
   }, 0)/(prices.value.length) || 0;
+})
+
+const { ctrl_shift_p } = useMagicKeys()
+
+watch(ctrl_shift_p, (value) => {
+  if(!value) return
+
+  const data = form.values
+
+  console.log('We have got some debug data for you:')
+
+  console.log('form', data)
+  console.log('data to API', {
+    name: data.name,
+    archived: data.archived,
+    costTable: data.costTable?._id,
+    customer: data.customer?._id,
+    prices: data.prices.map((price) => ({
+      product: price.product._id,
+      tax: Number(price.tax),
+      shipment: Number(price.shipment),
+      expense: Number(price.expense),
+      price: Number(price.price),
+      volume: Number(price.volume),
+      grossRevenue: Number(price.grossRevenue),
+      netSales: Number(price.netSales),
+      productCost: Number(price.productCost),
+      productionLost: Number(price.productionLost),
+      margin: Number(price.margin),
+    }))
+  })
 })
 
 const tab = ref('informations')
