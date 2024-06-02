@@ -70,6 +70,7 @@ const { value: dateFilterType } = useField('dateFilterType')
                 label="Ano"
                 name="dueYear"
                 :rules="required"
+                keep-values-on-unmount
               />
             </template>
 

@@ -29,7 +29,7 @@ const valueFormatted = computed(() => {
 
 <template>
   <VMenu :close-on-content-click="false" min-width="328px" location="center center">
-    <template v-slot:activator="{ props }">
+    <template #activator="{ props }">
       <VTextField
         v-bind="props"
         v-model="valueFormatted"
@@ -44,16 +44,19 @@ const valueFormatted = computed(() => {
       />
     </template>
 
-    <VCard>
-      <VCardTitle>
-        Selecione o mês
-      </VCardTitle>
-
-      <VDatePickerMonths
-        v-model="value"
-        :title="label"
-        hide-header
-      />
-    </VCard>
+    <template #default="{ isActive }">
+      <VCard>
+        <VCardTitle>
+          Selecione o mês
+        </VCardTitle>
+  
+        <VDatePickerMonths
+          v-model="value"
+          :title="label"
+          hide-header
+          @update:model-value="isActive.value = false"
+        />
+      </VCard>
+    </template>
 	</VMenu>
 </template>
