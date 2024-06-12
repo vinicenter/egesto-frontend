@@ -2,11 +2,14 @@
 import { required } from '@/src/core/utils/form-validator';
 import { PricesTableFormType } from '../../../types/pricesTable';
 import { FieldEntry, useFieldValue } from 'vee-validate';
+import { priceFormat } from '@/src/core/utils/format';
 
 defineProps<{
   itemsFiltered: FieldEntry<PricesTableFormType.Price>[]
   disabled?: boolean
 }>()
+
+const { formatPrice } = priceFormat()
 
 const prices = useFieldValue<PricesTableFormType.Price[]>('prices')
 
@@ -40,6 +43,7 @@ const getPriceIndexByProductId = (productId?: string) => {
 const perPage = [
   {value: 5, title: '5'},
   {value: 10, title: '10'},
+  {value: 15, title: '15'},
 ]
 </script>
 
@@ -70,11 +74,12 @@ const perPage = [
 
           <VTooltip
             v-if="item.value.product.code"
-            open-on-click
+            location="top"
           >
             <template v-slot:activator="{ props }">
               <VChip
                 v-bind="props"
+                color="purple"
                 :disabled="disabled"
               >
                 {{ item.value.product.code }}
@@ -82,6 +87,23 @@ const perPage = [
             </template>
 
             <span>Código do produto</span>
+          </VTooltip>
+
+          <VTooltip
+            v-if="item.value.product?.pack?.numberOfUnitsInPack || 0"
+            location="top"
+          >
+            <template v-slot:activator="{ props }">
+              <VChip
+                v-bind="props"
+                color="primary"
+                :disabled="disabled"
+              >
+                {{ formatPrice(item.value.price / (item.value.product?.pack?.numberOfUnitsInPack || 0)) }}
+              </VChip>
+            </template>
+
+            <span>Preço de venda unitário</span>
           </VTooltip>
         </div>
       </div>
