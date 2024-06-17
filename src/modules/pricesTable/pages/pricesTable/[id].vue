@@ -3,6 +3,7 @@ import { useRouter } from 'vue-router';
 import { createPricesTable, deletePricesTable, getPricesTable, updatePricesTable } from '../../datasource/pricesTable';
 import { IPricesTable, PricesTableFormType } from '../../types/pricesTable'
 import { useQueryClient } from '@tanstack/vue-query';
+import { getProductMargin } from '../../utils/product-margin';
 
 const router = useRouter()
 
@@ -45,7 +46,21 @@ const formatInitialValues = (data: IPricesTable.Root): PricesTableFormType.Root 
     _id: data._id,
     costTable: data.costTable,
     customer: data.customer,
-    prices: data.prices,
+    prices: data.prices.map((price) => {
+      const rowWithPriceUpdated = {
+        ...price,
+        productCost: price.product?.productionCost?.packCost || price.productCost,
+      }
+
+      const { grossRevenue, margin, netSales } = getProductMargin(rowWithPriceUpdated)
+
+      return {
+        ...rowWithPriceUpdated,
+        grossRevenue,
+        margin,
+        netSales,
+      }
+    }),
   }
 }
 
