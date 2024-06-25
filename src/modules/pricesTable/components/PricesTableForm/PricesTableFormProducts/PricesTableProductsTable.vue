@@ -3,6 +3,7 @@ import { required } from '@/src/core/utils/form-validator';
 import { PricesTableFormType } from '../../../types/pricesTable';
 import { FieldEntry, useFieldValue } from 'vee-validate';
 import { priceFormat } from '@/src/core/utils/format';
+import { getProductUnitPrice } from '../../../utils/formatter';
 
 defineProps<{
   itemsFiltered: FieldEntry<PricesTableFormType.Price>[]
@@ -99,7 +100,7 @@ const perPage = [
                 color="primary"
                 :disabled="disabled"
               >
-                {{ formatPrice(item.value.price / (item.value.product?.pack?.numberOfUnitsInPack || 0)) }}
+                {{ formatPrice(getProductUnitPrice(item.value.price, item.value.product)) }}
               </VChip>
             </template>
 
