@@ -1,36 +1,98 @@
 <script setup lang="ts">
 import { priceFormat, numberFormat } from '@/src/core/utils/format';
+import type { IPricesTable, PricesTableFormType } from '../types/pricesTable';
 import { computed } from 'vue';
-
-const props = defineProps<{
-  volumeTotal: number;
-  grossRevenue: number;
-  totalNetRevenue: number;
-  mediumMargin: number;
-  items: number;
-}>()
+import { useFormValues } from 'vee-validate';
 
 const { formatPrice } = priceFormat();
 const { format } = numberFormat();
 
-const items = computed(() => {
-  if(!props.items) return 'Adicione itens'
+const formValues = useFormValues<PricesTableFormType.Root>()
 
-  if(props.items > 1) {
-    return `${props.items} itens`
+const prices = computed(() => formValues.value.prices);
+
+const itemsTotal = computed(() => {
+  if(!prices.value) {
+    return
   }
 
-  return `${props.items} item`
+  return prices.value.length;
+})
+
+const volumeTotal = computed(() => {
+  if(!prices.value) {
+    return 0
+  }
+
+  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
+    return price.volume
+      ? acc + Number(price.volume)
+      : acc;
+  }, 0);
+})
+
+const grossRevenue = computed(() => {
+  if(!prices.value) {
+    return 0
+  }
+
+  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
+    return price.grossRevenue
+      ? acc + Number(price.grossRevenue)
+      : acc;
+  }, 0);
+})
+
+const totalNetRevenue = computed(() => {
+  if(!prices.value) {
+    return 0
+  }
+
+  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
+    return price.netSales
+      ? acc + Number(price.netSales)
+      : acc;
+  }, 0);
+})
+
+const mediumMargin = computed(() => {
+  if(!prices.value) {
+    return
+  }
+
+  const results: { subtotal: number, margin: number }[] = []
+
+  prices.value.forEach((price) => {
+    const subtotal = price.price * price.volume
+    const margin = subtotal * (price.margin / 100)
+
+    results.push({ margin, subtotal })
+  })
+
+  const totalMargin = results.reduce((acc, result) => acc + result.margin, 0)
+  const totalSubtotal = results.reduce((acc, result) => acc + result.subtotal, 0)
+
+  return totalMargin / totalSubtotal * 100
+})
+
+const items = computed(() => {
+  if(!itemsTotal.value) return 'Adicione itens'
+
+  if(itemsTotal.value > 1) {
+    return `${itemsTotal.value} itens`
+  }
+
+  return `${itemsTotal.value} item`
 })
 
 const volume = computed(() => {
-  if(!props.volumeTotal) return 'Adicione volume'
+  if(!volumeTotal.value) return 'Adicione volume'
 
-  if(props.volumeTotal > 1) {
-    return `${props.volumeTotal} volumes`
+  if(volumeTotal.value > 1) {
+    return `${volumeTotal.value} volumes`
   }
 
-  return `${props.volumeTotal} volume`
+  return `${volumeTotal.value} volume`
 })
 </script>
 
@@ -93,7 +155,7 @@ const volume = computed(() => {
           :text="`${format(mediumMargin)}%`"
         />
       </template>
-      <span>Média da margem de todos os produtos</span>
+      <span>Margem média</span>
     </VTooltip>
   </div>
 </template>

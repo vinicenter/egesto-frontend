@@ -1,5 +1,5 @@
 <script lang="ts" setup>
-import type { IPricesTable, PricesTableFormType } from '../../types/pricesTable';
+import type { PricesTableFormType } from '../../types/pricesTable';
 import { computed } from 'vue';
 import { useRouter } from 'vue-router';
 import PricesTableSummary from '../PricesTableSummary.vue';
@@ -39,45 +39,7 @@ const submit = form.handleSubmit((values) => {
   });
 });
 
-const prices = computed(() => form.values.prices);
-
 const disabled = computed(() => props.loading || props.disabled);
-
-const itemsTotal = computed(() => {
-  return prices.value.length;
-})
-
-const volumeTotal = computed(() => {
-  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
-    return price.volume
-      ? acc + Number(price.volume)
-      : acc;
-  }, 0);
-})
-
-const grossRevenue = computed(() => {
-  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
-    return price.grossRevenue
-      ? acc + Number(price.grossRevenue)
-      : acc;
-  }, 0);
-})
-
-const totalNetRevenue = computed(() => {
-  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
-    return price.netSales
-      ? acc + Number(price.netSales)
-      : acc;
-  }, 0);
-})
-
-const mediumMargin = computed(() => {
-  return prices.value.reduce((acc: number, price: IPricesTable.Price) => {
-    return price.margin ?
-      acc + Number(price.margin)
-      : acc;
-  }, 0)/(prices.value.length) || 0;
-})
 
 const { ctrl_shift_p } = useMagicKeys()
 
@@ -115,13 +77,7 @@ const tab = ref('informations')
 
 <template>
   <form @submit.prevent="submit">
-    <PricesTableSummary
-      :items="itemsTotal"
-      :volumeTotal="volumeTotal"
-      :grossRevenue="grossRevenue"
-      :totalNetRevenue="totalNetRevenue"
-      :mediumMargin="mediumMargin"
-    />
+    <PricesTableSummary />
 
     <VTabs grow class="m-y-4" v-model="tab">
       <VTab value="informations">
