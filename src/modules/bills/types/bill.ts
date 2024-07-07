@@ -11,6 +11,7 @@ export interface IBill {
   reference?: string,
   amount: number,
   tags: IBillTagRoot[],
+  installment?: BillInstallment | null,
   observations?: string,
   isPaid?: boolean
 }
@@ -23,13 +24,22 @@ export interface IBillRoot {
   reference?: string,
   amount: number,
   observations?: string,
-  isPaid: boolean
+  isPaid: boolean,
+  installment?: BillInstallment,
   updatedAt: string,
+}
+
+export interface BillInstallment {
+  _id?: string,
+  name: string,
+  description?: string,
+  deletedAt?: string,
 }
 
 export interface IBillFilters {
   paymentMethod?: BillPaymentMethods[],
   recipient?: string,
+  installment?: string,
   isPaid?: boolean | string
   tags?: string[]
 }

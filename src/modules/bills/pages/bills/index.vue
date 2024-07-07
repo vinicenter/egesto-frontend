@@ -125,10 +125,12 @@ const openAccumulativeModal = ref(false);
       :list-data-source="getBills"
       query-key="bills"
       :queryVariables="billsFilterStore.queryVariables"
-      @new="router.push({ name: 'bill', params: { id: 'novo', type: 'criar' } })"
     >
       <template #default="{ item }">
         <td>
+          <div v-if="item?.installment">
+            Parcelamento: {{ item?.installment?.name }}
+          </div>
           <div>Vencimento: {{ dayjs(item.dueDate).format('DD/MM/YYYY') }}</div>
           <div>{{ formatPrice(item.amount) }}</div>
           <div>{{ formatPaymentMethod(item.paymentMethod) }}</div>
@@ -145,7 +147,32 @@ const openAccumulativeModal = ref(false);
         <td>{{ item.reference || '-' }}</td>
         <td>{{ item.observations || '-' }}</td>
       </template>
-  
+
+      <template #new>
+        <VMenu>
+          <template v-slot:activator="{ props }">
+            <VBtn
+              color="primary"
+              append-icon="mdi-menu-down"
+              v-bind="props"
+            >
+              Novo
+            </VBtn>
+          </template>
+
+          <VList>
+            <VListItem
+              title="Nova Conta"
+              @click="router.push({ name: 'bill', params: { id: 'novo', type: 'criar' } })"
+            />
+
+            <VListItem
+              title="Novo Parcelamento"
+              @click="router.push({ name: 'bill-installment', params: { id: 'novo', type: 'criar' } })"
+            />
+          </VList>
+        </VMenu>
+      </template>
       <template #menu>
 
         <VMenu>
@@ -174,20 +201,17 @@ const openAccumulativeModal = ref(false);
           </VList>
         </VMenu>
 
-
         <BillFilter />
       </template>
-  
       <template #actions="{ item }">
         <div class="flex gap-x-sm justify-center items-center">
           <BillPayOrRevertPaid :item="item" />
-  
           <ETableActionButtons
-            :id="item._id"
+            :id="item.installment ? item.installment._id : item._id"
             delete
             edit
-            :clone="false"
-            page="bill"
+            :clone="!item.installment"
+            :page="item.installment ? 'bill-installment' : 'bill'"
           />
         </div>
       </template>

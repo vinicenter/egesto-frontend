@@ -10,6 +10,7 @@ import { priceFormat } from '@/src/core/utils/format';
 import { useBillsFilterStore } from '../stores/use-bills-filter-store';
 import { BillPaymentMethods, IBillFilters } from '../types/bill';
 import { BILL_PAYMENT_METHOD } from '../constants/bills';
+import ESelectBillInstallments from '@/src/core/components/ESelect/ESelectBillInstallments.vue';
 
 const modelValue = defineModel<boolean>()
 
@@ -18,6 +19,7 @@ interface FormValues {
   endDate: Dayjs
   isPaid: boolean | string
   tags: []
+  installment: string | undefined
   paymentMethod: BillPaymentMethods[] | undefined
   recipient: string | undefined
 }
@@ -56,6 +58,7 @@ const setDayToFilter = (date: string) => {
     endDueDate: undefined,
     isPaid: queryVariables.isPaid,
     recipient: queryVariables.recipient,
+    installment: queryVariables.installment,
     startDueDate: undefined,
     paymentMethod: queryVariables.paymentMethod,
     tags: queryVariables.tags,
@@ -86,6 +89,7 @@ const submit = form.handleSubmit(async (values) => {
   queryVariables.tags = values.tags
   queryVariables.paymentMethod = values.paymentMethod
   queryVariables.recipient = values.recipient
+  queryVariables.installment = values.installment
 })
 
 const isPaidEnabled = computed(() => queryVariables.isPaid === 'undefined' || queryVariables.isPaid === true)
@@ -205,6 +209,10 @@ const { formatPrice } = priceFormat({
                 { label: 'Não pago', value: false },
                 { label: 'Ambos', value: 'undefined' },
               ]"
+            />
+
+            <ESelectBillInstallments
+              name="installment"
             />
 
             <BillTagsSelect

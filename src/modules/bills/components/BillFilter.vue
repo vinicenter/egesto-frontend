@@ -106,6 +106,12 @@ const { value: dateFilterType } = useField('dateFilterType')
             hide-details
           />
 
+          <ESelectBillInstallments
+            label="Parcelamento"
+            name="installment"
+            hide-details
+          />
+
           <ESelectPeople
             label="Recebedor"
             name="recipient"

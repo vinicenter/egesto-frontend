@@ -118,13 +118,15 @@ const columnsToOrder = columns.filter(column => column.orderByValue).map(column 
       />
 
       <div class="flex flex-wrap gap-sm">
-        <VBtn
-          @click="emit('new')"
-          class="p-sm"
-          color="primary"
-        >
-          Novo
-        </VBtn>
+        <slot name="new">
+          <VBtn
+            @click="emit('new')"
+            class="p-sm"
+            color="primary"
+          >
+            Novo
+          </VBtn>
+        </slot>
 
         <EOrderBy
           v-if="columnsToOrder.length > 0"

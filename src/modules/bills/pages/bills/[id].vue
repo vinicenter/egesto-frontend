@@ -29,10 +29,15 @@ const formatSubmit = (data: IBill) => {
     ? data.recipient?._id ? data.recipient?._id : undefined
     : data.recipient?._id ? data.recipient?._id : null
 
+  const installment = isSelectUndefined
+    ? data.installment?._id ? data.installment?._id : undefined
+    : data.installment?._id ? data.installment?._id : null
+
   return {
     ...data,
     amount: Number(data.amount),
     recipient: recipient,
+    installment: installment,
     tags: data.tags?.length
       ? data.tags.map((tag) => tag._id)
       : [],

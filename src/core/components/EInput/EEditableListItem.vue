@@ -32,9 +32,11 @@ defineOptions({
 </script>
 
 <template>
-  <div v-if="!fields.length">
-    Nenhum item adicionado
-  </div>
+  <VEmptyState
+    v-if="!fields.length"
+    title="Nenhum item adicionado"
+    text="Adicione um novo item clicando no botão abaixo"
+  />
 
   <div v-for="(field, idx) in fields" :key="field.key">
     <div v-bind="attrs">

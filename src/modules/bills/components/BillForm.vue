@@ -32,7 +32,15 @@ const submit = form.handleSubmit(async (values) => {
 </script>
 
 <template>
-  <form @submit.prevent="submit">
+  <VEmptyState
+    v-if="initialValues.installment"
+    title="Conta parcelada"
+    text="Não é possível editar uma conta parcelada."
+    @click:action="router.push({ name: 'list-bills' })"
+    action-text="Contas"
+  />
+
+  <form v-else @submit.prevent="submit">
     <div>
       <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
         <EDatePicker

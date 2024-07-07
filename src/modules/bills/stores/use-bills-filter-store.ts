@@ -13,6 +13,7 @@ interface BillsFormFilter {
   tags: string[],
   dueYear?: number,
   recipient?: string,
+  installment?: string,
   isPaid: boolean | string
   paymentMethod?: BillPaymentMethods[]
 }
@@ -48,6 +49,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
       dueYear: undefined,
       endDueDate: undefined,
       recipient: undefined,
+      installment: undefined,
       startDueDate: undefined,
       paymentMethod: undefined,
       tags: [],
@@ -103,6 +105,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
           isPaid: values.isPaid,
           recipient: values.recipient,
           paymentMethod: values.paymentMethod,
+          installment: values.installment,
           tags: values.tags,
         }
       })
