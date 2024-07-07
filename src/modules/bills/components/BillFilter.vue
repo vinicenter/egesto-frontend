@@ -55,6 +55,10 @@ const { value: dateFilterType } = useField('dateFilterType')
               <VBtn value="period">
                 Período
               </VBtn>
+
+              <VBtn value="no-period">
+                Todos
+              </VBtn>
             </VBtnToggle>
 
             <template v-if="dateFilterType === 'month'">

@@ -5,7 +5,7 @@ import { BillPaymentMethods, IBillPaginationFilters } from "../types/bill";
 import dayjs from "~utils/dayjs";
 
 interface BillsFormFilter {
-  dateFilterType: 'month' | 'day' | 'period';
+  dateFilterType: 'month' | 'day' | 'period' | 'no-period';
   endDueDate?: string,
   startDueDate?: string,
   dueDate?: string,
@@ -70,6 +70,10 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
     submit() {
       return this.form?.handleSubmit((values) => {
         const getEndDueDate = () => {
+          if(values.dateFilterType === 'no-period') {
+            return undefined
+          }
+
           if(values.dateFilterType === 'month' && values.dueMonth !== undefined && values.dueYear !== undefined) {
             return dayjs().set('month', values.dueMonth).set('year', values.dueYear).endOf('month').toString()
           }
@@ -80,6 +84,10 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
         }
 
         const getStartDueDate = () => {
+          if(values.dateFilterType === 'no-period') {
+            return undefined
+          }
+
           if(values.dateFilterType === 'month' && values.dueMonth !== undefined && values.dueYear !== undefined) {
             return dayjs().set('month', values.dueMonth).set('year', values.dueYear).startOf('month').toString()
           }
