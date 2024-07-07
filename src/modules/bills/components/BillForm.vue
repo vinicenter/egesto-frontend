@@ -34,7 +34,7 @@ const submit = form.handleSubmit(async (values) => {
 <template>
   <form @submit.prevent="submit">
     <div>
-      <div class="grid grid-cols-2 gap-x-4">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-x-4">
         <EDatePicker
           name="dueDate"
           :disabled="disabled"
