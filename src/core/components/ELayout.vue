@@ -170,7 +170,7 @@ const userInitials = computed(() => {
         </VListItem>
       </div>
 
-      <VDivider class="mb-2" />
+      <VDivider />
 
       <VList density="compact" nav>
         <template v-for="(buttons) in items">
@@ -183,7 +183,7 @@ const userInitials = computed(() => {
             />
           </template>
 
-          <VDivider />
+          <VDivider class="mb-1" />
         </template>
       </VList>
 
