@@ -9,5 +9,6 @@
 </template>
 
 <route lang="yaml">
+name: families
 path: /familias
 </route>

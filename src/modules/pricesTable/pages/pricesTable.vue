@@ -9,5 +9,6 @@
 </template>
 
 <route lang="yaml">
+name: prices-table
 path: /tabelas-de-precos
 </route>

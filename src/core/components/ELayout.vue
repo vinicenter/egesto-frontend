@@ -3,13 +3,14 @@ interface Item {
   title: string
   childrens?: Item[]
   onClick?: Function
+  name?: string
   divider?: boolean
   icon?: string
 }
 
 import { ref } from 'vue'
 import { computed } from 'vue'
-import { useRouter, useRoute } from 'vue-router'
+import { useRouter, useRoute, RouteRecordName } from 'vue-router'
 import useAuth from '../composables/useAuth';
 import useAxiosInterceptors from '../composables/useAxiosInterceptors';
 const router = useRouter()
@@ -22,6 +23,7 @@ const items: Item[][] = [
     {
       title: 'Início',
       onClick: () => router.push({ name: 'home' }),
+      name: 'home',
       icon: 'mdi-home',
     },
   ],
@@ -29,28 +31,33 @@ const items: Item[][] = [
     {
       title: 'Pessoas',
       onClick: () => router.push({ name: 'list-people' }),
+      name: 'people',
       divider: true,
       icon: 'mdi-account-multiple',
     },
     {
       title: 'Matérias Primas',
       onClick: () => router.push({ name: 'list-feedstocks' }),
+      name: 'feedstocks',
       icon: 'mdi-package-down',
     },
     {
       title: 'Produtos',
       onClick: () => router.push({ name: 'list-products' }),
+      name: 'products',
       divider: true,
       icon: 'mdi-package-variant-closed',
     },
     {
       title: 'Marcas',
       onClick: () => router.push({ name: 'list-brands' }),
+      name: 'brands',
       icon: 'mdi-tag-text-outline',
     },
     {
       title: 'Famílias',
       onClick: () => router.push({ name: 'list-families' }),
+      name: 'families',
       divider: true,
       icon: 'mdi-tag',
     },
@@ -59,16 +66,19 @@ const items: Item[][] = [
     {
       title: 'Tabelas de Custos',
       onClick: () => router.push({ name: 'list-costs-table' }),
+      name: 'costs-table',
       icon: 'mdi-cash',
     },
     {
       title: 'Tabelas de Preços',
       onClick: () => router.push({ name: 'list-prices-table' }),
+      name: 'prices-table',
       icon: 'mdi-cash-lock',
     },
     {
       title: 'Contas',
       onClick: () => router.push({ name: 'list-bills' }),
+      name: 'bills',
       icon: 'mdi-currency-usd',
     },
   ],
@@ -76,15 +86,21 @@ const items: Item[][] = [
     {
       title: 'Configurações',
       icon: 'mdi-cog-outline',
+      name: 'settings',
       onClick: () => router.push({ name: 'settings' }),
     },
     {
       title: 'Usuários',
       icon: 'mdi-account-multiple',
+      name: 'users',
       onClick: () => router.push({ name: 'list-users' }),
     },
   ],
 ]
+
+const checkIsNameActive = (name: RouteRecordName | null | undefined) => {
+  return route.matched.some((route) => route.name === name)
+}
 
 const {
   authStorage,
@@ -154,7 +170,7 @@ const userInitials = computed(() => {
         </VListItem>
       </div>
 
-      <VDivider />
+      <VDivider class="mb-2" />
 
       <VList density="compact" nav>
         <template v-for="(buttons) in items">
@@ -163,6 +179,7 @@ const userInitials = computed(() => {
               :title="button.title"
               @click="button.onClick"
               :prepend-icon="button.icon"
+              :active="checkIsNameActive(button.name)"
             />
           </template>
 

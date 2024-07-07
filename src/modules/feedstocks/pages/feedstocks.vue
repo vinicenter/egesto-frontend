@@ -9,5 +9,6 @@
 </template>
 
 <route lang="yaml">
+name: feedstocks
 path: /materias-primas
 </route>
