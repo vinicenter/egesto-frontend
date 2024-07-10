@@ -34,6 +34,7 @@ defineProps<{
         @bills-calculated="addCalculatedBills"
         btn-icon="mdi-refresh"
         btn-label="Recalcular Parcelas"
+        warningMessage="Ao calcular, as parcelas atuais serão apagadas e será criado novas parcelas apartir desse recalculo."
       />
 
       <EDialogConfirm
@@ -141,7 +142,7 @@ defineProps<{
 
   <VEmptyState
     title="Nenhuma parcela adicionada"
-    text="Calcule suas parcelas clicando no botão abaixo"
+    text="Escolha uma opção abaixo para adicionar parcelas."
     v-else
   >
     <template #actions>
@@ -151,6 +152,15 @@ defineProps<{
         btn-icon="mdi-plus"
         btn-label="Calcular Parcelas"
       />
+
+      <VBtn
+        @click="setBills([{ dueDate: '', amount: undefined, reference: '', isPaid: false }])"
+        color="primary"
+        prepend-icon="mdi-plus"
+        :disabled="disabled"
+      >
+        Adicionar Manualmente
+      </VBtn>
     </template>
   </VEmptyState>
 </template>

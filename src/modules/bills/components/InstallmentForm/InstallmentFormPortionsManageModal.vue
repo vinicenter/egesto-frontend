@@ -12,6 +12,7 @@ defineProps<{
   disabled?: boolean
   btnIcon: string
   btnLabel: string
+  warningMessage?: string
 }>()
 
 const emit = defineEmits<{
@@ -111,12 +112,17 @@ const submit = form.handleSubmit((values) => {
           </VBtn>
         </VToolbar>
   
-        <div class="p-sm">
+        <div class="p-sm space-y-sm">
+          <VAlert type="warning" v-if="warningMessage">
+            {{ warningMessage }}
+          </VAlert>
+
           <form
             id="installment-form-portion-manage-modal"
             class="grid grid-cols-1 md:grid-cols-2 gap-x-4" 
             @submit.prevent="submit"
           >
+
             <EDatePicker
               name="firstDueDate"
               label="Data da primeira parcela"
@@ -168,7 +174,7 @@ const submit = form.handleSubmit((values) => {
             />
           </form>
 
-          <div class="m-b-sm">
+          <div>
             Valor total: {{ totalValue }}
           </div>
 

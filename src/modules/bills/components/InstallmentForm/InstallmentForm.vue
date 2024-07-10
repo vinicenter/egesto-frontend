@@ -35,7 +35,7 @@ const submit = form.handleSubmit(async (values) => {
 });
 
 const totalValue = computed(() => {
-  return formatPrice(form.values.bills.reduce((acc, bill) => acc + Number(bill.amount || 0), 0))
+  return formatPrice(form.values.bills?.reduce((acc, bill) => acc + Number(bill?.amount || 0), 0))
 })
 </script>
 
