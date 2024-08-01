@@ -22,6 +22,8 @@ useQuery({
       Bem vindo, {{ authStorage?.name || 'usuário' }}.
     </div>
 
+    <EImageUpload name="photo" />
+
     <VContainer class="space-y-4">
       <h1 class="text-lg">Cadastros</h1>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8">
