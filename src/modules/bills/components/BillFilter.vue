@@ -106,6 +106,12 @@ const { value: dateFilterType } = useField('dateFilterType')
             hide-details
           />
 
+          <BillTagsFilterTypeSelect
+            v-show="form.values.tags?.length"
+            name="tagsFilterType"
+            hide-details
+          />
+
           <ESelectBillInstallments
             label="Parcelamento"
             name="installment"

@@ -22,12 +22,14 @@ interface FormValues {
   installment: string | undefined
   paymentMethod: BillPaymentMethods[] | undefined
   recipient: string | undefined
+  tagsFilterType: 'OR' | 'AND'
 }
 
 const form = useForm<FormValues>({
   keepValuesOnUnmount: true,
   initialValues: {
     isPaid: 'undefined',
+    tagsFilterType: 'OR',
   }
 })
 
@@ -62,6 +64,7 @@ const setDayToFilter = (date: string) => {
     startDueDate: undefined,
     paymentMethod: queryVariables.paymentMethod,
     tags: queryVariables.tags,
+    tagsFilterType: queryVariables.tagsFilterType,
   })
 
   const submit = billsFilterStore.submit()
@@ -90,6 +93,7 @@ const submit = form.handleSubmit(async (values) => {
   queryVariables.paymentMethod = values.paymentMethod
   queryVariables.recipient = values.recipient
   queryVariables.installment = values.installment
+  queryVariables.tagsFilterType = values.tagsFilterType
 })
 
 const isPaidEnabled = computed(() => queryVariables.isPaid === 'undefined' || queryVariables.isPaid === true)
@@ -167,7 +171,7 @@ const { formatPrice } = priceFormat({
       <VToolbar
         dark
         color="primary"
-        title="Relatório cumulativo de contas"
+        title="Relatório acumulativo de contas"
       >
         <VBtn
           icon
@@ -217,6 +221,11 @@ const { formatPrice } = priceFormat({
 
             <BillTagsSelect
               name="tags" 
+            />
+
+            <BillTagsFilterTypeSelect
+              v-show="form.values.tags?.length"
+              name="tagsFilterType"
             />
 
             <ESelectPeople

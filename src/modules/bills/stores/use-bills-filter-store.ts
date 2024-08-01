@@ -6,6 +6,7 @@ import dayjs from "~utils/dayjs";
 
 interface BillsFormFilter {
   dateFilterType: 'month' | 'day' | 'period' | 'no-period';
+  tagsFilterType: 'AND' | 'OR';
   endDueDate?: string,
   startDueDate?: string,
   dueDate?: string,
@@ -27,6 +28,7 @@ interface States {
 
 const buildInitialValues = (initialValues: Partial<IBillPaginationFilters>): BillsFormFilter => {
   return {
+    tagsFilterType: 'OR',
     dateFilterType: 'period',
     dueYear: dayjs().year(),
     dueMonth: dayjs().month(),
@@ -44,6 +46,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
     filter: {
       dateFilterType: 'month',
       isPaid: 'undefined',
+      tagsFilterType: 'OR',
       dueDate: undefined,
       dueMonth: undefined,
       dueYear: undefined,
@@ -107,6 +110,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
           paymentMethod: values.paymentMethod,
           installment: values.installment,
           tags: values.tags,
+          tagsFilterType: values.tagsFilterType,
         }
       })
     },

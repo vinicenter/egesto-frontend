@@ -42,6 +42,7 @@ export interface IBillFilters {
   installment?: string,
   isPaid?: boolean | string
   tags?: string[]
+  tagsFilterType?: 'AND' | 'OR'
 }
 
 export interface IBillPaginationFilters extends IBillFilters {

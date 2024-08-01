@@ -15,6 +15,7 @@ declare module 'vue' {
     BillsSummary: typeof import('./src/modules/bills/components/BillsSummary.vue')['default']
     BillTableTags: typeof import('./src/modules/bills/components/BillTableTags.vue')['default']
     BillTagsEditModal: typeof import('./src/modules/bills/components/BillTagsSelect/BillTagsEditModal.vue')['default']
+    BillTagsFilterTypeSelect: typeof import('./src/modules/bills/components/BillTagsFilterTypeSelect.vue')['default']
     BillTagsRemoveModal: typeof import('./src/modules/bills/components/BillTagsSelect/BillTagsRemoveModal.vue')['default']
     BillTagsSelect: typeof import('./src/modules/bills/components/BillTagsSelect/BillTagsSelect.vue')['default']
     BrandForm: typeof import('./src/modules/brands/components/BrandForm.vue')['default']
