@@ -4,7 +4,7 @@ import { Ref } from "vue";
 import { BillPaymentMethods, IBillPaginationFilters } from "../types/bill";
 import dayjs from "~utils/dayjs";
 
-interface BillsFormFilter {
+export interface BillsFormFilter {
   dateFilterType: 'month' | 'day' | 'period' | 'no-period';
   tagsFilterType: 'AND' | 'OR';
   endDueDate?: string,

@@ -57,7 +57,13 @@ export interface IBillsSummary {
   billsAmount: number,
 }
 
-export interface IBillsCumulativeParams {
+export interface IBillsCumulativeParams extends IBillFilters {
+  startDate: string
+  endDate: string
+  isPaid?: boolean | string
+}
+
+export interface IBillsDailyReportParams extends IBillFilters {
   startDate: string
   endDate: string
   isPaid?: boolean | string
@@ -71,4 +77,14 @@ export interface IBillsCumulative {
     accumulativePaid: number;
     accumulativeUnpaid: number;
   };
+}
+
+export interface IBillsDailyReport {
+  date: string;
+  values: {
+    [tagId: string]: {
+      tag: IBillTagRoot;
+      amount: number;
+    };
+  }
 }

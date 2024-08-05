@@ -114,6 +114,7 @@ const generateExport = async (shouldUseFilter: boolean) => {
 }
 
 const openAccumulativeModal = ref(false);
+const openDailyReportModal = ref(false);
 </script>
 
 <template>
@@ -187,6 +188,10 @@ const openAccumulativeModal = ref(false);
           </template>
 
           <VList>
+            <VListItem @click="openDailyReportModal = true">
+              <VListItemTitle>Relatório diário</VListItemTitle>
+            </VListItem>
+
             <VListItem @click="openAccumulativeModal = true">
               <VListItemTitle>Relatório acumulativo</VListItemTitle>
             </VListItem>
@@ -218,6 +223,7 @@ const openAccumulativeModal = ref(false);
     </ETableGenericList>
 
     <BillsAccumulativeModal v-model="openAccumulativeModal" />
+    <BillsDailyReportModal v-model="openDailyReportModal" />
   </div>
 </template>
 

@@ -2,7 +2,7 @@
 interface Item {
   title: string
   childrens?: Item[]
-  onClick?: Function
+  onClick: ((args_0: MouseEvent) => void) & ((e: MouseEvent | KeyboardEvent) => any) & ((args_0: MouseEvent) => void) & ((e: MouseEvent | KeyboardEvent) => any)
   name?: string
   divider?: boolean
   icon?: string

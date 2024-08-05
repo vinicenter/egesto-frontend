@@ -12,6 +12,7 @@ declare module 'vue' {
     BillInstallmentSelect: typeof import('./src/modules/bills/components/BillInstallmentSelect.vue')['default']
     BillPayOrRevertPaid: typeof import('./src/modules/bills/components/BillPayOrRevertPaid.vue')['default']
     BillsAccumulativeModal: typeof import('./src/modules/bills/components/BillsAccumulativeModal.vue')['default']
+    BillsDailyReportModal: typeof import('./src/modules/bills/components/BillsDailyReportModal.vue')['default']
     BillsSummary: typeof import('./src/modules/bills/components/BillsSummary.vue')['default']
     BillTableTags: typeof import('./src/modules/bills/components/BillTableTags.vue')['default']
     BillTagsEditModal: typeof import('./src/modules/bills/components/BillTagsSelect/BillTagsEditModal.vue')['default']

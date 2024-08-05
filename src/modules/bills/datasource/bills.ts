@@ -1,5 +1,5 @@
 import { tableParams } from '@/src/core/types/pagination-types'
-import type { IBill, IBillPaginationFilters, IBillRoot, IBillsCumulative, IBillsCumulativeParams, IBillsSummary } from '../types/bill'
+import type { IBill, IBillPaginationFilters, IBillRoot, IBillsCumulative, IBillsCumulativeParams, IBillsDailyReport, IBillsDailyReportParams, IBillsSummary } from '../types/bill'
 import type { paginationRoot } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
 
@@ -47,6 +47,18 @@ export const exportBills = async (params: IBillPaginationFilters) => {
 
 export const getCumulativeBills = async (params: IBillsCumulativeParams) => {
   const { data } = await axios.get<IBillsCumulative>('/bills/cumulative', { params })
+
+  return data
+}
+
+export const getDailyReportBills = async (params: IBillsDailyReportParams) => {
+  const { data } = await axios.get<IBillsDailyReport[]>('/bills/daily-report', { params })
+
+  return data
+}
+
+export const exportDailyReportBills = async (params: IBillsDailyReportParams) => {
+  const { data } = await axios.get<Blob>('/bills/daily-report-csv', { params, responseType: 'blob' })
 
   return data
 }
