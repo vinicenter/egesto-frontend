@@ -47,10 +47,10 @@ const tab = ref('informations')
       <div class="font-bold">Identificação</div>
 
       <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-sm">
-        <EInputText
+        <ProductCodeField
           name="code"
           :disabled="disabled"
-          label="Código"
+          :productId="form.values._id"
         />
 
         <EInputText

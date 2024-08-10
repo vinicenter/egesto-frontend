@@ -98,6 +98,18 @@ const formatSubmit = (data: IProduct.Root) => {
   }
 }
 
+const formatInitialValues = (data: IProduct.Root): IProduct.Root => {
+  return {
+    ...data,
+    _id: props.type === 'clonar'
+      ? undefined
+      : data._id,
+    code: props.type === 'clonar'
+      ? ''
+      : data.code,
+  }
+}
+
 const queryClient = useQueryClient()
 
 const finish = () => {
@@ -116,6 +128,7 @@ const finish = () => {
     :update-fn="updateProduct"
     :format-submit-fn="formatSubmit"
     :initial-values-create="initialValuesCreate"
+    :format-initial-values="formatInitialValues"
     @finish="finish"
   >
     <template #default="{ data, buttonLabel, submit, loadingSubmit }">

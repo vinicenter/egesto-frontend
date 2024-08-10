@@ -4,11 +4,12 @@ import { MaybeRef, toRef } from 'vue';
 
 const props = defineProps<{
   name: string,
-  rules?: MaybeRef<RuleExpression<string>>,
+  rules?: MaybeRef<RuleExpression<any>>,
   disabled?: boolean,
   type?: string,
   label: string,
   keepValuesOnUnmount?: boolean,
+  loading?: boolean,
 }>()
 
 const { value, handleBlur, errorMessage } = useField<string>(toRef(props, "name"), props.rules, {
@@ -24,6 +25,7 @@ const { value, handleBlur, errorMessage } = useField<string>(toRef(props, "name"
     :disabled="disabled"
     step="any"
     :error-messages="errorMessage"
+    :loading="loading"
     @blur="handleBlur"
   />
 </template>

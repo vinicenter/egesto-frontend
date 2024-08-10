@@ -43,3 +43,11 @@ export const generateProductReport = async () => {
 
   return data
 }
+
+export const verifyProductCodeAvailability = async (code: string, productIdToExclude?: string) => {
+  const { data } = await axios.get<{ available: boolean }>('/products/verify-code-availability', {
+    params: { code, productIdToExclude }
+  })
+
+  return data
+}

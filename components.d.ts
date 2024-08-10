@@ -95,6 +95,7 @@ declare module 'vue' {
     PricesTableUpdateFamily: typeof import('./src/modules/pricesTable/components/PricesTableForm/menus/PricesTableUpdateFamily.vue')['default']
     PricesTableUpdateFamilyProducts: typeof import('./src/modules/pricesTable/components/PricesTableForm/menus/PricesTableUpdateFamilyProducts.vue')['default']
     ProcesTableAdd: typeof import('./src/modules/pricesTable/components/PricesTableForm/menus/ProcesTableAdd/ProcesTableAdd.vue')['default']
+    ProductCodeField: typeof import('./src/modules/products/components/ProductForm/ProductCodeField.vue')['default']
     ProductDetailsInfo: typeof import('./src/modules/products/components/ProductDetailsModel/tabs/ProductDetailsInfo.vue')['default']
     ProductDetailsMarketing: typeof import('./src/modules/products/components/ProductDetailsModel/tabs/ProductDetailsMarketing.vue')['default']
     ProductDetailsModel: typeof import('./src/modules/products/components/ProductDetailsModel/ProductDetailsModel.vue')['default']

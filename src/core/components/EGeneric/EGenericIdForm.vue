@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
 import useNotify from '../../composables/useNotify';
+import { AxiosError } from 'axios';
 
 const props = defineProps<{
   id: string | 'novo',
@@ -91,10 +92,13 @@ const saveModel = async (mode: 'edit' | 'create' | 'delete', values: unknown) =>
       type: 'success'
     })
   } catch(e) {
-    const error = e as Error
+    const error = e as AxiosError
+
+    const response = error.response?.data as { message?: string } | undefined
+    const message = response?.message || 'Erro ao salvar: ' + error.stack
 
     displayMessage({
-      message: 'Erro ao salvar: ' + error.stack,
+      message,
       type: 'error'
     })
   } finally {
