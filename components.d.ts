@@ -36,6 +36,7 @@ declare module 'vue' {
     ELayout: typeof import('./src/core/components/ELayout.vue')['default']
     ELoginModel: typeof import('./src/modules/users/components/ELoginModel.vue')['default']
     EMonthPicker: typeof import('./src/core/components/EInput/EMonthPicker.vue')['default']
+    EMultiImageUpload: typeof import('./src/core/components/EFileUpload/EMultiImageUpload.vue')['default']
     EOrderBy: typeof import('./src/core/components/EOrderBy.vue')['default']
     ESelect: typeof import('./src/core/components/ESelect/ESelect.vue')['default']
     ESelectBillInstallments: typeof import('./src/core/components/ESelect/ESelectBillInstallments.vue')['default']

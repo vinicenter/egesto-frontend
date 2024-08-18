@@ -4,20 +4,28 @@ import { useField } from 'vee-validate'
 import { MaybeRef, ref } from 'vue';
 import { uploadFiles, deleteFiles } from '@/src/core/datasource/upload';
 import useNotify from '../../composables/useNotify';
-import { useAsyncState } from '@vueuse/core';
+import { toRef, useAsyncState } from '@vueuse/core';
 import { computed } from 'vue';
+import { formatS3FileUrl } from '../../utils/format';
 
 const props = defineProps<{
   name: string
   rules?: MaybeRef<RuleExpression<string | undefined>>,
+  size: number
+  rounded?: boolean
 }>()
 
 const notify = useNotify()
 
+const emit = defineEmits<{
+  (e: 'uploaded'): void
+  (e: 'deleted'): void
+}>()
+
 const {
   value: inputValue,
   setValue,
-} = useField<string | undefined>(props.name, props.rules)
+} = useField<string | undefined>(toRef(props, 'name'), props.rules)
 
 const fileInput = ref()
 const files = computed(() => Object.values(fileInput.value?.files || {}) as File[])
@@ -37,6 +45,7 @@ const uploadFetch = useAsyncState(uploadPromise, undefined, {
     }
 
     setValue(response.data.files?.[0])
+    emit('uploaded')
   },
   onError: () => {
     notify.displayMessage({
@@ -58,6 +67,7 @@ const deletePromise = () => {
 const deleteFetch = useAsyncState(deletePromise, undefined, {
   onSuccess: () => {
     setValue(undefined)
+    emit('deleted')
   },
   onError: () => {
     notify.displayMessage({
@@ -70,7 +80,7 @@ const deleteFetch = useAsyncState(deletePromise, undefined, {
 </script>
 
 <template>
-  <div class="w-250px flex flex-col items-center">
+  <div class="w-max">
     <template v-if="!inputValue">
       <input
         type="file"
@@ -81,13 +91,14 @@ const deleteFetch = useAsyncState(deletePromise, undefined, {
       >
 
       <div
-        class="rounded-full p-xl b-gray-4 b-3 b-dashed cursor-pointer"
+        class="p-xl b-gray-4 b-3 b-dashed cursor-pointer"
+        :class="{ 'rounded-full': rounded }"
         v-ripple
         @click="() => fileInput?.click()"
       >
         <VProgressCircular
           v-if="uploadFetch.isLoading.value"
-          size="100px"
+          :size="`${size / 2}px`"
           color="grey-darken-2"
           :width="5"
           indeterminate
@@ -96,7 +107,7 @@ const deleteFetch = useAsyncState(deletePromise, undefined, {
         <VIcon
           v-else
           color="grey-darken-2"
-          size="100px"
+          :size="`${size / 2}px`"
         >
         mdi-image-outline
         </VIcon>
@@ -114,9 +125,9 @@ const deleteFetch = useAsyncState(deletePromise, undefined, {
       </div>
 
       <VImg
-        :src="inputValue"
+        :src="formatS3FileUrl(inputValue)"
         class="m-5"
-        width="200px"
+        :width="`${size}px`"
       />
     </div>
   </div>

@@ -63,3 +63,7 @@ export const priceFormat = (options?: Intl.NumberFormatOptions) => {
 }
 
 export const removeCnpjFormat = (cnpj: string) => cnpj.replace(/\D/g, '')
+
+export const formatS3FileUrl = (path: string) => {
+  return `${import.meta.env.VITE_S3_BUCKET_PUBLIC_ENDPOINT}/${path}`
+}
