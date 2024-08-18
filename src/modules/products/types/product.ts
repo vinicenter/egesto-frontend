@@ -40,7 +40,7 @@ export namespace IProduct {
     description?: string
     color?: string
     isPublic: boolean
-    photo?: string
+    photos?: string[]
   }
 
   export interface Taxes {

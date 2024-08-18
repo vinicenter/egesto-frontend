@@ -17,7 +17,7 @@ const initialValuesCreate: IProduct.Root = {
     color: '',
     description: '',
     isPublic: false,
-    photo: '',
+    photos: [],
   },
   taxes: {
     ncm: '',
@@ -58,7 +58,10 @@ const formatSubmit = (data: IProduct.Root) => {
   return {
     code: data.code,
     name: data.name,
-    marketing: data.marketing,
+    marketing: {
+      ...data.marketing,
+      photos: data.marketing.photos?.filter((item) => !!item),
+    },
     taxes: data.taxes,
     production: {
       lost: Number(data.production.lost),
