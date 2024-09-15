@@ -29,7 +29,7 @@ const onUploaded = () => {
 </script>
 
 <template>
-  <div class="flex items-center gap-4">
+  <div class="flex flex-wrap items-center gap-4">
     <EImageUpload
       v-for="field, index in fields"
       :key="field.key"

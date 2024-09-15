@@ -2,7 +2,7 @@
 import { useRouter } from 'vue-router'
 import { getProducts, generateProductReport } from '../../datasource/products';
 import { ref } from 'vue';
-import { priceFormat } from '@/src/core/utils/format';
+import { formatS3FileUrl, priceFormat } from '@/src/core/utils/format';
 import { formatFamilyLabel } from '../../utils/formatter';
 import { downloadBlob } from '@/src/core/utils/utils';
 import useNotify from '@/src/core/composables/useNotify';
@@ -73,7 +73,16 @@ const queryVariables = reactive<Partial<IProduct.Filters>>({
   >
     <template #default="{ item }">
       <td>{{ item.code || '-' }}</td>
-      <td>{{ item.name || '-' }}</td>
+      <td>
+        <div class="flex items-center gap-2">
+          <img
+            v-if="item.marketing?.photos?.length"
+            :src="formatS3FileUrl(item.marketing.photos[0])"
+            :height="60"
+          />
+          <div>{{ item.name || '-' }}</div>
+        </div>
+      </td>
       <td>{{ formatFamilyLabel(item.family) }}</td>
       <td>{{ item.pack?.numberOfUnitsInPack || '-' }}</td>
       <td>{{ item.productionCost?.unitCost ? formatPrice(item.productionCost?.unitCost) : '-' }}</td>
