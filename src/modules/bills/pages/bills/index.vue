@@ -133,6 +133,7 @@ const openDailyReportModal = ref(false);
             Parcelamento: {{ item?.installment?.name }}
           </div>
           <div>Vencimento: {{ dayjs(item.dueDate).format('DD/MM/YYYY') }}</div>
+          <div v-if="item?.paymentDate">Pago em: {{ dayjs(item.paymentDate).format('DD/MM/YYYY') }}</div>
           <div>{{ formatPrice(item.amount) }}</div>
           <div>{{ formatPaymentMethod(item.paymentMethod) }}</div>
           <div>

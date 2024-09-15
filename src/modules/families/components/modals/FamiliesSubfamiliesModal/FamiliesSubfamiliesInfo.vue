@@ -1,7 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import { IFamily } from '../../../types/family';
-import type { VDataTable } from 'vuetify/lib/components/index.mjs';
 
 const props = defineProps<{
   family: IFamily

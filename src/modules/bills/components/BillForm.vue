@@ -96,11 +96,20 @@ const submit = form.handleSubmit(async (values) => {
         label="Observação"
       />
 
-      <ESwitch
-        name="isPaid"
-        label="Pago"
-        :disabled="disabled"
-      />
+      <div class="flex gap-4 w-350px">
+        <ESwitch
+          name="isPaid"
+          label="Pago"
+          :disabled="disabled"
+        />
+  
+        <EDatePicker
+          v-if="form.values.isPaid"
+          name="paymentDate"
+          :disabled="disabled"
+          label="Data de pagamento"
+        />
+      </div>
     </div>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-sm">

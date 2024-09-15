@@ -1,16 +1,11 @@
 <script lang="ts" setup>
 import ESelectPeople from '@/src/core/components/ESelect/ESelectPeople.vue';
-import { IBillPaginationFilters } from '../types/bill';
 import { useField } from 'vee-validate';
 import { BILL_PAYMENT_METHOD } from '@/src/modules/bills/constants/bills';
 import EInputText from '@/src/core/components/EInput/EInputText.vue';
 import { required } from '@/src/core/utils/form-validator';
 import { useBillsFilterStore } from '@/src/modules/bills/stores/use-bills-filter-store';
 import BillTagsSelect from './BillTagsSelect/BillTagsSelect.vue';
-
-const emit = defineEmits<{
-  (e: 'update', value: Partial<IBillPaginationFilters>): void
-}>()
 
 const billsFilterStore = useBillsFilterStore()
 

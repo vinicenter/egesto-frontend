@@ -73,7 +73,7 @@ defineProps<{
 
     <EEditableListItem
       name="bills"
-      class="grid grid-cols-1 sm:grid-cols-4 gap-x-sm"
+      class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
       :disabled="disabled"
     >
       <template #default="{ index, removeItem }">
@@ -97,12 +97,21 @@ defineProps<{
           label="Referência"
         />
 
-        <div class="flex justify-start items-center gap-lg">
-          <ESwitch
-            :name="`bills.${index}.isPaid`"
-            label="Pago"
-            :disabled="disabled"
-          />
+        <div class="flex justify-between items-center gap-lg">
+          <div class="flex gap-4 w-full">
+            <ESwitch
+              :name="`bills.${index}.isPaid`"
+              label="Pago"
+              :disabled="disabled"
+            />
+
+            <EDatePicker
+              v-if="formValues.bills[index].isPaid"
+              :name="`bills.${index}.paymentDate`"
+              :disabled="disabled"
+              label="Data de pagamento"
+            />
+          </div>
 
           <EDialogConfirm
             v-if="formValues.bills.length > 1"

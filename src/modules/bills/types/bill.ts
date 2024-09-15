@@ -6,6 +6,7 @@ export type BillPaymentMethods = 'BOLETO' | 'CHEQUE' | 'PIX' | 'TRANSFERENCIA_BA
 export interface IBill {
   _id?: string,
   dueDate: string,
+  paymentDate?: string,
   recipient?: IPeople | null,
   paymentMethod: BillPaymentMethods,
   reference?: string,
@@ -19,6 +20,7 @@ export interface IBill {
 export interface IBillRoot {
   createdAt: string,
   dueDate: string,
+  paymentDate?: string,
   recipient?: IPeople,
   paymentMethod: BillPaymentMethods,
   reference?: string,

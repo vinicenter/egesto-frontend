@@ -50,7 +50,18 @@ const valueFormatted = computed(() => {
     <template #default="{ isActive }">
       <VCard>
         <VCardTitle>
-          Selecione a data
+          <div class="flex justify-between">
+            <div>Selecione a data</div>
+
+            <VBtn
+              icon
+              size="sm"
+              variant="text"
+              @click="isActive.value = false"
+            >
+              <VIcon>mdi-close</VIcon>
+            </VBtn>
+          </div>
         </VCardTitle>
   
         <VDatePicker
