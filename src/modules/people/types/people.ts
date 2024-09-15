@@ -7,7 +7,11 @@ export interface IPeople {
   phone?: string
   email?: string
   observation?: string
-  contractExpenses?: number
+  expenses?: {
+    contract?: number
+    marketing?: number
+    additional?: number
+  }
   address: {
     street?: string
     complement?: string

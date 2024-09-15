@@ -1,10 +1,9 @@
 <script lang="ts" setup>
+import { required } from '@/src/core/utils/form-validator';
 import type { IPeople } from '../types/people';
-import { emailValidation, required } from '@/src/core/utils/form-validator';
 import { useForm } from 'vee-validate';
-import { computed } from 'vue';
+import { computed, ref } from 'vue';
 import { useRouter } from 'vue-router';
-import PersonDocumentField from './PersonDocumentField.vue';
 
 const router = useRouter();
 
@@ -28,99 +27,56 @@ const disabled = computed(() => props.loading || props.disabled);
 const submit = form.handleSubmit(async (values) => {
   emit('submit', values);
 });
+
+const tab = ref<'info' | 'expenses'>('info')
 </script>
 
 <template>
   <form @submit.prevent="submit">
-    <section class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
-      <PersonDocumentField :disabled="disabled" />
+    <section>
+      <div class="font-bold">Identificação</div>
 
-      <EInputText
-        name="corporateName"
-        :disabled="disabled"
-        label="Razão Social"
-        :rules="[required]"
-      />
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-x-sm">
+        <PersonDocumentField :disabled="disabled" />
 
-      <EInputText
-        name="fantasyName"
-        :disabled="disabled"
-        label="Nome Fantasia"
-        :rules="[required]"
-      />
+        <EInputText
+          name="corporateName"
+          :disabled="disabled"
+          label="Razão Social"
+          :rules="[required]"
+        />
 
-      <EInputText
-        name="stateRegistration"
-        :disabled="disabled"
-        label="Inscrição Estadual"
-      />
-
-      <EInputText
-        name="phone"
-        :disabled="disabled"
-        label="Celular"
-      />
-
-      <EInputText
-        name="email"
-        :disabled="disabled"
-        label="E-mail"
-        :rules="[emailValidation]"
-      />
-
-      <EInputText
-        name="address.zipCode"
-        :disabled="disabled"
-        label="CEP"
-      />
-
-      <ESelectStates
-        name="address.federativeUnit"
-        :disabled="disabled"
-        label="UF"
-        :rules="[required]"
-      />
-
-      <EInputText
-        name="address.city"
-        :disabled="disabled"
-        label="Cidade"
-      />
-
-      <EInputText
-        name="address.neighborhood"
-        :disabled="disabled"
-        label="Bairro"
-      />
-
-      <EInputText
-        name="address.street"
-        :disabled="disabled"
-        label="Rua"
-      />
-
-      <EInputText
-        name="address.number"
-        :disabled="disabled"
-        label="Número"
-      />
-
-      <ETextarea
-        name="observation"
-        class="grid-col-span-1 sm:grid-col-span-2"
-        :disabled="disabled"
-        label="Observação"
-      />
-
-      <div>
-      <EInputPct
-        name="contractExpenses"
-        :disabled="disabled"
-        label="Despesas de contrato"
-      />
+        <EInputText
+          name="fantasyName"
+          :disabled="disabled"
+          label="Nome Fantasia"
+          :rules="[required]"
+        />
       </div>
     </section>
 
+    <VDivider class="m-y-sm" />
+
+    <section>
+      <VTabs grow class="m-y-4" v-model="tab">
+        <VTab value="info">
+          Informações Basicas
+        </VTab>
+        <VTab value="expenses">
+          Despesas
+        </VTab>
+      </VTabs>
+
+      <VWindow v-model="tab">
+        <VWindowItem value="info" eager>
+          <PersonInfoFields :disabled="disabled" />
+        </VWindowItem>
+
+        <VWindowItem value="expenses" eager>
+          <PersonExpensesFields :disabled="disabled" />
+        </VWindowItem>
+      </VWindow>
+    </section>
 
     <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 lg:grid-cols-6 xl:grid-cols-8 gap-sm">
       <VBtn

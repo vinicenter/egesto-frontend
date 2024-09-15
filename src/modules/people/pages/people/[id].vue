@@ -10,7 +10,11 @@ defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' }>()
 
 const formatSubmit = (data: IPeople): IPeople => ({
   ...data,
-  contractExpenses: Number(data.contractExpenses) || 0
+  expenses: {
+    contract: Number(data.expenses?.contract) || 0,
+    marketing: Number(data.expenses?.marketing) || 0,
+    additional: Number(data.expenses?.additional) || 0,
+  }
 });
 
 const queryClient = useQueryClient()

@@ -74,8 +74,13 @@ const setProductDataToPrice = (indexPrice: number) => {
 
   const product = row.product
 
+  const customerExpenses = 
+    (props.form.values.customer?.expenses?.contract || 0)
+    + (props.form.values.customer?.expenses?.marketing || 0)
+    + (props.form.values.customer?.expenses?.additional || 0)
+
   const productCost = product?.productionCost?.packCost || 0;
-  const expense = (product?.family?.totalCosts + (familiesDefaultCost.value.totalCosts || 0) + (props.form.values.customer?.contractExpenses || 0)) || 0;
+  const expense = ((product?.family?.totalCosts || 0) + (familiesDefaultCost.value.totalCosts || 0) + customerExpenses);
   const productionLost = product?.production?.lost || 0;
   const volume = row.volume || 1;
   const price = row.price || 0;

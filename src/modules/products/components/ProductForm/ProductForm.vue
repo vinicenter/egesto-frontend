@@ -104,7 +104,6 @@ const tab = ref('informations')
         </VWindowItem>
       </VWindow>
     </section>
-    
 
     <VDivider class="m-y-sm" />
 
