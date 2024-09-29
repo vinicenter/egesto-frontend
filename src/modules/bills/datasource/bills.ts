@@ -1,15 +1,15 @@
-import { tableParams } from '@/src/core/types/pagination-types'
-import type { IBill, IBillPaginationFilters, IBillRoot, IBillsCumulative, IBillsCumulativeParams, IBillsDailyReport, IBillsDailyReportParams, IBillsSummary } from '../types/bill'
 import type { paginationRoot } from '@/src/core/types/pagination-types'
+import { tableParams } from '@/src/core/types/pagination-types'
 import axios from '~utils/axios'
+import type { IBillCreateEdit, IBillPaginationFilters, IBillRoot, IBillsCumulative, IBillsCumulativeParams, IBillsDailyReport, IBillsDailyReportParams, IBillsSummary } from '../types/bill'
 
-export const createBill = async (params: IBill): Promise<IBillRoot> => {
+export const createBill = async (params: IBillCreateEdit): Promise<IBillRoot> => {
   const { data } = await axios.post('/bills', { ...params })
 
   return data
 }
 
-export const updateBill = async (id: string, params: Partial<IBill>): Promise<IBillRoot> => {
+export const updateBill = async (id: string, params: Partial<IBillCreateEdit>): Promise<IBillRoot> => {
   const { data } = await axios.patch(`/bills/${id}`, { ...params })
 
   return data

@@ -1,5 +1,5 @@
 import { IPeople } from "../../people/types/people"
-import { BillPaymentMethods, IBill } from "./bill"
+import { BillPaymentMethods, IBill, IBillCreateEdit } from "./bill"
 import { IBillTagRoot } from "./bill-tags"
 
 export interface IBillInstallmentForm {
@@ -19,5 +19,5 @@ export interface IBillInstallment {
   paymentMethod: BillPaymentMethods,
   observations?: string,
   tags: string[],
-  bills: IBill[],
+  bills: IBillCreateEdit[],
 }

@@ -1,13 +1,15 @@
 <script setup lang="ts">
 import { updateBill } from '../datasource/bills';
-import { IBill } from '../types/bill';
+import { IBillRoot } from '../types/bill';
 import { ref, watch } from 'vue';
 import useNotify from '@/src/core/composables/useNotify';
 import { useQueryClient } from '@tanstack/vue-query';
 import { useForm } from 'vee-validate';
+import BankSelect from '../../banks/components/BankSelect/BankSelect.vue';
+import { Bank } from '../../banks/types/bank';
 
 const props = defineProps<{
-  item: IBill
+  item: IBillRoot
 }>()
 
 const modelValue = defineModel<boolean>();
@@ -16,6 +18,7 @@ const { displayMessage } = useNotify();
 const queryClient = useQueryClient();
 
 interface FormValues {
+  paymentBank?: Bank
   paymentDate?: string
   isPaid: boolean
 }
@@ -23,14 +26,16 @@ interface FormValues {
 const form = useForm<FormValues>({
   initialValues: {
     isPaid: props.item.isPaid,
-    paymentDate: props.item.paymentDate
+    paymentDate: props.item.paymentDate,
+    paymentBank: props.item.paymentBank
   }
 })
 
 watch([() => props.item, modelValue], () => {
   form.setValues({
     isPaid: props.item.isPaid,
-    paymentDate: props.item.paymentDate
+    paymentDate: props.item.paymentDate,
+    paymentBank: props.item.paymentBank
   })
 })
 
@@ -40,7 +45,10 @@ const submit = form.handleSubmit(async (values) => {
   loading.value = true
 
   try {
-    await updateBill(props.item._id!, values)
+    await updateBill(props.item._id!, {
+      ...values,
+      paymentBank: values.paymentBank?._id,
+    })
 
     queryClient.invalidateQueries(['bills'])
     queryClient.invalidateQueries(['bills-summary'])
@@ -79,7 +87,7 @@ const submit = form.handleSubmit(async (values) => {
           Modificar pagamento
         </VCardTitle>
 
-        <VCardText class="w-250px">
+        <VCardText class="w-350px space-y-2">
           <ESwitch
             name="isPaid"
             label="Pago"
@@ -92,6 +100,13 @@ const submit = form.handleSubmit(async (values) => {
             label="Data de pagamento"
             hide-details
           />
+
+          <BankSelect
+            v-if="form.values.isPaid"
+            name="paymentBank"
+            editable
+            hide-details
+          />
         </VCardText>
 
         <VCardActions>
@@ -99,6 +114,7 @@ const submit = form.handleSubmit(async (values) => {
             <VBtn
               color="purple"
               :loading="loading"
+              variant="elevated"
               type="submit"
             >
               Atualizar

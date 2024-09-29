@@ -2,6 +2,7 @@
 import { RuleExpression, useField } from 'vee-validate';
 import {  } from 'vuetify'
 import { MaybeRef, toRef } from 'vue';
+import { VTextField } from 'vuetify/lib/components/index.mjs';
 
 const props = defineProps<{
   name: string
@@ -37,7 +38,13 @@ const { value, errorMessage, handleBlur } = useField<unknown>(toRef(props, "name
     >
       <div class="h-60px w-full">
         <div class="bg-white fixed w-full z-100 flex justify-center items-center gap-4px p-x-xs">
-          <VTextField hide-details label="Pesquisar" v-model="search" clearable />
+          <VTextField
+            hide-details
+            label="Pesquisar"
+            v-model="search"
+            clearable
+            @click:clear="search = ''"
+          />
 
           <VBtn
             v-if="showCreate"

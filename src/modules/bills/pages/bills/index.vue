@@ -134,6 +134,7 @@ const openDailyReportModal = ref(false);
           </div>
           <div>Vencimento: {{ dayjs(item.dueDate).format('DD/MM/YYYY') }}</div>
           <div v-if="item?.paymentDate">Pago em: {{ dayjs(item.paymentDate).format('DD/MM/YYYY') }}</div>
+          <div v-if="item?.paymentBank">Banco de pagamento: {{ item.paymentBank.name }}</div>
           <div>{{ formatPrice(item.amount) }}</div>
           <div>{{ formatPaymentMethod(item.paymentMethod) }}</div>
           <div>

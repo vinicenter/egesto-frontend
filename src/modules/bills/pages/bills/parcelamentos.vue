@@ -2,7 +2,8 @@
 import { useQueryClient } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { createInstallment, deleteInstallment, getInstallment, updateInstallment } from '../../datasource/bill-installments';
-import { IBillInstallment, IBillInstallmentForm } from '../../types/bill-installment';
+import { IBillInstallmentForm } from '../../types/bill-installment';
+import { IBillInstallment } from '../../types/bill-installment';
 
 const props = defineProps<{ id: string | 'novo', type: 'criar' | 'deletar' | 'editar' | 'clonar' }>()
 
@@ -31,7 +32,9 @@ const formatSubmit = (data: IBillInstallmentForm): IBillInstallment => {
   const bills = data.bills.map((bill) => ({
     ...bill,
     amount: Number(bill.amount),
-    isPaid: !!bill.isPaid
+    paymentBank: bill.paymentBank?._id
+      ? bill.paymentBank._id
+      : null,
   }))
 
   return {

@@ -1,8 +1,8 @@
 <script lang="ts" setup>
+import { useQueryClient } from '@tanstack/vue-query';
 import { useRouter } from 'vue-router';
 import { createBill, deleteBill, getBill, updateBill } from '../../datasource/bills';
 import { IBill } from '../../types/bill';
-import { useQueryClient } from '@tanstack/vue-query';
 
 const router = useRouter()
 
@@ -33,8 +33,13 @@ const formatSubmit = (data: IBill) => {
     ? data.installment?._id ? data.installment?._id : undefined
     : data.installment?._id ? data.installment?._id : null
 
+  const paymentBank = isSelectUndefined
+    ? data.paymentBank?._id ? data.paymentBank?._id : undefined
+    : data.paymentBank?._id ? data.paymentBank?._id : null
+
   return {
     ...data,
+    paymentBank,
     amount: Number(data.amount),
     recipient: recipient,
     installment: installment,

@@ -5,6 +5,7 @@ import { IBillInstallmentForm } from '../../types/bill-installment';
 import EDialogConfirm from '@/src/core/components/EDialog/EDialogConfirm.vue';
 import { IBill } from '../../types/bill';
 import useNotify from '@/src/core/composables/useNotify';
+import BankSelect from '@/src/modules/banks/components/BankSelect/BankSelect.vue';
 
 const notify = useNotify();
 
@@ -73,7 +74,7 @@ defineProps<{
 
     <EEditableListItem
       name="bills"
-      class="grid grid-cols-1 md:grid-cols-2 gap-x-sm"
+      class="grid grid-cols-1 lg:grid-cols-3 gap-x-sm"
       :disabled="disabled"
     >
       <template #default="{ index, removeItem }">
@@ -97,8 +98,9 @@ defineProps<{
           label="Referência"
         />
 
-        <div class="flex justify-between items-center gap-lg">
-          <div class="flex gap-4 w-full">
+        <div class="flex flex-col lg:flex-row items-start lg:items-center gap-lg col-span-1 lg:col-span-3 mb-sm lg:mb-0">
+          <div class="grid grid-cols-1 gap-4 w-full lg:grid-cols-3">
+
             <ESwitch
               :name="`bills.${index}.isPaid`"
               label="Pago"
@@ -110,6 +112,13 @@ defineProps<{
               :name="`bills.${index}.paymentDate`"
               :disabled="disabled"
               label="Data de pagamento"
+            />
+
+            <BankSelect
+              v-if="formValues.bills[index].isPaid"
+              :name="`bills.${index}.paymentBank`"
+              :disabled="disabled"
+              editable
             />
           </div>
 

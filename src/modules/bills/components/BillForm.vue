@@ -8,6 +8,7 @@ import EInputText from '@/src/core/components/EInput/EInputText.vue';
 import ESelectPeople from '@/src/core/components/ESelect/ESelectPeople.vue';
 import ESwitch from '@/src/core/components/EInput/ESwitch.vue';
 import { BILL_PAYMENT_METHOD } from '@/src/modules/bills/constants/bills';
+import BankSelect from '../../banks/components/BankSelect/BankSelect.vue';
 
 const router = useRouter();
 
@@ -96,18 +97,27 @@ const submit = form.handleSubmit(async (values) => {
         label="Observação"
       />
 
-      <div class="flex gap-4 w-350px">
+      <div class="grid grid-cols-5 gap-4">
         <ESwitch
           name="isPaid"
           label="Pago"
           :disabled="disabled"
         />
-  
+
         <EDatePicker
           v-if="form.values.isPaid"
+          class="w-300px"
           name="paymentDate"
           :disabled="disabled"
           label="Data de pagamento"
+        />
+
+        <BankSelect
+          v-if="form.values.isPaid"
+          class="w-300px"
+          name="paymentBank"
+          :disabled="disabled"
+          editable
         />
       </div>
     </div>
