@@ -37,7 +37,7 @@ const buildInitialValues = (initialValues: Partial<IBillPaginationFilters>): Bil
 }
 
 const makeInitialQueryVariables = (): Partial<IBillPaginationFilters> => ({
-  isPaid: 'undefined',
+  isPaid: false,
   startDueDate: dayjs().startOf('day').toISOString(),
 })
 
@@ -45,7 +45,7 @@ export const useBillsFilterStore = defineStore('bills-filter-store', {
   state: (): States => ({
     filter: {
       dateFilterType: 'month',
-      isPaid: 'undefined',
+      isPaid: false,
       tagsFilterType: 'OR',
       dueDate: undefined,
       dueMonth: undefined,
