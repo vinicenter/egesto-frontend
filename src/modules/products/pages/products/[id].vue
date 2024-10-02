@@ -56,7 +56,7 @@ const formatSubmit = (data: IProduct.Root) => {
     : data.brand?._id ? data.brand._id : null
 
   return {
-    code: data.code,
+    code: data.code || undefined,
     name: data.name,
     marketing: {
       ...data.marketing,
