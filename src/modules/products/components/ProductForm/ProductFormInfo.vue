@@ -35,6 +35,13 @@ defineProps<{
         :disabled="disabled"
         label="Unidade de medida"
       />
+
+      <EInputText
+        name="price"
+        :disabled="disabled"
+        type="number"
+        label="Preço"
+      />
     </div>
 
     <div class="font-bold">Informações de identificação</div>

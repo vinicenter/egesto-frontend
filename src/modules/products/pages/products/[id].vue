@@ -13,6 +13,7 @@ const initialValuesCreate: IProduct.Root = {
   name: '',
   family: undefined,
   brand: undefined,
+  price: 0,
   marketing: {
     color: '',
     description: '',
@@ -98,6 +99,7 @@ const formatSubmit = (data: IProduct.Root) => {
     UnitOfMeasurement: data.UnitOfMeasurement,
     family: family,
     brand: brand,
+    price: Number(data.price),
   }
 }
 

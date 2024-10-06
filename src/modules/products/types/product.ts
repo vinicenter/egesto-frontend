@@ -25,6 +25,7 @@ export namespace IProduct {
     UnitOfMeasurement: string
     pack: Pack
     packWeight?: number
+    price?: number
     unit: Unit
     family?: IFamily
     marketing: Marketing
