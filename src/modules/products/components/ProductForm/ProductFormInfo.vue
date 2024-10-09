@@ -40,7 +40,7 @@ defineProps<{
         name="price"
         :disabled="disabled"
         type="number"
-        label="Preço"
+        label="Preço sugerido"
       />
     </div>
 
