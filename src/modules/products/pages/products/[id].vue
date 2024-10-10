@@ -102,7 +102,7 @@ const formatSubmit = (data: IProduct.Root) => {
     sizes: data.sizes ? data.sizes.map((item) => {
       return item._id
     }) : [],
-    price: Number(data.price),
+    price: Number(data.price || 0),
   }
 }
 
