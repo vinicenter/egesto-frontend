@@ -115,6 +115,12 @@ const formatInitialValues = (data: IProduct.Root): IProduct.Root => {
     code: props.type === 'clonar'
       ? ''
       : data.code,
+    marketing: {
+      ...data.marketing,
+      photos: props.type === 'clonar'
+        ? []
+        : data.marketing.photos,
+    }
   }
 }
 
