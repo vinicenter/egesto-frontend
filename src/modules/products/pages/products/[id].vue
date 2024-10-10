@@ -99,6 +99,9 @@ const formatSubmit = (data: IProduct.Root) => {
     UnitOfMeasurement: data.UnitOfMeasurement,
     family: family,
     brand: brand,
+    sizes: data.sizes ? data.sizes.map((item) => {
+      return item._id
+    }) : [],
     price: Number(data.price),
   }
 }

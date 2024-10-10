@@ -3,7 +3,7 @@ import { useRouter } from 'vue-router'
 import { getProducts, generateProductReport } from '../../datasource/products';
 import { ref } from 'vue';
 import { formatS3FileUrl, priceFormat } from '@/src/core/utils/format';
-import { formatFamilyLabel } from '../../utils/formatter';
+import { formatFamilyLabel, formatSizesLabel } from '../../utils/formatter';
 import { downloadBlob } from '@/src/core/utils/utils';
 import useNotify from '@/src/core/composables/useNotify';
 import { reactive } from 'vue';
@@ -17,6 +17,7 @@ const notify = useNotify();
 const columns = [
   { label: 'Código', style: 'width: 100px', orderByValue: 'code' },
   { label: 'Nome', style: 'width: 200px', orderByValue: 'name', defaultOrderByValue: true },
+  { label: 'Tamanhos', style: 'width: 100px' },
   { label: 'Família', style: 'width: 100px' },
   { label: 'Unidade por Pack', style: 'width: 100px' },
   { label: 'Custo unitário', style: 'width: 100px' },
@@ -83,6 +84,7 @@ const queryVariables = reactive<Partial<IProduct.Filters>>({
           <div>{{ item.name || '-' }}</div>
         </div>
       </td>
+      <td>{{ formatSizesLabel(item.sizes) }}</td>
       <td>{{ formatFamilyLabel(item.family) }}</td>
       <td>{{ item.pack?.numberOfUnitsInPack || '-' }}</td>
       <td>{{ item.productionCost?.unitCost ? formatPrice(item.productionCost?.unitCost) : '-' }}</td>

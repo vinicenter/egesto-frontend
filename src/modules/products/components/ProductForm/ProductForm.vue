@@ -72,6 +72,13 @@ const tab = ref('informations')
           :disabled="disabled"
           return-object
         />
+
+        <ProductSizeSelect
+          name="sizes"
+          :editable="!disabled"
+          :disabled="disabled"
+          return-object
+        />
       </div>
     </section>
 

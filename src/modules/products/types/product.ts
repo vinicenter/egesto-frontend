@@ -1,6 +1,7 @@
 import { IFeedstock } from "../../feedstocks/types/feedstocks"
 import { IBrand } from "../../brands/types/brand"
 import { IFamily } from "../../families/types/family"
+import { ProductSize } from "./productSize";
 
 export interface ProductDescriptionPromptParams {
   oldProductDescription?: string;
@@ -29,6 +30,7 @@ export namespace IProduct {
     unit: Unit
     family?: IFamily
     marketing: Marketing
+    sizes?: ProductSize[]
     brand?: IBrand
     taxes: Taxes
     createdAt?: string
